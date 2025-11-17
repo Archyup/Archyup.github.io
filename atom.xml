@@ -6,7 +6,7 @@
   <link href="https://archyup.github.io/atom.xml" rel="self"/>
   
   <link href="https://archyup.github.io/"/>
-  <updated>2025-11-10T16:58:15.320Z</updated>
+  <updated>2025-11-17T08:37:39.503Z</updated>
   <id>https://archyup.github.io/</id>
   
   <author>
@@ -17,22 +17,29 @@
   <generator uri="https://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>Hello World</title>
-    <link href="https://archyup.github.io/2025/11/11/hello-world/"/>
-    <id>https://archyup.github.io/2025/11/11/hello-world/</id>
-    <published>2025-11-10T16:58:15.320Z</published>
-    <updated>2025-11-10T16:58:15.320Z</updated>
+    <title>我的CS学习之路-序章</title>
+    <link href="https://archyup.github.io/2025/11/11/%E6%88%91%E7%9A%84CS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF-%E5%BA%8F%E7%AB%A0/"/>
+    <id>https://archyup.github.io/2025/11/11/%E6%88%91%E7%9A%84CS%E5%AD%A6%E4%B9%A0%E4%B9%8B%E8%B7%AF-%E5%BA%8F%E7%AB%A0/</id>
+    <published>2025-11-11T07:41:44.824Z</published>
+    <updated>2025-11-17T08:37:39.503Z</updated>
     
-    <content type="html"><![CDATA[<p>Welcome to <a href="https://hexo.io/">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues">GitHub</a>.</p><h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">&quot;My New Post&quot;</span></span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/writing.html">Writing</a></p><h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/server.html">Server</a></p><h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/generating.html">Generating</a></p><h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure><p>More info: <a href="https://hexo.io/docs/one-command-deployment.html">Deployment</a></p>]]></content>
+    <content type="html"><![CDATA[<p>欢迎来到我的博客！</p><h2 id="为什么选择-CS？"><a href="#为什么选择-CS？" class="headerlink" title="为什么选择 CS？"></a>为什么选择 CS？</h2><center>经过三年高中的刻苦(<i>bushi<i>)练习，我想要选择一个不那么苦不那么累的专业。</center><center>在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。</center><center>（当然有考虑到爆火的电气会很卷并且课程难度很大）</center><center>我报考了华科，武大，厦大，北邮...结果...最终来到了湖大。</center><center>既来之则安之，我将在湖大这个平台开启我的cs之旅。</center><center><em>-起航-</em></center>]]></content>
     
     
       
       
-    <summary type="html">&lt;p&gt;Welcome to &lt;a href=&quot;https://hexo.io/&quot;&gt;Hexo&lt;/a&gt;! This is your very first post. Check &lt;a href=&quot;https://hexo.io/docs/&quot;&gt;documentation&lt;/a&gt; for</summary>
+    <summary type="html">&lt;p&gt;欢迎来到我的博客！&lt;/p&gt;
+&lt;h2 id=&quot;为什么选择-CS？&quot;&gt;&lt;a href=&quot;#为什么选择-CS？&quot; class=&quot;headerlink&quot; title=&quot;为什么选择 CS？&quot;&gt;&lt;/a&gt;为什么选择 CS？&lt;/h2&gt;&lt;center&gt;经过三年高中的刻苦(&lt;i&gt;bushi&lt;i</summary>
       
     
     
     
+    <category term="学习历程" scheme="https://archyup.github.io/categories/%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/"/>
+    
+    
+    <category term="随笔" scheme="https://archyup.github.io/tags/%E9%9A%8F%E7%AC%94/"/>
+    
+    <category term="CS" scheme="https://archyup.github.io/tags/CS/"/>
     
   </entry>
   
