@@ -1253,7 +1253,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #001275;
+    background: #88ff82;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2725,4 +2725,75 @@ header.header {
   .comments {
     padding: 10px 12px;
   }
+}
+/* =========================================================
+   Hexo NexT Apple Style (Gradient Version)
+   ========================================================= */
+body {
+/* 既然图片加载不出来，我们直接用苹果风的极光渐变色，这绝对能显示 */
+  background: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%) !important;
+  background-attachment: fixed !important;
+/* 强制苹果字体 */
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro SC", "SF Pro Text", "Helvetica Neue", "PingFang SC", "Microsoft YaHei", sans-serif !important;
+}
+/* 卡片样式：白底半透明 + 磨砂 */
+.header,
+.post-block,
+.sidebar-inner,
+.header-inner,
+.comments,
+.pagination {
+  background: rgba(255,255,255,0.6) !important;
+  backdrop-filter: blur(20px); /* 模糊滤镜 */
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 24px !important; /* 更大的圆角 */
+  border: 1px solid rgba(255,255,255,0.6);
+  box-shadow: 0 8px 30px rgba(0,0,0,0.1) !important;
+}
+/* 修正页脚那个烦人的 object Object */
+/* 既然配置改不好，我们直接用 CSS 暴力隐藏旧的，手写一个新的 */
+.footer-inner {
+  font-size: 0 !important; /* 隐藏原有文字 */
+}
+.footer-inner:after {
+  content: "© 2025 Archy | 开启 CS 之旅"; /* 手写你想要的内容 */
+  font-size: 14px !important;
+  color: #555;
+  display: block;
+}
+/* 其他微调 */
+.headband {
+  display: none;
+}
+.site-brand-container {
+  background: transparent !important;
+}
+.btn {
+  border-radius: 20px !important;
+  background: #0071e3 !important;
+  border: none !important;
+}
+/* =========================================================
+   修复左上角文字颜色 (Fix Header Contrast)
+   ========================================================= */
+/* 1. 强制把标题和副标题变成深黑色 */
+.site-title {
+  color: #000 !important; /* 纯黑 */
+  font-weight: 900 !important; /* 加粗 */
+}
+.site-subtitle {
+  color: #444 !important; /* 深灰，拉开层次 */
+}
+/* 2. 菜单项文字 (首页、归档等) 也改成黑色 */
+.menu-item a {
+  color: #333 !important;
+}
+/* 3. 菜单图标颜色 (前面的小房子图标等) */
+.menu-item i {
+  color: #333 !important;
+}
+/* 4. 鼠标悬停时变回苹果蓝 */
+.menu-item a:hover,
+.menu-item a:hover i {
+  color: #0071e3 !important;
 }
