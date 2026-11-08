@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12,"author":"Archy","description":"记录我的 C++ / Python 学习、算法与大学四年成长"},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":null},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null,"enable":true},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="记录我的 C++ &#x2F; Python 学习与大学四年的成长">
 <meta property="og:type" content="website">
@@ -52,6 +52,8 @@
 
   
 
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"neutral","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
 
 
 
@@ -62,6 +64,11 @@
 
 
 
+<!-- 中国清雅风 · 霞鹜文楷 & 思源宋体 WebFont 引入 -->
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" />
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -102,7 +109,7 @@
 
 
 <nav class="site-nav">
-  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa-solid fa-house fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa-regular fa-calendar fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa-solid fa-folder fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa-solid fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa-regular fa-user fa-fw"></i>关于</a></li>
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa-solid fa-compass fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa-solid fa-scroll fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa-solid fa-folder-tree fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa-solid fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa-solid fa-user-graduate fa-fw"></i>关于</a></li>
   </ul>
 </nav>
 
@@ -146,15 +153,25 @@
         </a>
       </div>
       <div class="site-state-item site-state-categories">
+          <a href="/categories/">
         <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span>
+        <span class="site-state-item-name">分类</span></a>
       </div>
       <div class="site-state-item site-state-tags">
+          <a href="/tags/">
         <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">标签</span>
+        <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
 </div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/Archyup" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Archyup" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1469129906@qq.com" title="E-Mail → mailto:1469129906@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
 
         </div>
       </div>
@@ -241,9 +258,9 @@
     &copy; 2025 – 
     <span itemprop="copyrightYear">2026</span>
     <span class="with-love">
-      <i class="fa fa-heart"></i>
+      <i class="fa fa-leaf"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">[object Object]</span>
+    <span class="author" itemprop="copyrightHolder">Archy (张裔奇) · 格物致知</span>
   </div>
   <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
   </div>
@@ -266,6 +283,560 @@
 <noscript>
   <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
 </noscript>
+<script>
+(function() {
+  // 1. 精选中国清雅风 / 自然大漠 / 远山云雾 / 必应实时壁纸池
+  const WALLPAPERS = [
+    {
+      url: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
+      title: "大漠孤烟 · 沙海孤木",
+      credit: "清雅自然志 · 卷一"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=2000&q=85",
+      title: "远山如黛 · 苍林晨雾",
+      credit: "清雅自然志 · 卷二"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85",
+      title: "千峰竞秀 · 云海苍茫",
+      credit: "清雅自然志 · 卷三"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85",
+      title: "平湖秋月 · 溪山行旅",
+      credit: "清雅自然志 · 卷四"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=85",
+      title: "晓雾初开 · 空山新雨",
+      credit: "清雅自然志 · 卷五"
+    },
+    {
+      url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85",
+      title: "寒江独钓 · 水墨丹青",
+      credit: "清雅自然志 · 卷六"
+    },
+    {
+      url: "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
+      title: "今日必应 · 每日实时画卷",
+      credit: "Bing Daily 实时源"
+    },
+    {
+      url: "https://bing.biturl.top/?resolution=1920&format=image&index=1&mkt=zh-CN",
+      title: "昨日必应 · 岁月掠影",
+      credit: "Bing Daily 实时源"
+    }
+  ];
+
+  // 2. 清雅格言 / 诗词池（点击可切换）
+  const VERSES = [
+    { text: "格物致知，知行合一。于方寸终端之间，探算力与智能之边界。", author: "《格物志 · 序》" },
+    { text: "大漠孤烟直，长河落日圆。", author: "唐 · 王维《使至塞上》" },
+    { text: "行到水穷处，坐看云起时。", author: "唐 · 王维《终南别业》" },
+    { text: "博学之，审问之，慎思之，明辨之，笃行之。", author: "《礼记 · 中庸》" },
+    { text: "落霞与孤鹜齐飞，秋水共长天一色。", author: "唐 · 王勃《滕王阁序》" },
+    { text: "竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。", author: "宋 · 苏轼《定风波》" }
+  ];
+
+  // 3. 站点核心文章索引（供首屏极速检索与多级渐进披露）
+  const POST_INDEX = [
+    {
+      title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优",
+      shortTitle: "动态稀疏矩阵乘 (SpMM) Wave64 标量化与满占用调优",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["高性能计算", "算子优化", "ROCm/HIP"],
+      url: "/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/",
+      summary: "先导杯第二题核心复盘：通过 __builtin_amdgcn_readfirstlane 标量提权、4×4 Burst Unroll-16 突发加载流水线、N=512 零分支 24-VGPR 100% 满占用特化内核与 Non-Temporal Store，实现 7.24x 综合加速与 370 项门禁全通过。"
+    },
+    {
+      title: "面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践",
+      shortTitle: "Qwen2.5-1.5B 端侧 32K 极速推理底座与静态图实践",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["高性能计算", "大模型推理", "ROCm/HIP"],
+      url: "/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/",
+      summary: "先导杯第一题核心复盘：在 16GB 显存红线下，通过原生 12-Head KV 广播融合、前 31 块 lm_head 旁路、Decode 0-VRAM 视图重绑与 4 路 Capacity=300 静态 HIP Graph，将 32.5K 显存压降 94.2%，Decode 吞吐提升 4.07x。"
+    },
+    {
+      title: "第一次参加 Hackathon · 岳麓黑客松初体验",
+      shortTitle: "岳麓黑客松初体验 · 初识工程化",
+      date: "2025-12-20",
+      cat: "学习历程",
+      tags: ["随笔", "CS"],
+      url: "/2025/12/20/黑客松初体验/",
+      summary: "大一刚入学码龄两个月时的第一次黑客松之旅。记录与学长组队开发可视化预测项目的过程，以及对“将 AI 工程化、落地化”的最初思考。"
+    },
+    {
+      title: "我的 CS 学习之路 · 序章",
+      shortTitle: "我的 CS 学习之路 · 序章",
+      date: "2025-11-11",
+      cat: "学习历程",
+      tags: ["随笔", "CS"],
+      url: "/2025/11/11/我的CS学习之路-序章/",
+      summary: "高考之后在 AI 浪潮下选择计算机科学，来到湖南大学开启大学四年的 CS 探索之旅。"
+    }
+  ];
+
+  const isHomePage = window.location.pathname === "/" || window.location.pathname === "/index.html";
+
+  // 4. 创建背景画布层与暗角遮罩
+  const bgContainer = document.createElement("div");
+  bgContainer.id = "qingya-wallpaper-bg";
+  bgContainer.innerHTML = `
+    <div class="qy-bg-layer qy-bg-a active"></div>
+    <div class="qy-bg-layer qy-bg-b"></div>
+    <div class="qy-bg-overlay"></div>
+  `;
+  document.body.prepend(bgContainer);
+
+  // 5. 创建首屏「清雅导航视界」(结合 Edge 新标签页 + Chairo 导航站 + 中国清雅楷体风)
+  const portalHero = document.createElement("section");
+  portalHero.id = "qingya-portal-hero";
+  portalHero.innerHTML = `
+    <!-- 顶部极简状态栏 (Edge 标签页风格) -->
+    <header class="qy-topbar">
+      <div class="qy-brand" id="qy-brand-home" title="返回首屏视界">
+        <span class="qy-seal">裔奇</span>
+        <span class="qy-brand-text">Archy · 格物志</span>
+      </div>
+      <div class="qy-top-meta">
+        <span class="qy-location"><i class="fa-solid fa-location-dot"></i> 湖南 · 长沙 · 岳麓</span>
+        <span class="qy-divider">|</span>
+        <span class="qy-wp-indicator" id="qy-wp-title">大漠孤烟 · 沙海孤木</span>
+      </div>
+    </header>
+
+    <!-- 中央核心视觉区：第一次点击仅呈现极简关键信息 -->
+    <div class="qy-center-stage">
+      <div class="qy-clock-wrap">
+        <div class="qy-time" id="qy-hero-time">00:00</div>
+        <div class="qy-date" id="qy-hero-date">丙午年 · 孟冬</div>
+      </div>
+
+      <div class="qy-verse-box" id="qy-verse-box" title="点击切换清雅诗句">
+        <p class="qy-verse-text" id="qy-verse-text">「格物致知，知行合一。于方寸终端之间，探算力与智能之边界。」</p>
+      </div>
+
+      <!-- Edge 风格极简检索框（支持站内文章秒级过滤 + 回车搜索） -->
+      <div class="qy-search-container">
+        <div class="qy-search-box">
+          <i class="fa-solid fa-magnifying-glass qy-search-icon"></i>
+          <input type="text" id="qy-search-input" placeholder="检索站内文章（如：先导杯、SpMM、Qwen、ROCm）或输入关键词回车..." autocomplete="off" />
+          <kbd class="qy-search-kbd">/</kbd>
+        </div>
+        <div class="qy-search-dropdown" id="qy-search-dropdown"></div>
+      </div>
+
+      <!-- 导航站风格快捷胶囊矩阵（第一次点击：极简入口；点击后触发二级详情） -->
+      <nav class="qy-nav-pills">
+        <button type="button" class="qy-pill qy-pill-primary" id="qy-btn-expand-posts">
+          <i class="fa-solid fa-book-open"></i>
+          <span>展卷阅文</span>
+          <em class="qy-pill-badge">${POST_INDEX.length}</em>
+        </button>
+        <button type="button" class="qy-pill" id="qy-btn-quick-peek">
+          <i class="fa-solid fa-layer-group"></i>
+          <span>新篇速览</span>
+        </button>
+        <a href="/categories/" class="qy-pill">
+          <i class="fa-solid fa-folder-tree"></i>
+          <span>分类目录</span>
+        </a>
+        <a href="/tags/" class="qy-pill">
+          <i class="fa-solid fa-tags"></i>
+          <span>标签云集</span>
+        </a>
+        <a href="/archives/" class="qy-pill">
+          <i class="fa-solid fa-scroll"></i>
+          <span>岁月归档</span>
+        </a>
+        <a href="/about/" class="qy-pill">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span>关于裔奇</span>
+        </a>
+        <a href="https://github.com/Archyup" target="_blank" rel="noopener" class="qy-pill">
+          <i class="fa-brands fa-github"></i>
+          <span>GitHub</span>
+        </a>
+      </nav>
+
+      <!-- 二级抽屉（默认收起，点击「新篇速览」展开极简标题卡片；再点击标题展开摘要或进正文） -->
+      <div class="qy-peek-drawer" id="qy-peek-drawer">
+        <div class="qy-peek-header">
+          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击条目可预览纲要，二次点击进入全文</span>
+          <button type="button" class="qy-peek-close" id="qy-peek-close" title="收起">✕</button>
+        </div>
+        <div class="qy-peek-list" id="qy-peek-list"></div>
+      </div>
+    </div>
+  `;
+  document.body.prepend(portalHero);
+
+  // 6. 创建底部 Chairo 风格悬浮控制坞 (Bottom Floating Dock)
+  const dock = document.createElement("aside");
+  dock.id = "qingya-dock";
+  dock.innerHTML = `
+    <div class="qy-dock-inner">
+      <button type="button" class="qy-dock-btn" id="qy-dock-portal" title="切换极简导航视界 / 展卷阅读模式">
+        <i class="fa-solid fa-compass"></i>
+        <span>视界</span>
+      </button>
+      <button type="button" class="qy-dock-btn" id="qy-dock-articles" title="展开全部文章卷轴">
+        <i class="fa-solid fa-scroll"></i>
+        <span>文卷</span>
+      </button>
+      <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="即时更换背景画卷">
+        <i class="fa-solid fa-image"></i>
+        <span>换景</span>
+      </button>
+      <button type="button" class="qy-dock-btn active" id="qy-dock-auto-wp" title="开启/关闭壁纸实时自动轮换 (每45秒)">
+        <i class="fa-solid fa-rotate"></i>
+        <span>时新</span>
+      </button>
+      <button type="button" class="qy-dock-btn" id="qy-dock-paper-mode" title="切换纯素宣纸阅读底色">
+        <i class="fa-solid fa-mug-hot"></i>
+        <span>素宣</span>
+      </button>
+      <button type="button" class="qy-dock-btn" id="qy-dock-top" title="回到顶部">
+        <i class="fa-solid fa-arrow-up"></i>
+      </button>
+      <div class="qy-dock-clock">
+        <div class="qy-dock-time" id="qy-dock-time">00:00:00</div>
+        <div class="qy-dock-date" id="qy-dock-date">2026.11.09</div>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dock);
+
+  // 7. 渲染「新篇速览」二级渐进披露抽屉（第1次点标题展开摘要，第2次点进正文）
+  const peekListEl = document.getElementById("qy-peek-list");
+  let activePeekIdx = -1;
+
+  function renderPeekList() {
+    peekListEl.innerHTML = POST_INDEX.map((post, idx) => `
+      <div class="qy-peek-item ${activePeekIdx === idx ? 'expanded' : ''}" data-idx="${idx}">
+        <div class="qy-peek-row">
+          <span class="qy-peek-cat">${post.cat}</span>
+          <span class="qy-peek-title">${post.shortTitle}</span>
+          <span class="qy-peek-date">${post.date}</span>
+          <span class="qy-peek-action">${activePeekIdx === idx ? '收起纲要 ▴' : '预览纲要 ▾'}</span>
+        </div>
+        <div class="qy-peek-detail">
+          <p class="qy-peek-summary">${post.summary}</p>
+          <div class="qy-peek-footer">
+            <div class="qy-peek-tags">
+              ${post.tags.map(t => `<span class="qy-mini-tag"># ${t}</span>`).join('')}
+            </div>
+            <a href="${post.url}" class="qy-peek-readmore">展卷深读全文 →</a>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+    peekListEl.querySelectorAll(".qy-peek-row").forEach(row => {
+      row.addEventListener("click", function() {
+        const item = this.parentElement;
+        const idx = parseInt(item.getAttribute("data-idx"), 10);
+        activePeekIdx = (activePeekIdx === idx) ? -1 : idx;
+        renderPeekList();
+      });
+    });
+  }
+  renderPeekList();
+
+  // 8. 改造文章列表页卡片：实现「第一次极简只看标题，点击展开摘要，再点击进全文」
+  function enhanceArticleCards() {
+    if (!isHomePage) return;
+    const postBlocks = document.querySelectorAll(".main-inner .post-block");
+    postBlocks.forEach((block, index) => {
+      const postBody = block.querySelector(".post-body");
+      const header = block.querySelector(".post-header");
+      if (!postBody || !header || block.dataset.qyEnhanced) return;
+      block.dataset.qyEnhanced = "true";
+
+      // 默认折叠正文摘要，除非用户点击「展读摘要」
+      postBody.classList.add("qy-collapsed-body");
+
+      const toggleBar = document.createElement("div");
+      toggleBar.className = "qy-card-progressive-bar";
+      const titleLink = block.querySelector(".post-title-link");
+      const postUrl = titleLink ? titleLink.getAttribute("href") : "#";
+
+      toggleBar.innerHTML = `
+        <button type="button" class="qy-btn-toggle-abstract">
+          <i class="fa-solid fa-eye"></i> 展读核心摘要
+        </button>
+        <a href="${postUrl}" class="qy-btn-enter-article">
+          直入全文深读 <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      `;
+
+      header.after(toggleBar);
+
+      const toggleBtn = toggleBar.querySelector(".qy-btn-toggle-abstract");
+      toggleBtn.addEventListener("click", function() {
+        const isCollapsed = postBody.classList.toggle("qy-collapsed-body");
+        this.innerHTML = isCollapsed
+          ? '<i class="fa-solid fa-eye"></i> 展读核心摘要'
+          : '<i class="fa-solid fa-eye-slash"></i> 收起摘要';
+      });
+    });
+  }
+  enhanceArticleCards();
+
+  // 9. 壁纸切换与实时自动更新引擎
+  let currentWpIdx = parseInt(localStorage.getItem("qy_wp_idx") || "0", 10) % WALLPAPERS.length;
+  let activeLayerIsA = true;
+  let autoRotateTimer = null;
+  let isAutoRotate = localStorage.getItem("qy_auto_wp") !== "false";
+  let isPaperMode = localStorage.getItem("qy_paper_mode") === "true";
+
+  const layerA = bgContainer.querySelector(".qy-bg-a");
+  const layerB = bgContainer.querySelector(".qy-bg-b");
+  const wpTitleEl = document.getElementById("qy-wp-title");
+  const btnAutoWp = document.getElementById("qy-dock-auto-wp");
+  const btnPaperMode = document.getElementById("qy-dock-paper-mode");
+
+  function applyWallpaper(idx,preloadOnly) {
+    const wp = WALLPAPERS[idx];
+    const img = new Image();
+    img.onload = function() {
+      if (preloadOnly) return;
+      const targetLayer = activeLayerIsA ? layerA : layerB;
+      const otherLayer = activeLayerIsA ? layerB : layerA;
+      targetLayer.style.backgroundImage = `url("${wp.url}")`;
+      targetLayer.classList.add("active");
+      otherLayer.classList.remove("active");
+      activeLayerIsA = !activeLayerIsA;
+      if (wpTitleEl) wpTitleEl.textContent = `${wp.title} (${wp.credit})`;
+    };
+    img.src = wp.url;
+  }
+
+  // 初始设置第一张壁纸
+  layerA.style.backgroundImage = `url("${WALLPAPERS[currentWpIdx].url}")`;
+  if (wpTitleEl) wpTitleEl.textContent = `${WALLPAPERS[currentWpIdx].title} (${WALLPAPERS[currentWpIdx].credit})`;
+  activeLayerIsA = false;
+
+  function nextWallpaper() {
+    if (isPaperMode) {
+      togglePaperMode(false);
+    }
+    currentWpIdx = (currentWpIdx + 1) % WALLPAPERS.length;
+    localStorage.setItem("qy_wp_idx", String(currentWpIdx));
+    applyWallpaper(currentWpIdx, false);
+  }
+
+  function updateAutoRotateState() {
+    if (autoRotateTimer) clearInterval(autoRotateTimer);
+    if (isAutoRotate && !isPaperMode) {
+      btnAutoWp.classList.add("active");
+      autoRotateTimer = setInterval(nextWallpaper, 45000); // 每45秒实时更新壁纸
+    } else {
+      btnAutoWp.classList.remove("active");
+    }
+  }
+
+  function togglePaperMode(forceState) {
+    isPaperMode = typeof forceState === "boolean" ? forceState : !isPaperMode;
+    localStorage.setItem("qy_paper_mode", String(isPaperMode));
+    document.body.classList.toggle("qy-paper-mode", isPaperMode);
+    btnPaperMode.classList.toggle("active", isPaperMode);
+    updateAutoRotateState();
+  }
+
+  if (isPaperMode) togglePaperMode(true);
+  updateAutoRotateState();
+
+  // 10. 首屏视界模式 vs 展卷阅读模式状态控制
+  function setPortalMode(zenMode) {
+    if (zenMode) {
+      document.body.classList.add("qy-portal-zen");
+      document.body.classList.remove("qy-portal-scroll");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    } else {
+      document.body.classList.remove("qy-portal-zen");
+      document.body.classList.add("qy-portal-scroll");
+    }
+  }
+
+  // 首页默认进入「极简导航视界」，内页直接进入「阅读视图」
+  if (isHomePage) {
+    setPortalMode(true);
+  } else {
+    document.body.classList.add("qy-inner-page");
+    setPortalMode(false);
+  }
+
+  // 11. 绑定交互事件
+  document.getElementById("qy-btn-expand-posts").addEventListener("click", function() {
+    setPortalMode(false);
+    setTimeout(() => {
+      const mainEl = document.querySelector(".main");
+      if (mainEl) mainEl.scrollIntoView({ behavior: "smooth" });
+    }, 80);
+  });
+
+  const peekDrawer = document.getElementById("qy-peek-drawer");
+  document.getElementById("qy-btn-quick-peek").addEventListener("click", function() {
+    peekDrawer.classList.toggle("open");
+    this.classList.toggle("qy-pill-active", peekDrawer.classList.contains("open"));
+  });
+
+  document.getElementById("qy-peek-close").addEventListener("click", function() {
+    peekDrawer.classList.remove("open");
+    document.getElementById("qy-btn-quick-peek").classList.remove("qy-pill-active");
+  });
+
+  document.getElementById("qy-brand-home").addEventListener("click", function() {
+    if (isHomePage) {
+      setPortalMode(true);
+    } else {
+      window.location.href = "/";
+    }
+  });
+
+  document.getElementById("qy-dock-portal").addEventListener("click", function() {
+    if (!isHomePage) {
+      window.location.href = "/";
+      return;
+    }
+    const isCurrentlyZen = document.body.classList.contains("qy-portal-zen");
+    setPortalMode(!isCurrentlyZen);
+  });
+
+  document.getElementById("qy-dock-articles").addEventListener("click", function() {
+    if (!isHomePage) {
+      window.location.href = "/archives/";
+      return;
+    }
+    setPortalMode(false);
+    setTimeout(() => {
+      const mainEl = document.querySelector(".main");
+      if (mainEl) mainEl.scrollIntoView({ behavior: "smooth" });
+    }, 80);
+  });
+
+  document.getElementById("qy-dock-next-wp").addEventListener("click", nextWallpaper);
+
+  btnAutoWp.addEventListener("click", function() {
+    isAutoRotate = !isAutoRotate;
+    localStorage.setItem("qy_auto_wp", String(isAutoRotate));
+    updateAutoRotateState();
+  });
+
+  btnPaperMode.addEventListener("click", function() {
+    togglePaperMode();
+  });
+
+  document.getElementById("qy-dock-top").addEventListener("click", function() {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  // 诗词点击切换
+  let verseIdx = 0;
+  document.getElementById("qy-verse-box").addEventListener("click", function() {
+    verseIdx = (verseIdx + 1) % VERSES.length;
+    const v = VERSES[verseIdx];
+    document.getElementById("qy-verse-text").textContent = `「${v.text}」 —— ${v.author}`;
+  });
+
+  // 12. 站内文章实时检索框逻辑
+  const searchInput = document.getElementById("qy-search-input");
+  const searchDropdown = document.getElementById("qy-search-dropdown");
+
+  searchInput.addEventListener("input", function() {
+    const q = this.value.trim().toLowerCase();
+    if (!q) {
+      searchDropdown.classList.remove("show");
+      return;
+    }
+    const matches = POST_INDEX.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.summary.toLowerCase().includes(q) ||
+      p.tags.some(t => t.toLowerCase().includes(q)) ||
+      p.cat.toLowerCase().includes(q)
+    );
+
+    if (matches.length > 0) {
+      searchDropdown.innerHTML = matches.map(m => `
+        <a href="${m.url}" class="qy-search-item">
+          <div class="qy-search-item-top">
+            <span class="qy-search-item-cat">${m.cat}</span>
+            <span class="qy-search-item-title">${m.shortTitle}</span>
+            <span class="qy-search-item-date">${m.date}</span>
+          </div>
+          <div class="qy-search-item-desc">${m.summary}</div>
+        </a>
+      `).join("");
+    } else {
+      searchDropdown.innerHTML = `
+        <div class="qy-search-empty">未检索到匹配文卷，按回车键使用必应全网搜索「${this.value}」</div>
+      `;
+    }
+    searchDropdown.classList.add("show");
+  });
+
+  searchInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && this.value.trim()) {
+      const q = this.value.trim().toLowerCase();
+      const firstMatch = POST_INDEX.find(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.summary.toLowerCase().includes(q)
+      );
+      if (firstMatch) {
+        window.location.href = firstMatch.url;
+      } else {
+        window.open(`https://cn.bing.com/search?q=${encodeURIComponent(this.value.trim())}`, "_blank");
+      }
+    } else if (e.key === "Escape") {
+      searchDropdown.classList.remove("show");
+      this.blur();
+    }
+  });
+
+  // 快捷键 `/` 聚焦搜索框
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "/" && document.activeElement !== searchInput && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".qy-search-container")) {
+      searchDropdown.classList.remove("show");
+    }
+  });
+
+  // 13. 实时时钟与干支纪年日期更新
+  const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
+  function updateClock() {
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, "0");
+    const mm = String(now.getMinutes()).padStart(2, "0");
+    const ss = String(now.getSeconds()).padStart(2, "0");
+    const yyyy = now.getFullYear();
+    const mo = String(now.getMonth() + 1).padStart(2, "0");
+    const dd = String(now.getDate()).padStart(2, "0");
+    const wk = WEEKDAYS[now.getDay()];
+
+    const heroTime = document.getElementById("qy-hero-time");
+    const heroDate = document.getElementById("qy-hero-date");
+    const dockTime = document.getElementById("qy-dock-time");
+    const dockDate = document.getElementById("qy-dock-date");
+
+    if (heroTime) heroTime.textContent = `${hh}:${mm}`;
+    if (heroDate) heroDate.textContent = `${yyyy}年${mo}月${dd}日 · ${wk} · 岁在丙午`;
+    if (dockTime) dockTime.textContent = `${hh}:${mm}:${ss}`;
+    if (dockDate) dockDate.textContent = `${yyyy}.${mo}.${dd}`;
+  }
+  updateClock();
+  setInterval(updateClock, 1000);
+})();
+</script>
 
 </body>
 </html>
