@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #8affff;
+    background: #1b1781;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2911,7 +2911,9 @@ html.qy-is-inner .main {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;
-  animation: qyFastAppear 0.2s ease-out;
+}
+html.qy-is-inner .main-inner {
+  animation: qyGentleEmergence 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 /* 首页「极简视界模式」：下滑前隐藏文章流，下滑瞬间丝滑浮现 */
 body.qy-portal-zen {
@@ -3410,17 +3412,24 @@ body.qy-paper-mode .qy-scroll-hint {
 .post-toc .nav-item {
   margin: 3px 0 !important;
 }
-.post-toc .nav-link {
+.post-toc .nav-link,
+.post-toc .nav-item.active > .nav-link {
   color: var(--qy-ink-secondary) !important;
+  font-weight: 400 !important;
   border-bottom: none !important;
-  transition: color 0.2s ease, padding-left 0.2s ease;
+  border-left: 2px solid transparent !important;
+  padding-left: 6px !important;
+  transition: color 0.22s ease, padding-left 0.22s ease, border-color 0.22s ease;
   display: block;
   white-space: normal !important;
 }
 .post-toc .nav-link:hover,
-.post-toc .nav-item.active > .nav-link {
+.post-toc .nav-item.qy-toc-current > .nav-link,
+.post-toc a.qy-toc-link-current {
   color: var(--qy-cinnabar) !important;
-  font-weight: 600 !important;
+  font-weight: 700 !important;
+  border-left: 2px solid var(--qy-cinnabar) !important;
+  padding-left: 10px !important;
 }
 /* Show all TOC levels cleanly for quick navigation */
 .post-toc .nav .nav-child {
@@ -3683,14 +3692,16 @@ body.qy-paper-mode .footer {
     display: none;
   }
 }
-@keyframes qyFastAppear {
-  from {
-    opacity: 0.4;
-    transform: translateY(8px);
+@keyframes qyGentleEmergence {
+  0% {
+    opacity: 0;
+    transform: translate3d(0, 24px, 0) scale(0.984);
+    filter: blur(4px);
   }
-  to {
+  100% {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0) scale(1);
+    filter: blur(0);
   }
 }
 @keyframes qyFloatHint {

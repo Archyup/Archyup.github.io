@@ -26,7 +26,7 @@
 <meta property="og:description" content="好久没更新博客了。从大一刚入学参加岳麓黑客松时连 API 调用都要抱学长大腿，到现在大二上学期一头扎进先导杯（CSCC）搞海光 DCU &#x2F; AMD 异构计算与大模型底层推理优化，这一年的跨度确实有点大。 yysy，放到两三年前，让一个刚上大二的本科生去手搓 HIP 算子融合、扣 Wave64 寄存器和 HBM2 访存带宽，几乎是不可能完成的任务。但现在处于 AI 大爆发的时代，AI 某种">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-11-08T16:36:00.000Z">
-<meta property="article:modified_time" content="2026-11-08T17:04:10.921Z">
+<meta property="article:modified_time" content="2026-11-08T18:44:01.139Z">
 <meta property="article:author" content="Archy">
 <meta property="article:tag" content="CS">
 <meta property="article:tag" content="ROCm&#x2F;HIP">
@@ -148,7 +148,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89%EF%BC%9A%E7%AB%AF%E4%BE%A7-16GB-%E6%98%BE%E5%AD%98%E7%BA%A2%E7%BA%BF%E4%B8%8B%E7%9A%84%E9%95%BF%E7%A8%8B%E6%8E%A8%E7%90%86%E5%9B%B0%E5%A2%83"><span class="nav-text">一、 背景与问题定义：端侧 16GB 显存红线下的长程推理困境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%A1%AC%E4%BB%B6%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%80%A7%E8%83%BD%E7%97%9B%E7%82%B9"><span class="nav-text">1.1 硬件边界与性能痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%B7%A5%E4%B8%9A%E7%BA%A7%E4%BF%9D%E7%9C%9F%E7%BA%A6%E6%9D%9F%EF%BC%9A0-ULP-%E9%80%90-Token-%E7%BB%9D%E5%AF%B9%E5%AF%B9%E9%BD%90"><span class="nav-text">1.2 工业级保真约束：0-ULP 逐 Token 绝对对齐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E6%98%BE%E5%AD%98%E6%96%AD%E5%B4%96%E5%BC%8F%E5%8E%8B%E7%BC%A9%EF%BC%9AKV-Cache-%E5%8A%A8%E6%80%81%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%97%81%E8%B7%AF"><span class="nav-text">二、 显存断崖式压缩：KV Cache 动态架构与计算旁路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8E%9F%E7%94%9F-12-Head-KV-%E7%BC%93%E5%AD%98%E4%B8%8E-GQA-%E8%B7%A8%E6%AD%A5%E5%B9%BF%E6%92%AD%E5%8E%9F%E4%BD%8D%E8%9E%8D%E5%90%88"><span class="nav-text">2.1 原生 12-Head KV 缓存与 GQA 跨步广播原位融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%88%86%E5%9D%97%E9%A2%84%E5%A1%AB%E5%85%85%EF%BC%88Chunked-Prefill%EF%BC%89%E4%B8%8E%E4%B8%AD%E9%97%B4%E5%9D%97-lm-head-%E6%97%81%E8%B7%AF"><span class="nav-text">2.2 分块预填充（Chunked Prefill）与中间块 lm_head 旁路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E7%AE%97%E5%AD%90%E8%9E%8D%E5%90%88%E4%B8%8E%E9%9B%B6%E6%98%BE%E5%AD%98%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91%EF%BC%88Kernel-Fusion-0-VRAM-View-Rebinding%EF%BC%89"><span class="nav-text">三、 算子融合与零显存视图重绑（Kernel Fusion &amp; 0-VRAM View Rebinding）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%A5%E6%A0%BC-0-ULP-%E5%AF%B9%E9%BD%90%E7%9A%84%E6%AE%8B%E5%B7%AE%E4%B8%8E-RMSNorm-%E8%9E%8D%E5%90%88%EF%BC%9Aadd-rmsnorm-exact-1536-f16"><span class="nav-text">3.1 严格 0-ULP 对齐的残差与 RMSNorm 融合：add_rmsnorm_exact_1536_f16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Decode-%E4%B8%93%E5%B1%9E-0-VRAM-%E6%9D%83%E9%87%8D%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91"><span class="nav-text">3.2 Decode 专属 0-VRAM 权重视图重绑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8D%95%E6%AD%A5-RoPE-%E6%97%8B%E8%BD%AC%E4%B8%8E-KV-%E5%86%99%E5%85%A5%E8%9E%8D%E5%90%88"><span class="nav-text">3.3 单步 RoPE 旋转与 KV 写入融合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E6%B6%88%E9%99%A4%E4%B8%BB%E6%9C%BA%E7%AB%AF%E7%93%B6%E9%A2%88%EF%BC%9A%E5%A4%9A%E9%80%9A%E9%81%93%E5%B8%B8%E9%A9%BB%E9%9D%99%E6%80%81-HIP-Graph-%E4%BD%93%E7%B3%BB"><span class="nav-text">四、 消除主机端瓶颈：多通道常驻静态 HIP Graph 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E5%AE%9E%E6%9C%BA%E8%AF%84%E6%B5%8B%E4%B8%8E%E6%80%A7%E8%83%BD%E6%94%B6%E7%9B%8A%E6%80%BB%E7%BB%93"><span class="nav-text">四、 实机评测与性能收益总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E7%BB%93%E8%AF%AD%E4%B8%8E%E4%B8%80%E7%82%B9%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F"><span class="nav-text">五、 结语与一点个人感悟</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89%EF%BC%9A%E7%AB%AF%E4%BE%A7-16GB-%E6%98%BE%E5%AD%98%E7%BA%A2%E7%BA%BF%E4%B8%8B%E7%9A%84%E9%95%BF%E7%A8%8B%E6%8E%A8%E7%90%86%E5%9B%B0%E5%A2%83"><span class="nav-text">一、 背景与问题定义：端侧 16GB 显存红线下的长程推理困境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%A1%AC%E4%BB%B6%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%80%A7%E8%83%BD%E7%97%9B%E7%82%B9"><span class="nav-text">1.1 硬件边界与性能痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%B7%A5%E4%B8%9A%E7%BA%A7%E4%BF%9D%E7%9C%9F%E7%BA%A6%E6%9D%9F%EF%BC%9A0-ULP-%E9%80%90-Token-%E7%BB%9D%E5%AF%B9%E5%AF%B9%E9%BD%90"><span class="nav-text">1.2 工业级保真约束：0-ULP 逐 Token 绝对对齐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E6%98%BE%E5%AD%98%E6%96%AD%E5%B4%96%E5%BC%8F%E5%8E%8B%E7%BC%A9%EF%BC%9AKV-Cache-%E5%8A%A8%E6%80%81%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%97%81%E8%B7%AF"><span class="nav-text">二、 显存断崖式压缩：KV Cache 动态架构与计算旁路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8E%9F%E7%94%9F-12-Head-KV-%E7%BC%93%E5%AD%98%E4%B8%8E-GQA-%E8%B7%A8%E6%AD%A5%E5%B9%BF%E6%92%AD%E5%8E%9F%E4%BD%8D%E8%9E%8D%E5%90%88"><span class="nav-text">2.1 原生 12-Head KV 缓存与 GQA 跨步广播原位融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%88%86%E5%9D%97%E9%A2%84%E5%A1%AB%E5%85%85%EF%BC%88Chunked-Prefill%EF%BC%89%E4%B8%8E%E4%B8%AD%E9%97%B4%E5%9D%97-lm-head-%E6%97%81%E8%B7%AF"><span class="nav-text">2.2 分块预填充（Chunked Prefill）与中间块 lm_head 旁路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E7%AE%97%E5%AD%90%E8%9E%8D%E5%90%88%E4%B8%8E%E9%9B%B6%E6%98%BE%E5%AD%98%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91%EF%BC%88Kernel-Fusion-0-VRAM-View-Rebinding%EF%BC%89"><span class="nav-text">三、 算子融合与零显存视图重绑（Kernel Fusion &amp; 0-VRAM View Rebinding）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%A5%E6%A0%BC-0-ULP-%E5%AF%B9%E9%BD%90%E7%9A%84%E6%AE%8B%E5%B7%AE%E4%B8%8E-RMSNorm-%E8%9E%8D%E5%90%88%EF%BC%9Aadd-rmsnorm-exact-1536-f16"><span class="nav-text">3.1 严格 0-ULP 对齐的残差与 RMSNorm 融合：add_rmsnorm_exact_1536_f16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Decode-%E4%B8%93%E5%B1%9E-0-VRAM-%E6%9D%83%E9%87%8D%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91"><span class="nav-text">3.2 Decode 专属 0-VRAM 权重视图重绑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8D%95%E6%AD%A5-RoPE-%E6%97%8B%E8%BD%AC%E4%B8%8E-KV-%E5%86%99%E5%85%A5%E8%9E%8D%E5%90%88"><span class="nav-text">3.3 单步 RoPE 旋转与 KV 写入融合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E6%B6%88%E9%99%A4%E4%B8%BB%E6%9C%BA%E7%AB%AF%E7%93%B6%E9%A2%88%EF%BC%9A%E5%A4%9A%E9%80%9A%E9%81%93%E5%B8%B8%E9%A9%BB%E9%9D%99%E6%80%81-HIP-Graph-%E4%BD%93%E7%B3%BB"><span class="nav-text">四、 消除主机端瓶颈：多通道常驻静态 HIP Graph 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E5%AE%9E%E6%9C%BA%E8%AF%84%E6%B5%8B%E4%B8%8E%E6%80%A7%E8%83%BD%E6%94%B6%E7%9B%8A%E6%80%BB%E7%BB%93"><span class="nav-text">五、 实机评测与性能收益总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81-%E7%BB%93%E8%AF%AD%E4%B8%8E%E4%B8%80%E7%82%B9%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F"><span class="nav-text">六、 结语与一点个人感悟</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -239,7 +239,7 @@
       <span class="post-meta-item-text">发表于</span>
       
 
-      <time title="创建时间：2026-11-09 00:36:00 / 修改时间：01:04:10" itemprop="dateCreated datePublished" datetime="2026-11-09T00:36:00+08:00">2026-11-09</time>
+      <time title="创建时间：2026-11-09 00:36:00 / 修改时间：02:44:01" itemprop="dateCreated datePublished" datetime="2026-11-09T00:36:00+08:00">2026-11-09</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -325,7 +325,7 @@
 <li><strong><code>REPLAY_CHUNK = 8</code> 细粒度回放与锁页内存异步 D2H</strong>：<br>如果每回放 1 步就同步拷贝 Token ID 回 CPU 检查是否遇到 <code>EOS</code>，PCIe 同步延迟会彻底抵消静态图的收益；如果一次性回放过多步，又会在遇到 <code>EOS</code> 后产生大量无效尾步计算。我们采用 8 步微批次图回放，配合 <code>Pinned Host Memory</code>（锁页内存）进行非阻塞异步 <code>Device-to-Host</code> 传输，彻底消除了 CPU 等待 GPU 的同步气泡。</li>
 </ol>
 <hr>
-<h2 id="四、-实机评测与性能收益总结"><a href="#四、-实机评测与性能收益总结" class="headerlink" title="四、 实机评测与性能收益总结"></a>四、 实机评测与性能收益总结</h2><p>在海光 DCU Z200（<code>gfx906</code>, 16GB）与 BW（<code>gfx936</code>, 64GB）双平台上，经过三轮 Formal 标准评测取中位数，最终交付版取得了显著的端到端性能突破：</p>
+<h2 id="五、-实机评测与性能收益总结"><a href="#五、-实机评测与性能收益总结" class="headerlink" title="五、 实机评测与性能收益总结"></a>五、 实机评测与性能收益总结</h2><p>在海光 DCU Z200（<code>gfx906</code>, 16GB）与 BW（<code>gfx936</code>, 64GB）双平台上，经过三轮 Formal 标准评测取中位数，最终交付版取得了显著的端到端性能突破：</p>
 <table>
 <thead>
 <tr>
@@ -379,7 +379,7 @@
 </tr>
 </tbody></table>
 <hr>
-<h2 id="五、-结语与一点个人感悟"><a href="#五、-结语与一点个人感悟" class="headerlink" title="五、 结语与一点个人感悟"></a>五、 结语与一点个人感悟</h2><p>回看整个优化过程，最深的一个体会是：<strong>高性能计算与大模型推理系统优化，从来不是靠单一的“银弹”，而是对硬件微架构边界、内存层级与数学等价性的极致抠细节。</strong> 从发现 $M&#x3D;1$ 下合并投影不破坏归约树的数学特性，到用 <code>UntypedStorage</code> 省下几 GB 显存，每一步都需要拿真实的 Profiler 数据和严苛的门禁测试说话。</p>
+<h2 id="六、-结语与一点个人感悟"><a href="#六、-结语与一点个人感悟" class="headerlink" title="六、 结语与一点个人感悟"></a>六、 结语与一点个人感悟</h2><p>回看整个优化过程，最深的一个体会是：<strong>高性能计算与大模型推理系统优化，从来不是靠单一的“银弹”，而是对硬件微架构边界、内存层级与数学等价性的极致抠细节。</strong> 从发现 $M&#x3D;1$ 下合并投影不破坏归约树的数学特性，到用 <code>UntypedStorage</code> 省下几 GB 显存，每一步都需要拿真实的 Profiler 数据和严苛的门禁测试说话。</p>
 <p>作为一名在校本科生，很庆幸能在这个技术变革的时代，借助先进的工具快速跨越底层门槛，去触碰以前只有资深系统工程师才能接触到的工业级真问题。先把系统跑通、把性能榨干、把每一个优化背后的物理逻辑彻底搞懂，这大概就是属于我们这一代 CS 学生最踏实的进阶路径吧。</p>
 <p><em>（下一篇准备整理一下本次比赛第二题——动态稀疏矩阵乘 SpMM 在 Wave64 架构下的标量化与 100% Occupancy 调优笔记，敬请期待 hh）</em></p>
 
@@ -455,41 +455,49 @@
 </noscript>
 <script>
 (function() {
-  // 1. 精选中国清雅风 / 自然意境 / 必应实时壁纸池
-  const WALLPAPERS = [
-    {
-      url: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
-      title: "大漠孤烟 · 沙海孤木"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=2000&q=85",
-      title: "远山如黛 · 苍林晨雾"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85",
-      title: "千峰竞秀 · 云海苍茫"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85",
-      title: "平湖秋月 · 溪山行旅"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=85",
-      title: "晓雾初开 · 空山新雨"
-    },
-    {
-      url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85",
-      title: "寒江独钓 · 水墨丹青"
-    },
-    {
-      url: "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
-      title: "今日必应 · 每日实时画卷"
-    },
-    {
-      url: "https://bing.biturl.top/?resolution=1920&format=image&index=1&mkt=zh-CN",
-      title: "昨日必应 · 岁月掠影"
-    }
+  // 1. 实时壁纸抓取引擎：结合必应实时源 + 随机风景 API + 精选东方自然意境底座
+  const SEED_WALLPAPERS = [
+    "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=1&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=2&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=3&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=4&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=5&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=6&mkt=zh-CN",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=7&mkt=zh-CN"
   ];
+
+  // 生成实时动态壁纸 URL（每次调用生成全新的随机壁纸流地址）
+  let liveCounter = parseInt(localStorage.getItem("qy_wp_seq") || "0", 10);
+  function generateLiveWallpaperUrl() {
+    liveCounter += 1;
+    localStorage.setItem("qy_wp_seq", String(liveCounter));
+    const uniqueToken = `${Date.now()}_${liveCounter}_${Math.floor(Math.random() * 100000)}`;
+    const mode = liveCounter % 3;
+    if (mode === 0) {
+      // 实时随机高清摄影流 (Fastly CDN 全球加速，无限不重样图库)
+      return `https://picsum.photos/1920/1080?random=${uniqueToken}`;
+    } else if (mode === 1) {
+      // Paugram 实时随机必应/Unsplash 壁纸源
+      const src = (liveCounter % 2 === 0) ? "bing" : "unsplash";
+      return `https://api.paugram.com/wallpaper/?source=${src}&t=${uniqueToken}`;
+    } else {
+      // 必应近 8 日实时官方画卷与精选 4K 东方山水轮替
+      return SEED_WALLPAPERS[liveCounter % SEED_WALLPAPERS.length];
+    }
+  }
 
   // 2. 站点核心文章索引
   const POST_INDEX = [
@@ -543,7 +551,7 @@
   `;
   document.body.prepend(bgContainer);
 
-  // 4. 创建首屏「清雅导航视界」：极简小巧半透明检索框 + 下滑自动展开提示
+  // 4. 创建首屏「清雅导航视界」
   const portalHero = document.createElement("section");
   portalHero.id = "qingya-portal-hero";
   portalHero.innerHTML = `
@@ -610,7 +618,7 @@
   `;
   document.body.prepend(portalHero);
 
-  // 5. 创建底部悬浮控制坞（最左侧为「归顶 ↑」，下滑时平滑移至左下角并收缩为单按钮，悬停原地向右展开）
+  // 5. 创建底部悬浮控制坞
   const dock = document.createElement("aside");
   dock.id = "qingya-dock";
   dock.innerHTML = `
@@ -628,8 +636,8 @@
           <i class="fa-solid fa-book-open"></i>
           <span>文卷</span>
         </button>
-        <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="即时更换背景画卷">
-          <i class="fa-solid fa-image"></i>
+        <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="实时抓取更换新壁纸">
+          <i class="fa-solid fa-image" id="qy-wp-icon"></i>
           <span>换景</span>
         </button>
         <button type="button" class="qy-dock-btn active" id="qy-dock-auto-wp" title="开启/关闭壁纸实时轮换">
@@ -645,24 +653,97 @@
   `;
   document.body.appendChild(dock);
 
-  // 6. 检查并美化文章页左侧「文章导读 (TOC)」栏
+  // 6. 文章页左侧「文章导读 (TOC)」与高精度滚动定位引擎（解决滑到底部仍停留在上一节的问题）
   function setupArticleTOC() {
     const sidebar = document.querySelector("aside.sidebar");
     if (!sidebar) return;
     const tocWrap = sidebar.querySelector(".post-toc-wrap");
-    const tocContent = sidebar.querySelector(".post-toc ol, .post-toc .nav");
-    if (tocWrap && tocContent && tocContent.children.length > 0) {
-      document.body.classList.add("qy-has-toc");
-      // 添加清雅导读标题头
-      if (!tocWrap.querySelector(".qy-toc-header")) {
-        const tocHeader = document.createElement("div");
-        tocHeader.className = "qy-toc-header";
-        tocHeader.innerHTML = '<i class="fa-solid fa-list-ul"></i><span>文章导读</span>';
-        tocWrap.prepend(tocHeader);
-      }
-    } else {
+    const tocLinks = Array.from(sidebar.querySelectorAll(".post-toc a.nav-link"));
+    if (!tocWrap || tocLinks.length === 0) {
       sidebar.style.display = "none";
+      return;
     }
+
+    document.body.classList.add("qy-has-toc");
+    if (!tocWrap.querySelector(".qy-toc-header")) {
+      const tocHeader = document.createElement("div");
+      tocHeader.className = "qy-toc-header";
+      tocHeader.innerHTML = '<i class="fa-solid fa-list-ul"></i><span>文章导读</span>';
+      tocWrap.prepend(tocHeader);
+    }
+
+    // 建立目录链接与正文标题元素的精确映射
+    const headingItems = tocLinks.map(link => {
+      const href = link.getAttribute("href") || "";
+      if (!href.startsWith("#")) return null;
+      const rawId = decodeURIComponent(href.slice(1));
+      const targetEl = document.getElementById(rawId);
+      return targetEl ? { link, navItem: link.closest(".nav-item"), targetEl } : null;
+    }).filter(Boolean);
+
+    if (headingItems.length === 0) return;
+
+    let clickLockedIdx = -1;
+    let clickLockTimer = null;
+
+    function highlightTocIndex(activeIndex) {
+      headingItems.forEach((item, idx) => {
+        if (!item.navItem) return;
+        const isCurrent = (idx === activeIndex);
+        item.navItem.classList.toggle("qy-toc-current", isCurrent);
+        item.link.classList.toggle("qy-toc-link-current", isCurrent);
+      });
+    }
+
+    function updateTocOnScroll() {
+      if (clickLockedIdx !== -1) {
+        highlightTocIndex(clickLockedIdx);
+        return;
+      }
+
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const winH = window.innerHeight;
+      const docH = document.documentElement.scrollHeight;
+
+      // 当页面已经滚动到最底部（距离底部不足 45px）时，精准激活最后一个目录项
+      if (winH + scrollY >= docH - 45) {
+        highlightTocIndex(headingItems.length - 1);
+        return;
+      }
+
+      // 以屏幕上方 32% 处作为自然阅读视线基准线
+      const readingLine = winH * 0.32;
+      let activeIdx = 0;
+      for (let i = 0; i < headingItems.length; i++) {
+        const rect = headingItems[i].targetEl.getBoundingClientRect();
+        if (rect.top <= readingLine) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
+      highlightTocIndex(activeIdx);
+    }
+
+    headingItems.forEach((item, idx) => {
+      item.link.addEventListener("click", function(e) {
+        e.preventDefault();
+        clickLockedIdx = idx;
+        highlightTocIndex(idx);
+        if (clickLockTimer) clearTimeout(clickLockTimer);
+        const topPos = item.targetEl.getBoundingClientRect().top + window.scrollY - 28;
+        window.scrollTo({ top: topPos, behavior: "smooth" });
+        clickLockTimer = setTimeout(() => {
+          clickLockedIdx = -1;
+          updateTocOnScroll();
+        }, 700);
+      });
+    });
+
+    window.addEventListener("scroll", function() {
+      window.requestAnimationFrame(updateTocOnScroll);
+    }, { passive: true });
+    updateTocOnScroll();
   }
   setupArticleTOC();
 
@@ -704,7 +785,7 @@
   }
   renderPeekList();
 
-  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮 + Apple Grid 丝滑过渡
+  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮
   function enhanceArticleCards() {
     if (!isHomePage) return;
     const postBlocks = document.querySelectorAll(".main-inner .post-block");
@@ -744,47 +825,86 @@
   }
   enhanceArticleCards();
 
-  // 9. 壁纸切换与实时轮换引擎
-  let currentWpIdx = parseInt(localStorage.getItem("qy_wp_idx") || "0", 10) % WALLPAPERS.length;
+  // 9. 实时壁纸抓取 + 后台预加载双缓冲引擎（每次切换均实时拉取新壁纸且0等待）
   let activeLayerIsA = true;
   let autoRotateTimer = null;
   let isAutoRotate = localStorage.getItem("qy_auto_wp") !== "false";
   let isPaperMode = localStorage.getItem("qy_paper_mode") === "true";
+  let nextPreloadedUrl = null;
+  let isFetchingWp = false;
 
   const layerA = bgContainer.querySelector(".qy-bg-a");
   const layerB = bgContainer.querySelector(".qy-bg-b");
   const btnAutoWp = document.getElementById("qy-dock-auto-wp");
   const btnPaperMode = document.getElementById("qy-dock-paper-mode");
+  const wpIconEl = document.getElementById("qy-wp-icon");
 
-  function applyWallpaper(idx) {
-    const wp = WALLPAPERS[idx];
+  function preloadNextLiveWallpaper() {
+    const candidateUrl = generateLiveWallpaperUrl();
     const img = new Image();
     img.onload = function() {
-      const targetLayer = activeLayerIsA ? layerA : layerB;
-      const otherLayer = activeLayerIsA ? layerB : layerA;
-      targetLayer.style.backgroundImage = `url("${wp.url}")`;
-      targetLayer.classList.add("active");
-      otherLayer.classList.remove("active");
-      activeLayerIsA = !activeLayerIsA;
+      nextPreloadedUrl = candidateUrl;
     };
-    img.src = wp.url;
+    img.onerror = function() {
+      // 若某个实时随机源偶发超时，自动回退到保底高清画卷池
+      const fallback = SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
+      nextPreloadedUrl = fallback;
+    };
+    img.src = candidateUrl;
   }
 
-  layerA.style.backgroundImage = `url("${WALLPAPERS[currentWpIdx].url}")`;
+  function crossfadeToUrl(url) {
+    const targetLayer = activeLayerIsA ? layerA : layerB;
+    const otherLayer = activeLayerIsA ? layerB : layerA;
+    targetLayer.style.backgroundImage = `url("${url}")`;
+    targetLayer.classList.add("active");
+    otherLayer.classList.remove("active");
+    activeLayerIsA = !activeLayerIsA;
+    localStorage.setItem("qy_last_wp_url", url);
+  }
+
+  // 初始壁纸展示并立即在后台预抓取下一张实时新图
+  const savedLastUrl = localStorage.getItem("qy_last_wp_url") || SEED_WALLPAPERS[0];
+  layerA.style.backgroundImage = `url("${savedLastUrl}")`;
   activeLayerIsA = false;
+  preloadNextLiveWallpaper();
 
   function nextWallpaper() {
     if (isPaperMode) togglePaperMode(false);
-    currentWpIdx = (currentWpIdx + 1) % WALLPAPERS.length;
-    localStorage.setItem("qy_wp_idx", String(currentWpIdx));
-    applyWallpaper(currentWpIdx);
+    if (nextPreloadedUrl) {
+      const readyUrl = nextPreloadedUrl;
+      nextPreloadedUrl = null;
+      crossfadeToUrl(readyUrl);
+      preloadNextLiveWallpaper();
+      return;
+    }
+    if (isFetchingWp) return;
+    isFetchingWp = true;
+    if (wpIconEl) wpIconEl.classList.add("fa-spin");
+
+    const liveUrl = generateLiveWallpaperUrl();
+    const img = new Image();
+    img.onload = function() {
+      isFetchingWp = false;
+      if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+      crossfadeToUrl(liveUrl);
+      preloadNextLiveWallpaper();
+    };
+    img.onerror = function() {
+      isFetchingWp = false;
+      if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+      const fallback = SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
+      crossfadeToUrl(fallback);
+      preloadNextLiveWallpaper();
+    };
+    img.src = liveUrl;
   }
 
   function updateAutoRotateState() {
     if (autoRotateTimer) clearInterval(autoRotateTimer);
     if (isAutoRotate && !isPaperMode) {
       btnAutoWp.classList.add("active");
-      autoRotateTimer = setInterval(nextWallpaper, 45000);
+      autoRotateTimer = setInterval(nextWallpaper, 35000); // 每 35 秒实时抓取新壁纸
     } else {
       btnAutoWp.classList.remove("active");
     }
@@ -807,7 +927,7 @@
   function setPortalMode(zenMode) {
     if (modeTransitionLock) return;
     modeTransitionLock = true;
-    setTimeout(() => { modeTransitionLock = false; }, 520);
+    setTimeout(() => { modeTransitionLock = false; }, 480);
 
     if (zenMode) {
       document.body.classList.add("qy-portal-zen");
@@ -826,7 +946,6 @@
     document.body.classList.add("qy-inner-page", "qy-portal-scroll");
   }
 
-  // 首页滚轮与触摸手势驱动：下滑自动展卷，上滑到顶自动收拢
   if (isHomePage) {
     window.addEventListener("wheel", function(e) {
       if (e.target.closest(".qy-peek-drawer") || e.target.closest(".qy-search-dropdown")) return;
@@ -929,7 +1048,6 @@
     togglePaperMode();
   });
 
-  // 点击最左侧「回到最顶」按钮：回到最顶且控制坞丝滑回到正中间（首页同步收起回视界）
   document.getElementById("qy-dock-top").addEventListener("click", function() {
     isScrollingToTop = true;
     dock.classList.remove("qy-dock-scrolled");
