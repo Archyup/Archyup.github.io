@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #95ff83;
+    background: #8affff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -1493,7 +1493,6 @@ pre code {
   line-height: 1.8;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
 }
 .post-toc .nav .nav-child {
   --height: 0;
@@ -2603,7 +2602,6 @@ header.header {
     color: var(--text-color);
     margin-top: 12px;
     max-height: calc(100vh - 24px);
-    visibility: hidden;
   }
   .site-state-item {
     padding: 0 10px;
@@ -2747,31 +2745,61 @@ header.header {
   }
 }
 /* ==========================================================================
-   中国清雅风 · 霞鹜文楷 × 极简导航视界 (Apple Spring 丝滑过渡版)
+   中国清雅风 · 全文楷体 × 极简导航视界 (人体工学滑动展卷 + 左侧文章导读版)
    ========================================================================== */
 :root {
-  --qy-font-kaiti: "LXGW WenKai Screen", "LXGW WenKai", "STKaiti", "Kaiti SC", "KaiTi", "Noto Serif SC", "Songti SC", serif;
+  --qy-font-kaiti: "Kaiti SC", "STKaiti", "LXGW WenKai Screen", "LXGW WenKai", "KaiTi", "楷体-简", "楷体", "Noto Serif SC", serif;
   --qy-font-mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, monospace;
   --qy-xuan-bg: #faf7f0;
-  --qy-xuan-card: rgba(251,248,241,0.96);
-  --qy-ink-primary: #1f2421;
-  --qy-ink-secondary: #525955;
-  --qy-ink-muted: #7d847f;
+  --qy-xuan-card: rgba(251,248,241,0.88);
+  --qy-ink-primary: #1e2320;
+  --qy-ink-secondary: #4a524e;
+  --qy-ink-muted: #767e79;
   --qy-cinnabar: #9e2a2b;
   --qy-jade: #3b5958;
-  --qy-border-gold: rgba(138,121,93,0.25);
+  --qy-border-gold: rgba(138,121,93,0.24);
   --qy-apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
 }
-/* 1. 全局楷体排版与隐藏冗余组件 */
-body {
+/* 1. 强制全局与博客正文、标题、列表、表格、导读全部采用清雅楷体 */
+body,
+.main,
+.post-block,
+.post-header,
+.post-title,
+.post-title-link,
+.post-meta,
+.post-body,
+.post-body p,
+.post-body li,
+.post-body ul,
+.post-body ol,
+.post-body blockquote,
+.post-body table,
+.post-body th,
+.post-body td,
+.post-toc,
+.post-toc ol,
+.post-toc li,
+.post-toc a,
+.category-all-page,
+.tag-cloud,
+.posts-collapse,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: var(--qy-font-kaiti) !important;
+}
+body {
   color: var(--qy-ink-primary) !important;
   background: #1a1d1c !important;
-  font-size: 17px !important;
-  line-height: 1.85 !important;
-  letter-spacing: 0.02em;
+  font-size: 17.5px !important;
+  line-height: 1.88 !important;
+  letter-spacing: 0.025em;
   margin: 0;
-  padding-bottom: 92px !important;
+  padding-bottom: 88px !important;
   overflow-x: hidden;
 }
 h1,
@@ -2782,26 +2810,31 @@ h5,
 h6,
 .site-title,
 .site-subtitle,
-.post-title,
-.menu-item a {
-  font-family: var(--qy-font-kaiti) !important;
+.post-title {
   font-weight: 600 !important;
   letter-spacing: 0.04em;
 }
+/* 行内代码与代码块保持清晰等宽字体 */
 code,
 pre,
 .highlight,
-.highlight pre {
+.highlight pre,
+.highlight code {
   font-family: var(--qy-font-mono) !important;
   font-size: 14px !important;
 }
-/* 彻底移除突兀的左侧头像栏、原版回到顶部按钮与顶部色带 */
+/* 隐藏冗余组件（保留文章页 .sidebar 中的导读 TOC，但隐藏头像站点概览卡片） */
 .headband,
 .header,
-.sidebar,
 .sidebar-toggle,
 .back-to-top,
-.powered-by {
+.powered-by,
+.sidebar-nav,
+.site-overview-wrap {
+  display: none !important;
+}
+/* 非文章页（无导读目录时）完全隐藏 sidebar */
+body:not(.qy-has-toc) aside.sidebar {
   display: none !important;
 }
 /* 2. 动态全屏壁纸层与「素宣模式」 */
@@ -2820,8 +2853,8 @@ pre,
   background-position: center center;
   background-repeat: no-repeat;
   opacity: 0;
-  transform: scale(1.03);
-  transition: opacity 1.5s var(--qy-apple-spring), transform 7s ease-out;
+  transform: scale(1.02);
+  transition: opacity 1.3s var(--qy-apple-spring), transform 6s ease-out;
 }
 .qy-bg-layer.active {
   opacity: 1;
@@ -2830,8 +2863,8 @@ pre,
 .qy-bg-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(14,18,16,0.2) 0%, rgba(8,12,10,0.56) 100%);
-  transition: background 0.65s var(--qy-apple-spring);
+  background: radial-gradient(circle at center, rgba(14,18,16,0.16) 0%, rgba(8,12,10,0.5) 100%);
+  transition: background 0.5s var(--qy-apple-spring);
 }
 body.qy-paper-mode #qingya-wallpaper-bg .qy-bg-layer {
   opacity: 0 !important;
@@ -2844,7 +2877,7 @@ body.qy-paper-mode #qingya-wallpaper-bg {
 body.qy-paper-mode #qingya-wallpaper-bg .qy-bg-overlay {
   background: linear-gradient(180deg, rgba(245,240,230,0.92) 0%, rgba(238,232,218,0.96) 100%) !important;
 }
-/* 3. 首屏「清雅导航视界」与 Apple 级丝滑展开过渡 */
+/* 3. 首屏「清雅导航视界」与人体工学滑动过渡 */
 #qingya-portal-hero {
   position: relative;
   width: 100%;
@@ -2853,51 +2886,66 @@ body.qy-paper-mode #qingya-wallpaper-bg .qy-bg-overlay {
   flex-direction: column;
   justify-content: space-between;
   min-height: 100vh;
-  padding: 28px 48px 110px;
-  transition: min-height 0.72s var(--qy-apple-spring), padding 0.72s var(--qy-apple-spring), transform 0.72s var(--qy-apple-spring);
+  padding: 24px 44px 100px;
+  transition: min-height 0.52s var(--qy-apple-spring), padding 0.52s var(--qy-apple-spring);
   z-index: 20;
 }
+/* 内页首帧立即可见，无等待延迟 */
+html.qy-is-inner #qingya-portal-hero,
+body.qy-inner-page #qingya-portal-hero {
+  min-height: auto !important;
+  padding: 18px 44px 6px !important;
+  transition: none !important;
+}
+html.qy-is-inner .qy-scroll-hint,
+html.qy-is-inner .qy-peek-drawer,
+body.qy-inner-page .qy-scroll-hint,
+body.qy-inner-page .qy-peek-drawer {
+  display: none !important;
+}
+html.qy-is-inner .qy-center-stage,
+body.qy-inner-page .qy-center-stage {
+  margin-top: 2px;
+}
+html.qy-is-inner .main {
+  opacity: 1 !important;
+  transform: none !important;
+  filter: none !important;
+  animation: qyFastAppear 0.2s ease-out;
+}
+/* 首页「极简视界模式」：下滑前隐藏文章流，下滑瞬间丝滑浮现 */
 body.qy-portal-zen {
   overflow: hidden !important;
   padding-bottom: 0 !important;
 }
-/* 下方文章列表容器：使用 opacity + translate3d + blur 实现如丝般顺滑的浮现与收拢 */
 .main {
-  transition: opacity 0.68s var(--qy-apple-spring), transform 0.68s var(--qy-apple-spring), filter 0.68s var(--qy-apple-spring);
-  will-change: opacity, transform, filter;
+  transition: opacity 0.46s var(--qy-apple-spring), transform 0.46s var(--qy-apple-spring);
+  will-change: opacity, transform;
 }
 body.qy-portal-zen .main,
 body.qy-portal-zen .footer {
   opacity: 0 !important;
   pointer-events: none !important;
-  transform: translate3d(0, 56px, 0) scale(0.975) !important;
-  filter: blur(10px);
+  transform: translate3d(0, 42px, 0) scale(0.985) !important;
   max-height: 0;
   overflow: hidden;
 }
 body.qy-portal-scroll #qingya-portal-hero {
-  min-height: 310px;
-  padding: 24px 48px 18px;
+  min-height: 140px;
+  padding: 20px 44px 10px;
+}
+body.qy-portal-scroll .qy-scroll-hint {
+  opacity: 0;
+  pointer-events: none;
+  height: 0;
+  margin: 0;
+  overflow: hidden;
 }
 body.qy-portal-scroll .main,
 body.qy-portal-scroll .footer {
   opacity: 1 !important;
   pointer-events: auto !important;
   transform: translate3d(0, 0, 0) scale(1) !important;
-  filter: blur(0);
-}
-/* 内页模式：首屏收拢为精致顶栏 */
-body.qy-inner-page #qingya-portal-hero {
-  min-height: auto !important;
-  padding: 20px 48px 8px !important;
-}
-body.qy-inner-page .qy-verse-box,
-body.qy-inner-page .qy-hero-cta,
-body.qy-inner-page .qy-peek-drawer {
-  display: none !important;
-}
-body.qy-inner-page .qy-center-stage {
-  margin-top: 6px;
 }
 /* 4. 顶部导航栏：左上角印章品牌 + 右上角悬停展开图标栏 */
 .qy-topbar {
@@ -2907,8 +2955,8 @@ body.qy-inner-page .qy-center-stage {
   width: 100%;
   max-width: 1180px;
   margin: 0 auto;
-  color: rgba(255,255,255,0.94);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
+  color: rgba(255,255,255,0.92);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.38);
 }
 body.qy-paper-mode .qy-topbar {
   color: var(--qy-ink-primary);
@@ -2917,10 +2965,10 @@ body.qy-paper-mode .qy-topbar {
 .qy-brand {
   display: inline-flex;
   align-items: center;
-  gap: 12px;
+  gap: 10px;
   cursor: pointer;
   user-select: none;
-  transition: transform 0.3s var(--qy-apple-spring);
+  transition: transform 0.28s var(--qy-apple-spring);
 }
 .qy-brand:hover {
   transform: scale(1.02);
@@ -2931,53 +2979,51 @@ body.qy-paper-mode .qy-topbar {
   justify-content: center;
   background: var(--qy-cinnabar);
   color: #fff8f0;
-  font-size: 13px;
+  font-size: 12.5px;
   font-weight: 700;
-  padding: 3px 8px;
+  padding: 2px 7px;
   border-radius: 4px;
-  border: 1px solid rgba(255,240,230,0.5);
-  box-shadow: 0 2px 8px rgba(158,42,43,0.45);
+  border: 1px solid rgba(255,240,230,0.45);
+  box-shadow: 0 2px 8px rgba(158,42,43,0.4);
   letter-spacing: 2px;
 }
 .qy-brand-text {
-  font-size: 22px;
+  font-size: 20px;
   font-weight: 700;
   letter-spacing: 0.08em;
 }
-/* 右上角图标组：默认圆形仅图标，悬停丝滑展开文字说明 */
+/* 右上角图标组：更小巧精致、高透毛玻璃，悬停丝滑展开文字说明 */
 .qy-top-actions {
   display: flex;
   align-items: center;
-  gap: 8px;
+  gap: 7px;
 }
 .qy-icon-pill {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  height: 38px;
-  padding: 0 11px;
+  height: 34px;
+  padding: 0 10px;
   border-radius: 999px;
-  background: rgba(24,28,26,0.48);
-  color: #f7f4eb !important;
-  border: 1px solid rgba(255,255,255,0.2);
+  background: rgba(24,28,26,0.36);
+  color: rgba(250,247,240,0.92) !important;
+  border: 1px solid rgba(255,255,255,0.18);
   font-family: var(--qy-font-kaiti) !important;
-  font-size: 14.5px;
+  font-size: 13.5px;
   text-decoration: none !important;
   cursor: pointer;
-  backdrop-filter: blur(8px);
-  -webkit-backdrop-filter: blur(8px);
-  transition: background 0.35s var(--qy-apple-spring), color 0.35s var(--qy-apple-spring), border-color 0.35s var(--qy-apple-spring), padding 0.4s var(--qy-apple-spring), transform 0.35s var(--qy-apple-spring), box-shadow 0.35s var(--qy-apple-spring);
-  box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.3s var(--qy-apple-spring), color 0.3s var(--qy-apple-spring), border-color 0.3s var(--qy-apple-spring), padding 0.35s var(--qy-apple-spring), transform 0.3s var(--qy-apple-spring);
   overflow: hidden;
 }
 body.qy-paper-mode .qy-icon-pill {
-  background: rgba(251,248,241,0.9);
+  background: rgba(251,248,241,0.72);
   color: var(--qy-ink-primary) !important;
   border-color: var(--qy-border-gold);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
 }
 .qy-icon-pill i {
-  font-size: 15px;
+  font-size: 13.5px;
   flex-shrink: 0;
 }
 .qy-icon-label {
@@ -2987,106 +3033,72 @@ body.qy-paper-mode .qy-icon-pill {
   margin-left: 0;
   white-space: nowrap;
   overflow: hidden;
-  transition: max-width 0.42s var(--qy-apple-spring), opacity 0.32s var(--qy-apple-spring), margin-left 0.42s var(--qy-apple-spring);
+  transition: max-width 0.36s var(--qy-apple-spring), opacity 0.26s var(--qy-apple-spring), margin-left 0.36s var(--qy-apple-spring);
 }
 .qy-icon-pill:hover,
 .qy-icon-pill.active {
-  background: #fbf8f1 !important;
+  background: rgba(251,248,241,0.92) !important;
   color: var(--qy-cinnabar) !important;
-  border-color: var(--qy-cinnabar) !important;
-  padding: 0 15px;
-  transform: translateY(-1.5px);
-  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+  border-color: rgba(158,42,43,0.45) !important;
+  padding: 0 13px;
+  transform: translateY(-1px);
 }
 .qy-icon-pill:hover .qy-icon-label,
 .qy-icon-pill.active .qy-icon-label {
-  max-width: 96px;
+  max-width: 88px;
   opacity: 1;
-  margin-left: 7px;
+  margin-left: 6px;
 }
-/* 5. 中央视觉舞台：优雅诗句 + 搜索框 + 展卷阅文 */
+/* 5. 中央视觉区：更小、更通透的检索框 + 轻滑展卷提示 */
 .qy-center-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  max-width: 720px;
+  max-width: 560px;
   width: 100%;
   margin: auto;
   color: #fff;
 }
-body.qy-paper-mode .qy-center-stage {
-  color: var(--qy-ink-primary);
-}
-.qy-verse-box {
-  margin: 0 0 30px;
-  padding: 10px 24px;
-  cursor: pointer;
-  user-select: none;
-  transition: opacity 0.28s ease, transform 0.35s var(--qy-apple-spring);
-}
-.qy-verse-box:hover {
-  transform: translateY(-2px);
-}
-.qy-verse-box.switching {
-  opacity: 0;
-  transform: translateY(4px);
-}
-.qy-verse-main {
-  font-size: 32px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  line-height: 1.45;
-  color: rgba(255,253,248,0.98);
-  text-shadow: 0 4px 20px rgba(0,0,0,0.55);
-  transition: font-size 0.55s var(--qy-apple-spring);
-}
-body.qy-portal-scroll .qy-verse-main {
-  font-size: 24px;
-}
-.qy-verse-sub {
-  margin-top: 10px;
-  font-size: 15px;
-  letter-spacing: 0.22em;
-  color: rgba(255,250,240,0.82);
-  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
-}
-body.qy-paper-mode .qy-verse-main {
-  color: var(--qy-ink-primary);
-  text-shadow: none;
-}
-body.qy-paper-mode .qy-verse-sub {
-  color: var(--qy-ink-secondary);
-  text-shadow: none;
-}
-/* 极简检索框 */
 .qy-search-container {
   position: relative;
   width: 100%;
-  max-width: 540px;
-  margin-bottom: 24px;
+  max-width: 400px;
+  margin-bottom: 10px;
+  transition: max-width 0.4s var(--qy-apple-spring);
+}
+.qy-search-container:focus-within {
+  max-width: 450px;
 }
 .qy-search-box {
   display: flex;
   align-items: center;
-  background: rgba(251,248,242,0.94);
-  border: 1px solid rgba(138,121,93,0.35);
+  background: rgba(251,248,242,0.52);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  border: 1px solid rgba(255,255,255,0.34);
   border-radius: 999px;
-  padding: 11px 20px;
-  box-shadow: 0 10px 32px rgba(0,0,0,0.22);
-  transition: all 0.35s var(--qy-apple-spring);
+  padding: 7px 15px;
+  box-shadow: 0 6px 24px rgba(0,0,0,0.14);
+  transition: all 0.32s var(--qy-apple-spring);
+}
+body.qy-paper-mode .qy-search-box {
+  background: rgba(255,255,255,0.75);
+  border-color: var(--qy-border-gold);
+}
+.qy-search-box:hover {
+  background: rgba(251,248,242,0.72);
 }
 .qy-search-box:focus-within {
-  background: #fff;
+  background: rgba(251,248,242,0.94);
   border-color: var(--qy-cinnabar);
-  box-shadow: 0 14px 38px rgba(0,0,0,0.3);
-  transform: translateY(-1.5px) scale(1.01);
+  box-shadow: 0 10px 30px rgba(0,0,0,0.22);
 }
 .qy-search-icon {
-  color: var(--qy-ink-muted);
-  font-size: 15px;
-  margin-right: 12px;
+  color: rgba(31,36,33,0.65);
+  font-size: 13px;
+  margin-right: 9px;
 }
 #qy-search-input {
   flex: 1;
@@ -3094,19 +3106,43 @@ body.qy-paper-mode .qy-verse-sub {
   outline: none;
   background: transparent;
   font-family: var(--qy-font-kaiti) !important;
-  font-size: 15.5px;
+  font-size: 14px;
   color: var(--qy-ink-primary);
 }
 #qy-search-input::placeholder {
-  color: #8c8881;
+  color: rgba(45,50,48,0.68);
 }
 .qy-search-kbd {
   font-family: var(--qy-font-mono);
-  font-size: 12px;
-  color: var(--qy-ink-muted);
+  font-size: 11px;
+  color: rgba(31,36,33,0.55);
   background: rgba(0,0,0,0.06);
-  padding: 2px 7px;
-  border-radius: 6px;
+  padding: 1px 6px;
+  border-radius: 5px;
+}
+/* 轻滑展卷微提示 */
+.qy-scroll-hint {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  margin-top: 6px;
+  font-size: 12.5px;
+  letter-spacing: 0.18em;
+  color: rgba(255,252,245,0.68);
+  cursor: pointer;
+  user-select: none;
+  transition: opacity 0.3s ease, color 0.3s ease;
+  animation: qyFloatHint 2.8s ease-in-out infinite;
+}
+body.qy-paper-mode .qy-scroll-hint {
+  color: var(--qy-ink-muted);
+}
+.qy-scroll-hint:hover {
+  color: #fff;
+}
+.qy-scroll-hint i {
+  font-size: 10px;
 }
 /* 检索下拉结果面板 */
 .qy-search-dropdown {
@@ -3115,27 +3151,28 @@ body.qy-paper-mode .qy-verse-sub {
   top: calc(100% + 8px);
   left: 0;
   right: 0;
-  background: #fbf8f1;
+  background: rgba(251,248,241,0.96);
+  backdrop-filter: blur(12px);
   border: 1px solid var(--qy-border-gold);
-  border-radius: 14px;
-  box-shadow: 0 16px 42px rgba(0,0,0,0.28);
-  padding: 8px;
+  border-radius: 12px;
+  box-shadow: 0 14px 36px rgba(0,0,0,0.24);
+  padding: 6px;
   text-align: left;
   z-index: 100;
-  max-height: 320px;
+  max-height: 300px;
   overflow-y: auto;
 }
 .qy-search-dropdown.show {
   display: block;
-  animation: qyPopIn 0.25s var(--qy-apple-spring);
+  animation: qyPopIn 0.2s var(--qy-apple-spring);
 }
 .qy-search-item {
   display: block;
-  padding: 10px 14px;
-  border-radius: 10px;
+  padding: 8px 12px;
+  border-radius: 8px;
   text-decoration: none !important;
   color: var(--qy-ink-primary) !important;
-  transition: background 0.2s ease;
+  transition: background 0.18s ease;
   border-bottom: none !important;
 }
 .qy-search-item:hover {
@@ -3145,26 +3182,26 @@ body.qy-paper-mode .qy-verse-sub {
   display: flex;
   align-items: center;
   gap: 8px;
-  margin-bottom: 4px;
+  margin-bottom: 2px;
 }
 .qy-search-item-cat {
-  font-size: 12px;
+  font-size: 11.5px;
   background: var(--qy-jade);
   color: #fff;
-  padding: 1px 7px;
+  padding: 0 6px;
   border-radius: 4px;
 }
 .qy-search-item-title {
   font-weight: 700;
-  font-size: 15.5px;
+  font-size: 14.5px;
   flex: 1;
 }
 .qy-search-item-date {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--qy-ink-muted);
 }
 .qy-search-item-desc {
-  font-size: 13.5px;
+  font-size: 13px;
   color: var(--qy-ink-secondary);
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -3172,82 +3209,53 @@ body.qy-paper-mode .qy-verse-sub {
   overflow: hidden;
 }
 .qy-search-empty {
-  padding: 14px;
-  font-size: 14px;
+  padding: 12px;
+  font-size: 13.5px;
   color: var(--qy-ink-secondary);
   text-align: center;
-}
-/* 中央「展卷阅文」主按钮 */
-.qy-btn-unroll {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  padding: 10px 26px;
-  border-radius: 999px;
-  background: rgba(158,42,43,0.9);
-  color: #fff9f2 !important;
-  border: 1px solid rgba(255,235,220,0.45);
-  font-family: var(--qy-font-kaiti) !important;
-  font-size: 16px;
-  letter-spacing: 0.1em;
-  cursor: pointer;
-  box-shadow: 0 8px 24px rgba(158,42,43,0.35);
-  transition: all 0.4s var(--qy-apple-spring);
-}
-.qy-btn-unroll:hover {
-  background: #b02e30;
-  transform: translateY(-2px) scale(1.03);
-  box-shadow: 0 12px 30px rgba(158,42,43,0.48);
-}
-.qy-unroll-arrow {
-  font-size: 12px;
-  transition: transform 0.45s var(--qy-apple-spring);
-}
-.qy-btn-unroll.expanded .qy-unroll-arrow {
-  transform: rotate(180deg);
 }
 /* 二级「新篇速览」渐进披露抽屉 */
 .qy-peek-drawer {
   width: 100%;
-  max-width: 660px;
+  max-width: 580px;
   margin-top: 0;
-  background: var(--qy-xuan-card);
+  background: rgba(251,248,241,0.88);
+  backdrop-filter: blur(14px);
   color: var(--qy-ink-primary);
   border: 1px solid transparent;
-  border-radius: 14px;
-  padding: 0 16px;
-  box-shadow: none;
+  border-radius: 12px;
+  padding: 0 14px;
   text-align: left;
   max-height: 0;
   opacity: 0;
   overflow: hidden;
-  transition: max-height 0.5s var(--qy-apple-spring), opacity 0.4s var(--qy-apple-spring), margin-top 0.5s var(--qy-apple-spring), padding 0.5s var(--qy-apple-spring), border-color 0.4s ease;
+  transition: max-height 0.42s var(--qy-apple-spring), opacity 0.32s var(--qy-apple-spring), margin-top 0.42s var(--qy-apple-spring), padding 0.42s var(--qy-apple-spring);
 }
 .qy-peek-drawer.open {
-  max-height: 360px;
+  max-height: 340px;
   opacity: 1;
-  margin-top: 18px;
-  padding: 12px 16px;
+  margin-top: 14px;
+  padding: 10px 14px;
   border-color: var(--qy-border-gold);
-  box-shadow: 0 18px 48px rgba(0,0,0,0.32);
+  box-shadow: 0 14px 38px rgba(0,0,0,0.26);
   overflow-y: auto;
 }
 .qy-peek-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--qy-ink-muted);
-  padding-bottom: 8px;
-  margin-bottom: 6px;
-  border-bottom: 1px dashed rgba(138,121,93,0.3);
+  padding-bottom: 6px;
+  margin-bottom: 4px;
+  border-bottom: 1px dashed rgba(138,121,93,0.28);
 }
 .qy-peek-close {
   border: none;
   background: transparent;
   color: var(--qy-ink-muted);
   cursor: pointer;
-  font-size: 14px;
+  font-size: 13px;
 }
 .qy-peek-item {
   border-radius: 8px;
@@ -3259,60 +3267,60 @@ body.qy-paper-mode .qy-verse-sub {
 .qy-peek-row {
   display: flex;
   align-items: center;
-  gap: 10px;
-  padding: 9px 10px;
+  gap: 8px;
+  padding: 8px;
   cursor: pointer;
-  transition: background 0.2s ease;
+  transition: background 0.18s ease;
 }
 .qy-peek-row:hover {
   background: rgba(158,42,43,0.06);
   border-radius: 8px;
 }
 .qy-peek-cat {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--qy-jade);
   border: 1px solid rgba(59,89,88,0.35);
-  padding: 0 6px;
+  padding: 0 5px;
   border-radius: 4px;
   white-space: nowrap;
 }
 .qy-peek-title {
   flex: 1;
   font-weight: 600;
-  font-size: 15.5px;
+  font-size: 14.5px;
   color: var(--qy-ink-primary);
 }
 .qy-peek-date {
-  font-size: 13px;
+  font-size: 12.5px;
   color: var(--qy-ink-muted);
 }
 .qy-peek-action {
-  font-size: 12.5px;
+  font-size: 12px;
   color: var(--qy-cinnabar);
 }
 .qy-peek-detail-wrap {
   display: grid;
   grid-template-rows: 0fr;
-  transition: grid-template-rows 0.38s var(--qy-apple-spring);
+  transition: grid-template-rows 0.34s var(--qy-apple-spring);
 }
 .qy-peek-item.expanded .qy-peek-detail-wrap {
   grid-template-rows: 1fr;
 }
 .qy-peek-detail {
   overflow: hidden;
-  padding: 0 12px;
-  background: rgba(239,233,220,0.55);
+  padding: 0 10px;
+  background: rgba(239,233,220,0.5);
   border-radius: 0 0 8px 8px;
-  transition: padding 0.38s var(--qy-apple-spring);
+  transition: padding 0.34s var(--qy-apple-spring);
 }
 .qy-peek-item.expanded .qy-peek-detail {
-  padding: 8px 12px 12px;
+  padding: 8px 10px 10px;
 }
 .qy-peek-summary {
-  margin: 0 0 10px;
-  font-size: 14.5px;
+  margin: 0 0 8px;
+  font-size: 13.5px;
   color: var(--qy-ink-secondary);
-  line-height: 1.65;
+  line-height: 1.6;
 }
 .qy-peek-footer {
   display: flex;
@@ -3320,24 +3328,103 @@ body.qy-paper-mode .qy-verse-sub {
   align-items: center;
 }
 .qy-mini-tag {
-  font-size: 12px;
+  font-size: 11.5px;
   color: var(--qy-ink-muted);
-  margin-right: 8px;
+  margin-right: 6px;
 }
 .qy-peek-readmore {
-  font-size: 13.5px;
+  font-size: 13px;
   font-weight: 600;
   color: var(--qy-cinnabar) !important;
   text-decoration: none !important;
   border-bottom: 1px solid var(--qy-cinnabar) !important;
 }
-/* 6. 宣纸水墨居中阅读区（无左侧头像栏干扰，完全对称清雅） */
+/* 6. 主阅读区与文章左侧「文章导读 (TOC)」栏布局 */
 .main-inner {
   width: 100% !important;
-  max-width: 860px !important;
+  max-width: 840px !important;
   margin: 0 auto !important;
-  padding: 8px 20px 44px !important;
+  padding: 6px 20px 44px !important;
   float: none !important;
+}
+/* 当进入带有目录导读的文章内页时：展开双栏布局（左侧清雅导读 + 右侧正文） */
+@media (min-width: 1024px) {
+  body.qy-has-toc .main-inner {
+    max-width: 1140px !important;
+    display: flex !important;
+    flex-direction: row-reverse !important;
+    align-items: flex-start !important;
+    justify-content: center !important;
+    gap: 22px !important;
+  }
+  body.qy-has-toc .content-wrap {
+    flex: 1 1 auto !important;
+    max-width: 840px !important;
+    width: auto !important;
+  }
+  body.qy-has-toc aside.sidebar {
+    display: block !important;
+    position: sticky !important;
+    top: 24px !important;
+    width: 250px !important;
+    flex: 0 0 250px !important;
+    margin: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+  }
+}
+.sidebar-inner {
+  background: var(--qy-xuan-card) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--qy-border-gold) !important;
+  box-shadow: 0 10px 28px rgba(15,18,16,0.18) !important;
+  padding: 18px 18px !important;
+  color: var(--qy-ink-primary) !important;
+}
+.post-toc-wrap {
+  display: block !important;
+  opacity: 1 !important;
+  max-height: calc(100vh - 110px) !important;
+  overflow-y: auto !important;
+}
+.qy-toc-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 15.5px;
+  font-weight: 700;
+  color: var(--qy-cinnabar);
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+  border-bottom: 1px dashed rgba(138,121,93,0.32);
+  letter-spacing: 0.08em;
+}
+.post-toc ol {
+  margin: 0 !important;
+  padding-left: 12px !important;
+  font-size: 14px !important;
+  line-height: 1.75 !important;
+}
+.post-toc .nav-item {
+  margin: 3px 0 !important;
+}
+.post-toc .nav-link {
+  color: var(--qy-ink-secondary) !important;
+  border-bottom: none !important;
+  transition: color 0.2s ease, padding-left 0.2s ease;
+  display: block;
+  white-space: normal !important;
+}
+.post-toc .nav-link:hover,
+.post-toc .nav-item.active > .nav-link {
+  color: var(--qy-cinnabar) !important;
+  font-weight: 600 !important;
+}
+/* Show all TOC levels cleanly for quick navigation */
+.post-toc .nav .nav-child {
+  display: block !important;
 }
 .content-wrap {
   width: 100% !important;
@@ -3349,13 +3436,13 @@ body.qy-paper-mode .qy-verse-sub {
 .comments,
 .pagination {
   background: var(--qy-xuan-card) !important;
-  backdrop-filter: none !important;
-  -webkit-backdrop-filter: none !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
   border-radius: 12px !important;
   border: 1px solid var(--qy-border-gold) !important;
-  box-shadow: 0 12px 36px rgba(15,18,16,0.22) !important;
-  padding: 34px 46px !important;
-  margin-bottom: 24px !important;
+  box-shadow: 0 10px 32px rgba(15,18,16,0.18) !important;
+  padding: 28px 40px !important;
+  margin-bottom: 20px !important;
   position: relative;
 }
 .post-block::before {
@@ -3366,12 +3453,13 @@ body.qy-paper-mode .qy-verse-sub {
   right: 36px;
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--qy-cinnabar), transparent);
-  opacity: 0.45;
+  opacity: 0.4;
 }
 .post-title,
 .post-title-link {
   color: var(--qy-ink-primary) !important;
-  font-size: 24px !important;
+  font-size: 22px !important;
+  border-bottom: none !important;
   transition: color 0.2s ease;
 }
 .post-title-link:hover {
@@ -3379,20 +3467,20 @@ body.qy-paper-mode .qy-verse-sub {
 }
 .post-meta {
   color: var(--qy-ink-muted) !important;
-  font-size: 13.5px !important;
+  font-size: 13px !important;
 }
-/* 列表页卡片摘要的 Apple Grid 丝滑展开容器 */
+/* 列表页卡片「摘要 / 深读」极简按钮与 Apple Grid 丝滑过渡 */
 .qy-abstract-grid-wrap {
   display: grid;
   grid-template-rows: 0fr;
   opacity: 0;
-  transition: grid-template-rows 0.52s var(--qy-apple-spring), opacity 0.42s var(--qy-apple-spring), margin-top 0.52s var(--qy-apple-spring);
+  transition: grid-template-rows 0.44s var(--qy-apple-spring), opacity 0.34s var(--qy-apple-spring), margin-top 0.44s var(--qy-apple-spring);
   margin-top: 0;
 }
 .qy-abstract-grid-wrap.expanded {
   grid-template-rows: 1fr;
   opacity: 1;
-  margin-top: 16px;
+  margin-top: 14px;
 }
 .qy-abstract-grid-inner {
   overflow: hidden;
@@ -3401,28 +3489,29 @@ body.qy-paper-mode .qy-verse-sub {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 14px;
-  margin-top: 14px;
-  padding-top: 12px;
-  border-top: 1px dashed rgba(138,121,93,0.28);
+  gap: 12px;
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px dashed rgba(138,121,93,0.24);
 }
 .qy-btn-toggle-abstract,
 .qy-btn-enter-article {
   display: inline-flex;
   align-items: center;
-  gap: 6px;
-  padding: 6px 16px;
+  justify-content: center;
+  padding: 4px 16px;
   border-radius: 999px;
   font-family: var(--qy-font-kaiti) !important;
-  font-size: 14px;
+  font-size: 13.5px;
+  letter-spacing: 0.1em;
   cursor: pointer;
   text-decoration: none !important;
-  transition: all 0.28s var(--qy-apple-spring);
+  transition: all 0.25s var(--qy-apple-spring);
 }
 .qy-btn-toggle-abstract {
   background: rgba(59,89,88,0.08);
   color: var(--qy-jade);
-  border: 1px solid rgba(59,89,88,0.28);
+  border: 1px solid rgba(59,89,88,0.26);
 }
 .qy-btn-toggle-abstract:hover {
   background: var(--qy-jade);
@@ -3430,75 +3519,73 @@ body.qy-paper-mode .qy-verse-sub {
   transform: translateY(-1px);
 }
 .qy-btn-enter-article {
-  background: rgba(158,42,43,0.09);
+  background: rgba(158,42,43,0.08);
   color: var(--qy-cinnabar) !important;
-  border: 1px solid rgba(158,42,43,0.3);
+  border: 1px solid rgba(158,42,43,0.28);
 }
 .qy-btn-enter-article:hover {
   background: var(--qy-cinnabar);
   color: #fff !important;
   transform: translateY(-1px);
 }
+/* 隐藏列表卡片里原本重复的阅读全文按钮 */
+body.qy-is-home .post-button,
+.qy-abstract-grid-wrap .post-button {
+  display: none !important;
+}
 /* 文章内页排版细节 */
 .post-body h2 {
   color: var(--qy-ink-primary);
-  border-bottom: 1px solid rgba(158,42,43,0.28);
-  padding-bottom: 8px;
-  margin-top: 34px;
+  border-bottom: 1px solid rgba(158,42,43,0.25);
+  padding-bottom: 6px;
+  margin-top: 32px;
 }
 .post-body h3 {
   color: var(--qy-jade);
-  margin-top: 24px;
+  margin-top: 22px;
 }
 .post-body blockquote {
-  background: rgba(235,228,212,0.6);
-  border-left: 4px solid var(--qy-cinnabar);
+  background: rgba(235,228,212,0.55);
+  border-left: 3px solid var(--qy-cinnabar);
   color: var(--qy-ink-secondary);
-  padding: 12px 18px;
+  padding: 10px 16px;
   border-radius: 0 8px 8px 0;
 }
 .post-body table th {
-  background: rgba(59,89,88,0.12) !important;
+  background: rgba(59,89,88,0.1) !important;
   color: var(--qy-ink-primary) !important;
 }
-.btn {
-  border-radius: 999px !important;
-  background: var(--qy-cinnabar) !important;
-  color: #fff !important;
-  border: none !important;
-  padding: 6px 18px !important;
-}
-/* 7. 底部悬浮控制坞：Apple Dynamic Island 风格左移收缩与悬停原地向右展开 */
+/* 7. 底部悬浮控制坞：更小巧通透，下滑左移收缩与悬停原地向右展开 */
 #qingya-dock {
   position: fixed;
-  bottom: 22px;
+  bottom: 20px;
   left: 50%;
   transform: translate3d(-50%, 0, 0);
   z-index: 999;
-  transition: left 0.62s var(--qy-apple-spring), transform 0.62s var(--qy-apple-spring);
+  transition: left 0.56s var(--qy-apple-spring), transform 0.56s var(--qy-apple-spring);
   will-change: left, transform;
 }
 .qy-dock-inner {
   display: flex;
   align-items: center;
-  background: rgba(22,26,24,0.86);
+  background: rgba(22,26,24,0.68);
   border: 1px solid rgba(255,255,255,0.18);
-  padding: 6px 10px;
+  padding: 5px 8px;
   border-radius: 999px;
-  box-shadow: 0 12px 36px rgba(0,0,0,0.42);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: padding 0.52s var(--qy-apple-spring), background 0.35s ease, box-shadow 0.35s ease;
+  box-shadow: 0 8px 28px rgba(0,0,0,0.32);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  transition: padding 0.46s var(--qy-apple-spring), background 0.3s ease;
 }
 .qy-dock-collapsible {
   display: flex;
   align-items: center;
-  gap: 4px;
-  max-width: 520px;
+  gap: 2px;
+  max-width: 460px;
   opacity: 1;
-  margin-left: 4px;
+  margin-left: 2px;
   overflow: hidden;
-  transition: max-width 0.55s var(--qy-apple-spring), opacity 0.38s var(--qy-apple-spring), margin-left 0.55s var(--qy-apple-spring);
+  transition: max-width 0.48s var(--qy-apple-spring), opacity 0.32s var(--qy-apple-spring), margin-left 0.48s var(--qy-apple-spring);
 }
 .qy-dock-btn {
   display: inline-flex;
@@ -3508,18 +3595,18 @@ body.qy-paper-mode .qy-verse-sub {
   background: transparent;
   color: rgba(247,244,235,0.88);
   border: none;
-  padding: 7px 12px;
+  padding: 5px 10px;
   border-radius: 999px;
   font-family: var(--qy-font-kaiti) !important;
-  font-size: 14px;
+  font-size: 13px;
   cursor: pointer;
-  transition: background 0.25s ease, color 0.25s ease, padding 0.45s var(--qy-apple-spring);
+  transition: background 0.22s ease, color 0.22s ease, padding 0.4s var(--qy-apple-spring);
   white-space: nowrap;
   flex-shrink: 0;
 }
 .qy-dock-btn:hover,
 .qy-dock-btn.active {
-  background: rgba(255,255,255,0.15);
+  background: rgba(255,255,255,0.16);
   color: #fff;
 }
 .qy-dock-btn.active {
@@ -3527,22 +3614,22 @@ body.qy-paper-mode .qy-verse-sub {
 }
 .qy-top-label {
   display: inline-block;
-  max-width: 48px;
+  max-width: 42px;
   opacity: 1;
   overflow: hidden;
-  transition: max-width 0.45s var(--qy-apple-spring), opacity 0.32s var(--qy-apple-spring), margin-left 0.45s var(--qy-apple-spring);
+  transition: max-width 0.4s var(--qy-apple-spring), opacity 0.28s var(--qy-apple-spring);
 }
 /* 当页面往下滑动阅读时：控制坞丝滑移至左下角，收缩成仅剩最左侧「↑」的圆按钮 */
 #qingya-dock.qy-dock-scrolled {
-  left: 24px;
+  left: 22px;
   transform: translate3d(0, 0, 0);
 }
 #qingya-dock.qy-dock-scrolled .qy-dock-inner {
-  padding: 6px;
+  padding: 5px;
 }
 #qingya-dock.qy-dock-scrolled .qy-dock-top-btn {
-  width: 34px;
-  height: 34px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   gap: 0;
 }
@@ -3558,51 +3645,68 @@ body.qy-paper-mode .qy-verse-sub {
 }
 /* 鼠标停留在左下角回到顶部按钮上时：最左侧「↑」保持原地不动，右侧丝滑展开完整控制坞 */
 #qingya-dock.qy-dock-scrolled:hover .qy-dock-inner {
-  padding: 6px 10px;
+  padding: 5px 8px;
 }
 #qingya-dock.qy-dock-scrolled:hover .qy-dock-collapsible {
-  max-width: 520px;
+  max-width: 460px;
   opacity: 1;
-  margin-left: 6px;
+  margin-left: 4px;
   pointer-events: auto;
 }
 #qingya-dock.qy-dock-scrolled .qy-dock-top-btn:hover {
   background: var(--qy-cinnabar);
   color: #fff;
 }
-/* 8. 页脚修饰（干净纯粹，不含任何框架推广） */
+/* 8. 页脚修饰 */
 .footer {
-  color: rgba(255,255,255,0.82) !important;
+  color: rgba(255,255,255,0.78) !important;
   text-align: center;
-  padding: 16px 0 !important;
+  padding: 14px 0 !important;
 }
 body.qy-paper-mode .footer {
   color: var(--qy-ink-secondary) !important;
 }
 .footer-inner {
-  font-size: 14px !important;
+  font-size: 13.5px !important;
   margin: 0 auto !important;
   float: none !important;
 }
 /* 移动端自适应 */
 @media (max-width: 768px) {
   #qingya-portal-hero {
-    padding: 18px 18px 90px;
-  }
-  .qy-verse-main {
-    font-size: 22px;
+    padding: 16px 16px 84px;
   }
   .post-block {
-    padding: 22px 18px !important;
+    padding: 20px 16px !important;
   }
   .qy-dock-btn span {
     display: none;
   }
 }
+@keyframes qyFastAppear {
+  from {
+    opacity: 0.4;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+@keyframes qyFloatHint {
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 0.62;
+  }
+  50% {
+    transform: translateY(4px);
+    opacity: 0.92;
+  }
+}
 @keyframes qyPopIn {
   from {
     opacity: 0;
-    transform: translateY(-8px) scale(0.98);
+    transform: translateY(-6px) scale(0.98);
   }
   to {
     opacity: 1;

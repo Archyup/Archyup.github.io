@@ -15,9 +15,8 @@
 
 
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"remove","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="记录我的 C++ &#x2F; Python 学习与大学四年的成长">
 <meta property="og:type" content="website">
@@ -48,7 +47,7 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/next-boot.js" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
 
   
 
@@ -64,12 +63,17 @@
 
 
 
-<!-- 中国清雅风 · 霞鹜文楷 WebFont 与 KaTeX 数学公式支持 -->
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" />
-<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script>
+  // 首帧同步判定首页与内页，彻底消除点击右上角功能页时的等待与高度跳变
+  (function() {
+    var p = window.location.pathname;
+    var isHome = (p === "/" || p === "/index.html");
+    document.documentElement.classList.add(isHome ? "qy-is-home" : "qy-is-inner");
+  })();
+</script>
+<!-- 异步非阻塞加载霞鹜文楷与 KaTeX 数学公式，0 阻塞首屏渲染 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" media="print" onload="this.media='all'">
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
   onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
@@ -80,7 +84,7 @@
 <link rel="alternate" href="/atom.xml" title="Archyのcs之旅" type="application/atom+xml">
 </head>
 
-<body itemscope itemtype="http://schema.org/WebPage" class="use-motion">
+<body itemscope itemtype="http://schema.org/WebPage">
   <div class="headband"></div>
 
   <main class="main">
@@ -121,6 +125,70 @@
 
 
 </header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Archy"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">Archy</p>
+  <div class="site-description" itemprop="description">记录我的 C++ / Python 学习与大学四年的成长</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aarchyyy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aarchyyy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1469129906@qq.com" title="E-Mail → mailto:1469129906@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
     </div>
 
     <div class="main-inner category posts-collapse">
@@ -230,6 +298,12 @@
   </footer>
 
   
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
   <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
@@ -276,17 +350,7 @@
     }
   ];
 
-  // 2. 清雅诗词池（点击可切换，带淡入淡出过渡）
-  const VERSES = [
-    { line: "行到水穷处，坐看云起时。", sub: "唐 · 王维《终南别业》" },
-    { line: "大漠孤烟直，长河落日圆。", sub: "唐 · 王维《使至塞上》" },
-    { line: "博学之，审问之，慎思之，明辨之，笃行之。", sub: "《礼记 · 中庸》" },
-    { line: "落霞与孤鹜齐飞，秋水共长天一色。", sub: "唐 · 王勃《滕王阁序》" },
-    { line: "竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。", sub: "宋 · 苏轼《定风波》" },
-    { line: "明月松间照，清泉石上流。", sub: "唐 · 王维《山居秋暝》" }
-  ];
-
-  // 3. 站点核心文章索引
+  // 2. 站点核心文章索引
   const POST_INDEX = [
     {
       title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优",
@@ -328,7 +392,7 @@
 
   const isHomePage = window.location.pathname === "/" || window.location.pathname === "/index.html";
 
-  // 4. 创建背景画布层
+  // 3. 创建背景画布层
   const bgContainer = document.createElement("div");
   bgContainer.id = "qingya-wallpaper-bg";
   bgContainer.innerHTML = `
@@ -338,8 +402,7 @@
   `;
   document.body.prepend(bgContainer);
 
-  // 5. 创建首屏「清雅导航视界」
-  // 顶部右侧仅留图标，鼠标悬停丝滑展开文字说明；中央仅留优雅诗句、极简搜索与「展卷阅文」
+  // 4. 创建首屏「清雅导航视界」：极简小巧半透明检索框 + 下滑自动展开提示
   const portalHero = document.createElement("section");
   portalHero.id = "qingya-portal-hero";
   portalHero.innerHTML = `
@@ -349,7 +412,7 @@
         <span class="qy-brand-text">Archy · 格物志</span>
       </div>
 
-      <!-- 右上角功能图标栏：默认只显示图标，悬停丝滑展开说明 -->
+      <!-- 右上角功能图标栏：默认只显示图标，鼠标悬停丝滑展开说明 -->
       <nav class="qy-top-actions" aria-label="快捷功能导航">
         <button type="button" class="qy-icon-pill" id="qy-btn-quick-peek">
           <i class="fa-solid fa-layer-group"></i>
@@ -378,34 +441,26 @@
       </nav>
     </header>
 
-    <!-- 中央核心舞台：只保留优雅诗句 + 搜索框 + 展卷阅文 -->
+    <!-- 中央核心视觉区：仅保留精致半透明搜索框与轻滑展卷引导 -->
     <div class="qy-center-stage">
-      <div class="qy-verse-box" id="qy-verse-box" title="点击切换清雅诗句">
-        <div class="qy-verse-main" id="qy-verse-line">「 行到水穷处，坐看云起时。 」</div>
-        <div class="qy-verse-sub" id="qy-verse-sub">唐 · 王维《终南别业》</div>
-      </div>
-
       <div class="qy-search-container">
         <div class="qy-search-box">
           <i class="fa-solid fa-magnifying-glass qy-search-icon"></i>
-          <input type="text" id="qy-search-input" placeholder="寻访文卷（如：先导杯、SpMM、Qwen、ROCm）..." autocomplete="off" />
+          <input type="text" id="qy-search-input" placeholder="寻访文卷（先导杯、SpMM、Qwen、ROCm）..." autocomplete="off" />
           <kbd class="qy-search-kbd">/</kbd>
         </div>
         <div class="qy-search-dropdown" id="qy-search-dropdown"></div>
       </div>
 
-      <div class="qy-hero-cta">
-        <button type="button" class="qy-btn-unroll" id="qy-btn-expand-posts">
-          <i class="fa-solid fa-book-open"></i>
-          <span id="qy-unroll-text">展卷阅文</span>
-          <i class="fa-solid fa-chevron-down qy-unroll-arrow"></i>
-        </button>
+      <div class="qy-scroll-hint" id="qy-scroll-hint" title="向下滑动展开文卷">
+        <span>轻滑展卷</span>
+        <i class="fa-solid fa-chevron-down"></i>
       </div>
 
       <!-- 二级抽屉（点击右上角「新篇速览」展开） -->
       <div class="qy-peek-drawer" id="qy-peek-drawer">
         <div class="qy-peek-header">
-          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击条目预览纲要，二次点击深读全文</span>
+          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击预览摘要，二次点击深读</span>
           <button type="button" class="qy-peek-close" id="qy-peek-close" title="收起">✕</button>
         </div>
         <div class="qy-peek-list" id="qy-peek-list"></div>
@@ -414,7 +469,7 @@
   `;
   document.body.prepend(portalHero);
 
-  // 6. 创建底部悬浮控制坞（最左侧为「回到最顶 ↑」，下滑时平滑左移并收缩为单按钮，悬停原地向右展开）
+  // 5. 创建底部悬浮控制坞（最左侧为「归顶 ↑」，下滑时平滑移至左下角并收缩为单按钮，悬停原地向右展开）
   const dock = document.createElement("aside");
   dock.id = "qingya-dock";
   dock.innerHTML = `
@@ -449,6 +504,27 @@
   `;
   document.body.appendChild(dock);
 
+  // 6. 检查并美化文章页左侧「文章导读 (TOC)」栏
+  function setupArticleTOC() {
+    const sidebar = document.querySelector("aside.sidebar");
+    if (!sidebar) return;
+    const tocWrap = sidebar.querySelector(".post-toc-wrap");
+    const tocContent = sidebar.querySelector(".post-toc ol, .post-toc .nav");
+    if (tocWrap && tocContent && tocContent.children.length > 0) {
+      document.body.classList.add("qy-has-toc");
+      // 添加清雅导读标题头
+      if (!tocWrap.querySelector(".qy-toc-header")) {
+        const tocHeader = document.createElement("div");
+        tocHeader.className = "qy-toc-header";
+        tocHeader.innerHTML = '<i class="fa-solid fa-list-ul"></i><span>文章导读</span>';
+        tocWrap.prepend(tocHeader);
+      }
+    } else {
+      sidebar.style.display = "none";
+    }
+  }
+  setupArticleTOC();
+
   // 7. 渲染「新篇速览」抽屉
   const peekListEl = document.getElementById("qy-peek-list");
   let activePeekIdx = -1;
@@ -460,7 +536,7 @@
           <span class="qy-peek-cat">${post.cat}</span>
           <span class="qy-peek-title">${post.shortTitle}</span>
           <span class="qy-peek-date">${post.date}</span>
-          <span class="qy-peek-action">${activePeekIdx === idx ? '收起纲要 ▴' : '预览纲要 ▾'}</span>
+          <span class="qy-peek-action">${activePeekIdx === idx ? '收起 ▴' : '摘要 ▾'}</span>
         </div>
         <div class="qy-peek-detail-wrap">
           <div class="qy-peek-detail">
@@ -469,7 +545,7 @@
               <div class="qy-peek-tags">
                 ${post.tags.map(t => `<span class="qy-mini-tag"># ${t}</span>`).join('')}
               </div>
-              <a href="${post.url}" class="qy-peek-readmore">展卷深读全文 →</a>
+              <a href="${post.url}" class="qy-peek-readmore">深读 →</a>
             </div>
           </div>
         </div>
@@ -487,7 +563,7 @@
   }
   renderPeekList();
 
-  // 8. 改造文章列表卡片：使用 Apple 级丝滑 Grid 折叠动画展开/收起摘要
+  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮 + Apple Grid 丝滑过渡
   function enhanceArticleCards() {
     if (!isHomePage) return;
     const postBlocks = document.querySelectorAll(".main-inner .post-block");
@@ -497,7 +573,6 @@
       if (!postBody || !header || block.dataset.qyEnhanced) return;
       block.dataset.qyEnhanced = "true";
 
-      // 用 Grid 动画容器包裹 postBody，实现丝滑高度过渡
       const gridWrap = document.createElement("div");
       gridWrap.className = "qy-abstract-grid-wrap";
       const gridInner = document.createElement("div");
@@ -513,12 +588,8 @@
       const postUrl = titleLink ? titleLink.getAttribute("href") : "#";
 
       toggleBar.innerHTML = `
-        <button type="button" class="qy-btn-toggle-abstract">
-          <i class="fa-solid fa-eye"></i> 展读核心摘要
-        </button>
-        <a href="${postUrl}" class="qy-btn-enter-article">
-          直入全文深读 <i class="fa-solid fa-arrow-right"></i>
-        </a>
+        <button type="button" class="qy-btn-toggle-abstract">摘要</button>
+        <a href="${postUrl}" class="qy-btn-enter-article">深读</a>
       `;
 
       header.after(toggleBar);
@@ -526,9 +597,7 @@
       const toggleBtn = toggleBar.querySelector(".qy-btn-toggle-abstract");
       toggleBtn.addEventListener("click", function() {
         const isExpanded = gridWrap.classList.toggle("expanded");
-        this.innerHTML = isExpanded
-          ? '<i class="fa-solid fa-eye-slash"></i> 收起摘要'
-          : '<i class="fa-solid fa-eye"></i> 展读核心摘要';
+        this.textContent = isExpanded ? "收起" : "摘要";
       });
     });
   }
@@ -591,45 +660,76 @@
   if (isPaperMode) togglePaperMode(true);
   updateAutoRotateState();
 
-  // 10. 丝滑切换「首屏视界」与「展卷阅文」模式
-  const unrollTextEl = document.getElementById("qy-unroll-text");
-  const unrollBtn = document.getElementById("qy-btn-expand-posts");
+  // 10. 人体工学「下滑自动展开文卷 / 上滑到顶自动收起」状态机
+  let modeTransitionLock = false;
 
   function setPortalMode(zenMode) {
+    if (modeTransitionLock) return;
+    modeTransitionLock = true;
+    setTimeout(() => { modeTransitionLock = false; }, 520);
+
     if (zenMode) {
       document.body.classList.add("qy-portal-zen");
       document.body.classList.remove("qy-portal-scroll");
-      if (unrollTextEl) unrollTextEl.textContent = "展卷阅文";
-      if (unrollBtn) unrollBtn.classList.remove("expanded");
       window.scrollTo({ top: 0, behavior: "smooth" });
       dock.classList.remove("qy-dock-scrolled");
     } else {
       document.body.classList.remove("qy-portal-zen");
       document.body.classList.add("qy-portal-scroll");
-      if (unrollTextEl) unrollTextEl.textContent = "收卷观景";
-      if (unrollBtn) unrollBtn.classList.add("expanded");
     }
   }
 
   if (isHomePage) {
-    setPortalMode(true);
+    document.body.classList.add("qy-portal-zen");
   } else {
-    document.body.classList.add("qy-inner-page");
-    setPortalMode(false);
+    document.body.classList.add("qy-inner-page", "qy-portal-scroll");
   }
 
-  // 11. 监听滚动：下滑阅读时，控制坞平滑移至左下角并收缩为「回到最顶 ↑」单按钮
+  // 首页滚轮与触摸手势驱动：下滑自动展卷，上滑到顶自动收拢
+  if (isHomePage) {
+    window.addEventListener("wheel", function(e) {
+      if (e.target.closest(".qy-peek-drawer") || e.target.closest(".qy-search-dropdown")) return;
+      const isZen = document.body.classList.contains("qy-portal-zen");
+      if (isZen && e.deltaY > 12) {
+        setPortalMode(false);
+      } else if (!isZen && (window.scrollY || document.documentElement.scrollTop) <= 4 && e.deltaY < -18) {
+        setPortalMode(true);
+      }
+    }, { passive: true });
+
+    let touchStartY = 0;
+    window.addEventListener("touchstart", function(e) {
+      if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener("touchmove", function(e) {
+      if (e.touches.length !== 1) return;
+      const dy = touchStartY - e.touches[0].clientY;
+      const isZen = document.body.classList.contains("qy-portal-zen");
+      if (isZen && dy > 28) {
+        setPortalMode(false);
+      } else if (!isZen && (window.scrollY || document.documentElement.scrollTop) <= 4 && dy < -35) {
+        setPortalMode(true);
+      }
+    }, { passive: true });
+  }
+
+  document.getElementById("qy-scroll-hint").addEventListener("click", function() {
+    setPortalMode(false);
+  });
+
+  // 11. 监听滚动：下滑阅读时，控制坞平滑移至左下角并收缩为「归顶 ↑」单按钮
   let isScrollingToTop = false;
   function handleScroll() {
     if (isScrollingToTop) {
-      if (window.scrollY <= 15) {
+      if (window.scrollY <= 10) {
         isScrollingToTop = false;
         dock.classList.remove("qy-dock-scrolled");
       }
       return;
     }
     const scrollY = window.scrollY || document.documentElement.scrollTop;
-    if (scrollY > 90) {
+    if (scrollY > 75 || (isHomePage && document.body.classList.contains("qy-portal-scroll") && scrollY > 30)) {
       dock.classList.add("qy-dock-scrolled");
     } else {
       dock.classList.remove("qy-dock-scrolled");
@@ -639,15 +739,6 @@
   handleScroll();
 
   // 12. 交互事件绑定
-  unrollBtn.addEventListener("click", function() {
-    const isCurrentlyZen = document.body.classList.contains("qy-portal-zen");
-    if (isCurrentlyZen) {
-      setPortalMode(false);
-    } else {
-      setPortalMode(true);
-    }
-  });
-
   const peekDrawer = document.getElementById("qy-peek-drawer");
   const quickPeekBtn = document.getElementById("qy-btn-quick-peek");
   quickPeekBtn.addEventListener("click", function() {
@@ -683,10 +774,6 @@
       return;
     }
     setPortalMode(false);
-    setTimeout(() => {
-      const mainEl = document.querySelector(".main");
-      if (mainEl) mainEl.scrollIntoView({ behavior: "smooth" });
-    }, 60);
   });
 
   document.getElementById("qy-dock-next-wp").addEventListener("click", nextWallpaper);
@@ -701,28 +788,16 @@
     togglePaperMode();
   });
 
-  // 点击最左侧「回到最顶」按钮：平滑回到顶部，同时控制坞丝滑回到正中间
+  // 点击最左侧「回到最顶」按钮：回到最顶且控制坞丝滑回到正中间（首页同步收起回视界）
   document.getElementById("qy-dock-top").addEventListener("click", function() {
     isScrollingToTop = true;
     dock.classList.remove("qy-dock-scrolled");
-    window.scrollTo({ top: 0, behavior: "smooth" });
-    setTimeout(() => { isScrollingToTop = false; }, 700);
-  });
-
-  // 诗句点击柔光切换
-  let verseIdx = 0;
-  const verseBox = document.getElementById("qy-verse-box");
-  const verseLine = document.getElementById("qy-verse-line");
-  const verseSub = document.getElementById("qy-verse-sub");
-  verseBox.addEventListener("click", function() {
-    verseBox.classList.add("switching");
-    setTimeout(() => {
-      verseIdx = (verseIdx + 1) % VERSES.length;
-      const v = VERSES[verseIdx];
-      verseLine.textContent = `「 ${v.line} 」`;
-      verseSub.textContent = v.sub;
-      verseBox.classList.remove("switching");
-    }, 220);
+    if (isHomePage) {
+      setPortalMode(true);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setTimeout(() => { isScrollingToTop = false; }, 600);
   });
 
   // 13. 站内实时检索框逻辑
