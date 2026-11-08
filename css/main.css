@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #ffcc30;
+    background: #95ff83;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2747,21 +2747,22 @@ header.header {
   }
 }
 /* ==========================================================================
-   中国清雅风 · 霞鹜文楷 × 极简导航视界 (Edge New Tab × Chairo × 宣纸水墨)
+   中国清雅风 · 霞鹜文楷 × 极简导航视界 (Apple Spring 丝滑过渡版)
    ========================================================================== */
 :root {
   --qy-font-kaiti: "LXGW WenKai Screen", "LXGW WenKai", "STKaiti", "Kaiti SC", "KaiTi", "Noto Serif SC", "Songti SC", serif;
   --qy-font-mono: "JetBrains Mono", "Fira Code", "SFMono-Regular", Consolas, monospace;
   --qy-xuan-bg: #faf7f0;
-  --qy-xuan-card: rgba(251,248,241,0.95);
+  --qy-xuan-card: rgba(251,248,241,0.96);
   --qy-ink-primary: #1f2421;
   --qy-ink-secondary: #525955;
   --qy-ink-muted: #7d847f;
   --qy-cinnabar: #9e2a2b;
   --qy-jade: #3b5958;
   --qy-border-gold: rgba(138,121,93,0.25);
+  --qy-apple-spring: cubic-bezier(0.32, 0.72, 0, 1);
 }
-/* 1. 全局楷体排版与基础重置 */
+/* 1. 全局楷体排版与隐藏冗余组件 */
 body {
   font-family: var(--qy-font-kaiti) !important;
   color: var(--qy-ink-primary) !important;
@@ -2770,7 +2771,7 @@ body {
   line-height: 1.85 !important;
   letter-spacing: 0.02em;
   margin: 0;
-  padding-bottom: 84px !important;
+  padding-bottom: 92px !important;
   overflow-x: hidden;
 }
 h1,
@@ -2794,7 +2795,13 @@ pre,
   font-family: var(--qy-font-mono) !important;
   font-size: 14px !important;
 }
-.headband {
+/* 彻底移除突兀的左侧头像栏、原版回到顶部按钮与顶部色带 */
+.headband,
+.header,
+.sidebar,
+.sidebar-toggle,
+.back-to-top,
+.powered-by {
   display: none !important;
 }
 /* 2. 动态全屏壁纸层与「素宣模式」 */
@@ -2813,8 +2820,8 @@ pre,
   background-position: center center;
   background-repeat: no-repeat;
   opacity: 0;
-  transform: scale(1.02);
-  transition: opacity 1.4s ease-in-out, transform 6s ease-out;
+  transform: scale(1.03);
+  transition: opacity 1.5s var(--qy-apple-spring), transform 7s ease-out;
 }
 .qy-bg-layer.active {
   opacity: 1;
@@ -2823,10 +2830,9 @@ pre,
 .qy-bg-overlay {
   position: absolute;
   inset: 0;
-  background: radial-gradient(circle at center, rgba(15,20,18,0.22) 0%, rgba(10,14,12,0.58) 100%);
-  transition: background 0.6s ease;
+  background: radial-gradient(circle at center, rgba(14,18,16,0.2) 0%, rgba(8,12,10,0.56) 100%);
+  transition: background 0.65s var(--qy-apple-spring);
 }
-/* 素宣模式：切换为温润的中国宣纸纹理底色 */
 body.qy-paper-mode #qingya-wallpaper-bg .qy-bg-layer {
   opacity: 0 !important;
 }
@@ -2836,66 +2842,73 @@ body.qy-paper-mode #qingya-wallpaper-bg {
   background-size: 24px 24px !important;
 }
 body.qy-paper-mode #qingya-wallpaper-bg .qy-bg-overlay {
-  background: linear-gradient(180deg, rgba(245,240,230,0.9) 0%, rgba(238,232,218,0.95) 100%) !important;
+  background: linear-gradient(180deg, rgba(245,240,230,0.92) 0%, rgba(238,232,218,0.96) 100%) !important;
 }
-/* 3. 首屏「清雅导航视界」(Edge 新标签页 × Chairo 导航站) */
+/* 3. 首屏「清雅导航视界」与 Apple 级丝滑展开过渡 */
 #qingya-portal-hero {
   position: relative;
   width: 100%;
   box-sizing: border-box;
-  transition: all 0.55s cubic-bezier(0.22, 1, 0.36, 1);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 100vh;
+  padding: 28px 48px 110px;
+  transition: min-height 0.72s var(--qy-apple-spring), padding 0.72s var(--qy-apple-spring), transform 0.72s var(--qy-apple-spring);
   z-index: 20;
 }
-/* 首页「极简视界模式」：全屏 100vh，隐藏下方复杂内容，呈现极致留白 */
 body.qy-portal-zen {
   overflow: hidden !important;
   padding-bottom: 0 !important;
 }
-body.qy-portal-zen #qingya-portal-hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  padding: 28px 48px 110px;
+/* 下方文章列表容器：使用 opacity + translate3d + blur 实现如丝般顺滑的浮现与收拢 */
+.main {
+  transition: opacity 0.68s var(--qy-apple-spring), transform 0.68s var(--qy-apple-spring), filter 0.68s var(--qy-apple-spring);
+  will-change: opacity, transform, filter;
 }
 body.qy-portal-zen .main,
 body.qy-portal-zen .footer {
-  opacity: 0;
-  pointer-events: none;
-  height: 0;
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translate3d(0, 56px, 0) scale(0.975) !important;
+  filter: blur(10px);
+  max-height: 0;
   overflow: hidden;
-  transform: translateY(30px);
 }
-/* 展开文卷模式 / 内页模式：首屏优雅收拢为顶部导航区 */
 body.qy-portal-scroll #qingya-portal-hero {
-  min-height: 320px;
-  padding: 24px 42px 28px;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-start;
+  min-height: 310px;
+  padding: 24px 48px 18px;
 }
+body.qy-portal-scroll .main,
+body.qy-portal-scroll .footer {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+  transform: translate3d(0, 0, 0) scale(1) !important;
+  filter: blur(0);
+}
+/* 内页模式：首屏收拢为精致顶栏 */
 body.qy-inner-page #qingya-portal-hero {
-  min-height: auto;
-  padding: 18px 42px 10px;
+  min-height: auto !important;
+  padding: 20px 48px 8px !important;
 }
-body.qy-inner-page .qy-clock-wrap,
 body.qy-inner-page .qy-verse-box,
+body.qy-inner-page .qy-hero-cta,
 body.qy-inner-page .qy-peek-drawer {
   display: none !important;
 }
 body.qy-inner-page .qy-center-stage {
-  margin-top: 8px;
+  margin-top: 6px;
 }
-/* 顶部状态栏 */
+/* 4. 顶部导航栏：左上角印章品牌 + 右上角悬停展开图标栏 */
 .qy-topbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
   width: 100%;
-  max-width: 1200px;
+  max-width: 1180px;
   margin: 0 auto;
-  color: rgba(255,255,255,0.92);
-  text-shadow: 0 2px 8px rgba(0,0,0,0.45);
+  color: rgba(255,255,255,0.94);
+  text-shadow: 0 2px 8px rgba(0,0,0,0.4);
 }
 body.qy-paper-mode .qy-topbar {
   color: var(--qy-ink-primary);
@@ -2907,6 +2920,10 @@ body.qy-paper-mode .qy-topbar {
   gap: 12px;
   cursor: pointer;
   user-select: none;
+  transition: transform 0.3s var(--qy-apple-spring);
+}
+.qy-brand:hover {
+  transform: scale(1.02);
 }
 .qy-seal {
   display: inline-flex;
@@ -2927,24 +2944,74 @@ body.qy-paper-mode .qy-topbar {
   font-weight: 700;
   letter-spacing: 0.08em;
 }
-.qy-top-meta {
+/* 右上角图标组：默认圆形仅图标，悬停丝滑展开文字说明 */
+.qy-top-actions {
   display: flex;
   align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  opacity: 0.9;
+  gap: 8px;
 }
-.qy-divider {
-  opacity: 0.45;
+.qy-icon-pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 38px;
+  padding: 0 11px;
+  border-radius: 999px;
+  background: rgba(24,28,26,0.48);
+  color: #f7f4eb !important;
+  border: 1px solid rgba(255,255,255,0.2);
+  font-family: var(--qy-font-kaiti) !important;
+  font-size: 14.5px;
+  text-decoration: none !important;
+  cursor: pointer;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  transition: background 0.35s var(--qy-apple-spring), color 0.35s var(--qy-apple-spring), border-color 0.35s var(--qy-apple-spring), padding 0.4s var(--qy-apple-spring), transform 0.35s var(--qy-apple-spring), box-shadow 0.35s var(--qy-apple-spring);
+  box-shadow: 0 4px 14px rgba(0,0,0,0.16);
+  overflow: hidden;
 }
-/* 中央视觉舞台 */
+body.qy-paper-mode .qy-icon-pill {
+  background: rgba(251,248,241,0.9);
+  color: var(--qy-ink-primary) !important;
+  border-color: var(--qy-border-gold);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+}
+.qy-icon-pill i {
+  font-size: 15px;
+  flex-shrink: 0;
+}
+.qy-icon-label {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  margin-left: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  transition: max-width 0.42s var(--qy-apple-spring), opacity 0.32s var(--qy-apple-spring), margin-left 0.42s var(--qy-apple-spring);
+}
+.qy-icon-pill:hover,
+.qy-icon-pill.active {
+  background: #fbf8f1 !important;
+  color: var(--qy-cinnabar) !important;
+  border-color: var(--qy-cinnabar) !important;
+  padding: 0 15px;
+  transform: translateY(-1.5px);
+  box-shadow: 0 6px 20px rgba(0,0,0,0.22);
+}
+.qy-icon-pill:hover .qy-icon-label,
+.qy-icon-pill.active .qy-icon-label {
+  max-width: 96px;
+  opacity: 1;
+  margin-left: 7px;
+}
+/* 5. 中央视觉舞台：优雅诗句 + 搜索框 + 展卷阅文 */
 .qy-center-stage {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   text-align: center;
-  max-width: 780px;
+  max-width: 720px;
   width: 100%;
   margin: auto;
   color: #fff;
@@ -2952,76 +3019,69 @@ body.qy-paper-mode .qy-topbar {
 body.qy-paper-mode .qy-center-stage {
   color: var(--qy-ink-primary);
 }
-.qy-clock-wrap {
-  margin-bottom: 10px;
-}
-.qy-time {
-  font-size: 76px;
-  font-weight: 400;
-  line-height: 1.05;
-  letter-spacing: 0.06em;
-  text-shadow: 0 4px 24px rgba(0,0,0,0.45);
-}
-body.qy-portal-scroll .qy-time {
-  font-size: 46px;
-}
-body.qy-paper-mode .qy-time {
-  text-shadow: none;
-  color: var(--qy-ink-primary);
-}
-.qy-date {
-  font-size: 16px;
-  letter-spacing: 0.16em;
-  opacity: 0.9;
-  margin-top: 6px;
-  text-shadow: 0 2px 10px rgba(0,0,0,0.45);
-}
-body.qy-paper-mode .qy-date {
-  text-shadow: none;
-  color: var(--qy-ink-secondary);
-}
 .qy-verse-box {
-  margin: 14px 0 24px;
-  padding: 6px 20px;
+  margin: 0 0 30px;
+  padding: 10px 24px;
   cursor: pointer;
-  transition: transform 0.25s ease;
+  user-select: none;
+  transition: opacity 0.28s ease, transform 0.35s var(--qy-apple-spring);
 }
 .qy-verse-box:hover {
   transform: translateY(-2px);
 }
-.qy-verse-text {
-  margin: 0;
-  font-size: 18px;
-  letter-spacing: 0.08em;
-  color: rgba(255,252,245,0.95);
-  text-shadow: 0 2px 12px rgba(0,0,0,0.6);
+.qy-verse-box.switching {
+  opacity: 0;
+  transform: translateY(4px);
 }
-body.qy-paper-mode .qy-verse-text {
+.qy-verse-main {
+  font-size: 32px;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  line-height: 1.45;
+  color: rgba(255,253,248,0.98);
+  text-shadow: 0 4px 20px rgba(0,0,0,0.55);
+  transition: font-size 0.55s var(--qy-apple-spring);
+}
+body.qy-portal-scroll .qy-verse-main {
+  font-size: 24px;
+}
+.qy-verse-sub {
+  margin-top: 10px;
+  font-size: 15px;
+  letter-spacing: 0.22em;
+  color: rgba(255,250,240,0.82);
+  text-shadow: 0 2px 10px rgba(0,0,0,0.5);
+}
+body.qy-paper-mode .qy-verse-main {
+  color: var(--qy-ink-primary);
+  text-shadow: none;
+}
+body.qy-paper-mode .qy-verse-sub {
   color: var(--qy-ink-secondary);
   text-shadow: none;
 }
-/* Edge 风格极简检索框 */
+/* 极简检索框 */
 .qy-search-container {
   position: relative;
   width: 100%;
-  max-width: 580px;
-  margin-bottom: 22px;
+  max-width: 540px;
+  margin-bottom: 24px;
 }
 .qy-search-box {
   display: flex;
   align-items: center;
-  background: rgba(251,248,242,0.92);
+  background: rgba(251,248,242,0.94);
   border: 1px solid rgba(138,121,93,0.35);
   border-radius: 999px;
-  padding: 10px 18px;
+  padding: 11px 20px;
   box-shadow: 0 10px 32px rgba(0,0,0,0.22);
-  transition: all 0.25s ease;
+  transition: all 0.35s var(--qy-apple-spring);
 }
 .qy-search-box:focus-within {
   background: #fff;
   border-color: var(--qy-cinnabar);
-  box-shadow: 0 12px 36px rgba(0,0,0,0.32);
-  transform: translateY(-1px);
+  box-shadow: 0 14px 38px rgba(0,0,0,0.3);
+  transform: translateY(-1.5px) scale(1.01);
 }
 .qy-search-icon {
   color: var(--qy-ink-muted);
@@ -3067,6 +3127,7 @@ body.qy-paper-mode .qy-verse-text {
 }
 .qy-search-dropdown.show {
   display: block;
+  animation: qyPopIn 0.25s var(--qy-apple-spring);
 }
 .qy-search-item {
   display: block;
@@ -3116,79 +3177,60 @@ body.qy-paper-mode .qy-verse-text {
   color: var(--qy-ink-secondary);
   text-align: center;
 }
-/* 导航快捷胶囊矩阵 (Edge / 导航站风格) */
-.qy-nav-pills {
-  display: flex;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  justify-content: center;
-  gap: 10px;
-}
-.qy-pill {
+/* 中央「展卷阅文」主按钮 */
+.qy-btn-unroll {
   display: inline-flex;
   align-items: center;
-  gap: 7px;
-  padding: 8px 16px;
+  gap: 10px;
+  padding: 10px 26px;
   border-radius: 999px;
-  background: rgba(28,34,32,0.62);
-  color: #f7f4eb !important;
-  border: 1px solid rgba(255,255,255,0.22);
-  font-family: var(--qy-font-kaiti) !important;
-  font-size: 14.5px;
-  text-decoration: none !important;
-  cursor: pointer;
-  transition: all 0.25s ease;
-  box-shadow: 0 4px 14px rgba(0,0,0,0.18);
-}
-body.qy-paper-mode .qy-pill {
-  background: #fbf8f1;
-  color: var(--qy-ink-primary) !important;
-  border-color: var(--qy-border-gold);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.05);
-}
-.qy-pill:hover,
-.qy-pill.qy-pill-active {
-  background: #fbf8f1 !important;
-  color: var(--qy-cinnabar) !important;
-  border-color: var(--qy-cinnabar) !important;
-  transform: translateY(-2px);
-}
-.qy-pill-primary {
-  background: var(--qy-cinnabar) !important;
+  background: rgba(158,42,43,0.9);
   color: #fff9f2 !important;
-  border-color: rgba(255,235,220,0.4) !important;
+  border: 1px solid rgba(255,235,220,0.45);
+  font-family: var(--qy-font-kaiti) !important;
+  font-size: 16px;
+  letter-spacing: 0.1em;
+  cursor: pointer;
+  box-shadow: 0 8px 24px rgba(158,42,43,0.35);
+  transition: all 0.4s var(--qy-apple-spring);
 }
-.qy-pill-primary:hover {
-  background: #b53032 !important;
-  color: #fff !important;
+.qy-btn-unroll:hover {
+  background: #b02e30;
+  transform: translateY(-2px) scale(1.03);
+  box-shadow: 0 12px 30px rgba(158,42,43,0.48);
 }
-.qy-pill-badge {
-  font-style: normal;
+.qy-unroll-arrow {
   font-size: 12px;
-  background: rgba(0,0,0,0.25);
-  padding: 0 6px;
-  border-radius: 999px;
+  transition: transform 0.45s var(--qy-apple-spring);
+}
+.qy-btn-unroll.expanded .qy-unroll-arrow {
+  transform: rotate(180deg);
 }
 /* 二级「新篇速览」渐进披露抽屉 */
 .qy-peek-drawer {
-  display: none;
   width: 100%;
-  max-width: 680px;
-  margin-top: 16px;
+  max-width: 660px;
+  margin-top: 0;
   background: var(--qy-xuan-card);
   color: var(--qy-ink-primary);
-  border: 1px solid var(--qy-border-gold);
+  border: 1px solid transparent;
   border-radius: 14px;
-  padding: 12px 16px;
-  box-shadow: 0 18px 48px rgba(0,0,0,0.32);
+  padding: 0 16px;
+  box-shadow: none;
   text-align: left;
-  max-height: 38vh;
-  overflow-y: auto;
+  max-height: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-height 0.5s var(--qy-apple-spring), opacity 0.4s var(--qy-apple-spring), margin-top 0.5s var(--qy-apple-spring), padding 0.5s var(--qy-apple-spring), border-color 0.4s ease;
 }
 .qy-peek-drawer.open {
-  display: block;
-  animation: qyFadeIn 0.28s ease-out;
+  max-height: 360px;
+  opacity: 1;
+  margin-top: 18px;
+  padding: 12px 16px;
+  border-color: var(--qy-border-gold);
+  box-shadow: 0 18px 48px rgba(0,0,0,0.32);
+  overflow-y: auto;
 }
 .qy-peek-header {
   display: flex;
@@ -3209,7 +3251,6 @@ body.qy-paper-mode .qy-pill {
 }
 .qy-peek-item {
   border-radius: 8px;
-  transition: background 0.2s ease;
   border-bottom: 1px solid rgba(138,121,93,0.12);
 }
 .qy-peek-item:last-child {
@@ -3221,6 +3262,7 @@ body.qy-paper-mode .qy-pill {
   gap: 10px;
   padding: 9px 10px;
   cursor: pointer;
+  transition: background 0.2s ease;
 }
 .qy-peek-row:hover {
   background: rgba(158,42,43,0.06);
@@ -3248,14 +3290,23 @@ body.qy-paper-mode .qy-pill {
   font-size: 12.5px;
   color: var(--qy-cinnabar);
 }
+.qy-peek-detail-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows 0.38s var(--qy-apple-spring);
+}
+.qy-peek-item.expanded .qy-peek-detail-wrap {
+  grid-template-rows: 1fr;
+}
 .qy-peek-detail {
-  display: none;
-  padding: 6px 12px 12px;
+  overflow: hidden;
+  padding: 0 12px;
   background: rgba(239,233,220,0.55);
   border-radius: 0 0 8px 8px;
+  transition: padding 0.38s var(--qy-apple-spring);
 }
 .qy-peek-item.expanded .qy-peek-detail {
-  display: block;
+  padding: 8px 12px 12px;
 }
 .qy-peek-summary {
   margin: 0 0 10px;
@@ -3280,18 +3331,17 @@ body.qy-paper-mode .qy-pill {
   text-decoration: none !important;
   border-bottom: 1px solid var(--qy-cinnabar) !important;
 }
-/* 4. 宣纸水墨阅读区（彻底告别廉价毛玻璃与亮紫渐变） */
-.header {
-  display: none !important; /* 使用顶部清雅导航条与底部悬浮坞替代原本笨重的左侧边栏菜单 */
-}
+/* 6. 宣纸水墨居中阅读区（无左侧头像栏干扰，完全对称清雅） */
 .main-inner {
   width: 100% !important;
-  max-width: 900px !important;
+  max-width: 860px !important;
   margin: 0 auto !important;
-  padding: 10px 20px 40px !important;
+  padding: 8px 20px 44px !important;
+  float: none !important;
 }
 .content-wrap {
   width: 100% !important;
+  float: none !important;
   background: transparent !important;
   box-shadow: none !important;
 }
@@ -3304,11 +3354,10 @@ body.qy-paper-mode .qy-pill {
   border-radius: 12px !important;
   border: 1px solid var(--qy-border-gold) !important;
   box-shadow: 0 12px 36px rgba(15,18,16,0.22) !important;
-  padding: 32px 42px !important;
+  padding: 34px 46px !important;
   margin-bottom: 24px !important;
   position: relative;
 }
-/* 宣纸卡片顶部古典朱砂細线点缀 */
 .post-block::before {
   content: "";
   position: absolute;
@@ -3332,9 +3381,21 @@ body.qy-paper-mode .qy-pill {
   color: var(--qy-ink-muted) !important;
   font-size: 13.5px !important;
 }
-/* 列表页卡片渐进展开控制条（第一次点击看标题，第二次点击展读摘要，第三次点击进正文） */
-.qy-collapsed-body {
-  display: none !important;
+/* 列表页卡片摘要的 Apple Grid 丝滑展开容器 */
+.qy-abstract-grid-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  opacity: 0;
+  transition: grid-template-rows 0.52s var(--qy-apple-spring), opacity 0.42s var(--qy-apple-spring), margin-top 0.52s var(--qy-apple-spring);
+  margin-top: 0;
+}
+.qy-abstract-grid-wrap.expanded {
+  grid-template-rows: 1fr;
+  opacity: 1;
+  margin-top: 16px;
+}
+.qy-abstract-grid-inner {
+  overflow: hidden;
 }
 .qy-card-progressive-bar {
   display: flex;
@@ -3350,13 +3411,13 @@ body.qy-paper-mode .qy-pill {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  padding: 5px 15px;
+  padding: 6px 16px;
   border-radius: 999px;
   font-family: var(--qy-font-kaiti) !important;
   font-size: 14px;
   cursor: pointer;
   text-decoration: none !important;
-  transition: all 0.2s ease;
+  transition: all 0.28s var(--qy-apple-spring);
 }
 .qy-btn-toggle-abstract {
   background: rgba(59,89,88,0.08);
@@ -3366,6 +3427,7 @@ body.qy-paper-mode .qy-pill {
 .qy-btn-toggle-abstract:hover {
   background: var(--qy-jade);
   color: #fff;
+  transform: translateY(-1px);
 }
 .qy-btn-enter-article {
   background: rgba(158,42,43,0.09);
@@ -3375,8 +3437,9 @@ body.qy-paper-mode .qy-pill {
 .qy-btn-enter-article:hover {
   background: var(--qy-cinnabar);
   color: #fff !important;
+  transform: translateY(-1px);
 }
-/* 文章内页正文排版优化 */
+/* 文章内页排版细节 */
 .post-body h2 {
   color: var(--qy-ink-primary);
   border-bottom: 1px solid rgba(158,42,43,0.28);
@@ -3405,39 +3468,54 @@ body.qy-paper-mode .qy-pill {
   border: none !important;
   padding: 6px 18px !important;
 }
-/* 5. 底部 Chairo 风格悬浮控制坞 (Bottom Floating Dock) */
+/* 7. 底部悬浮控制坞：Apple Dynamic Island 风格左移收缩与悬停原地向右展开 */
 #qingya-dock {
   position: fixed;
-  bottom: 18px;
+  bottom: 22px;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate3d(-50%, 0, 0);
   z-index: 999;
+  transition: left 0.62s var(--qy-apple-spring), transform 0.62s var(--qy-apple-spring);
+  will-change: left, transform;
 }
 .qy-dock-inner {
   display: flex;
   align-items: center;
-  gap: 6px;
-  background: rgba(24,28,26,0.84);
+  background: rgba(22,26,24,0.86);
   border: 1px solid rgba(255,255,255,0.18);
-  padding: 7px 14px;
+  padding: 6px 10px;
   border-radius: 999px;
-  box-shadow: 0 10px 32px rgba(0,0,0,0.42);
-  backdrop-filter: blur(10px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.42);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: padding 0.52s var(--qy-apple-spring), background 0.35s ease, box-shadow 0.35s ease;
+}
+.qy-dock-collapsible {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  max-width: 520px;
+  opacity: 1;
+  margin-left: 4px;
+  overflow: hidden;
+  transition: max-width 0.55s var(--qy-apple-spring), opacity 0.38s var(--qy-apple-spring), margin-left 0.55s var(--qy-apple-spring);
 }
 .qy-dock-btn {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 5px;
   background: transparent;
-  color: rgba(247,244,235,0.86);
+  color: rgba(247,244,235,0.88);
   border: none;
-  padding: 6px 11px;
+  padding: 7px 12px;
   border-radius: 999px;
   font-family: var(--qy-font-kaiti) !important;
-  font-size: 13.5px;
+  font-size: 14px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: background 0.25s ease, color 0.25s ease, padding 0.45s var(--qy-apple-spring);
   white-space: nowrap;
+  flex-shrink: 0;
 }
 .qy-dock-btn:hover,
 .qy-dock-btn.active {
@@ -3447,44 +3525,72 @@ body.qy-paper-mode .qy-pill {
 .qy-dock-btn.active {
   color: #f3c68f;
 }
-.qy-dock-clock {
-  padding-left: 10px;
-  margin-left: 4px;
-  border-left: 1px solid rgba(255,255,255,0.18);
-  color: rgba(247,244,235,0.9);
-  line-height: 1.2;
-  text-align: right;
-  font-family: var(--qy-font-mono);
+.qy-top-label {
+  display: inline-block;
+  max-width: 48px;
+  opacity: 1;
+  overflow: hidden;
+  transition: max-width 0.45s var(--qy-apple-spring), opacity 0.32s var(--qy-apple-spring), margin-left 0.45s var(--qy-apple-spring);
 }
-.qy-dock-time {
-  font-size: 12.5px;
-  font-weight: 600;
+/* 当页面往下滑动阅读时：控制坞丝滑移至左下角，收缩成仅剩最左侧「↑」的圆按钮 */
+#qingya-dock.qy-dock-scrolled {
+  left: 24px;
+  transform: translate3d(0, 0, 0);
 }
-.qy-dock-date {
-  font-size: 10.5px;
-  opacity: 0.72;
+#qingya-dock.qy-dock-scrolled .qy-dock-inner {
+  padding: 6px;
 }
-/* 页脚修饰 */
+#qingya-dock.qy-dock-scrolled .qy-dock-top-btn {
+  width: 34px;
+  height: 34px;
+  padding: 0;
+  gap: 0;
+}
+#qingya-dock.qy-dock-scrolled .qy-top-label {
+  max-width: 0;
+  opacity: 0;
+}
+#qingya-dock.qy-dock-scrolled .qy-dock-collapsible {
+  max-width: 0;
+  opacity: 0;
+  margin-left: 0;
+  pointer-events: none;
+}
+/* 鼠标停留在左下角回到顶部按钮上时：最左侧「↑」保持原地不动，右侧丝滑展开完整控制坞 */
+#qingya-dock.qy-dock-scrolled:hover .qy-dock-inner {
+  padding: 6px 10px;
+}
+#qingya-dock.qy-dock-scrolled:hover .qy-dock-collapsible {
+  max-width: 520px;
+  opacity: 1;
+  margin-left: 6px;
+  pointer-events: auto;
+}
+#qingya-dock.qy-dock-scrolled .qy-dock-top-btn:hover {
+  background: var(--qy-cinnabar);
+  color: #fff;
+}
+/* 8. 页脚修饰（干净纯粹，不含任何框架推广） */
 .footer {
-  color: rgba(255,255,255,0.8) !important;
+  color: rgba(255,255,255,0.82) !important;
   text-align: center;
+  padding: 16px 0 !important;
 }
 body.qy-paper-mode .footer {
   color: var(--qy-ink-secondary) !important;
 }
 .footer-inner {
   font-size: 14px !important;
+  margin: 0 auto !important;
+  float: none !important;
 }
 /* 移动端自适应 */
 @media (max-width: 768px) {
-  body.qy-portal-zen #qingya-portal-hero {
+  #qingya-portal-hero {
     padding: 18px 18px 90px;
   }
-  .qy-time {
-    font-size: 52px;
-  }
-  .qy-top-meta {
-    display: none;
+  .qy-verse-main {
+    font-size: 22px;
   }
   .post-block {
     padding: 22px 18px !important;
@@ -3493,13 +3599,13 @@ body.qy-paper-mode .footer {
     display: none;
   }
 }
-@keyframes qyFadeIn {
+@keyframes qyPopIn {
   from {
     opacity: 0;
-    transform: translateY(-6px);
+    transform: translateY(-8px) scale(0.98);
   }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translateY(0) scale(1);
   }
 }

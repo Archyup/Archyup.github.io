@@ -17,7 +17,7 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/3.1.1/animate.min.css" integrity="sha256-PR7ttpcvz8qrF57fur/yAx1qXMFJeJFiA6pSzWi0OIE=" crossorigin="anonymous">
 
-<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"remove","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":true,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
     <meta name="description" content="好久没更新博客了。从大一刚入学参加岳麓黑客松时连 API 调用都要抱学长大腿，到现在大二上学期一头扎进先导杯（CSCC）搞海光 DCU &#x2F; AMD 异构计算与大模型底层推理优化，这一年的跨度确实有点大。 yysy，放到两三年前，让一个刚上大二的本科生去手搓 HIP 算子融合、扣 Wave64 寄存器和 HBM2 访存带宽，几乎是不可能完成的任务。但现在处于 AI 大爆发的时代，AI 某种">
 <meta property="og:type" content="article">
@@ -54,7 +54,7 @@
 
   
   <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
-<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/motion.js" defer></script><script src="/js/next-boot.js" defer></script>
 
   
 
@@ -70,11 +70,15 @@
 
 
 
-<!-- 中国清雅风 · 霞鹜文楷 & 思源宋体 WebFont 引入 -->
+<!-- 中国清雅风 · 霞鹜文楷 WebFont 与 KaTeX 数学公式支持 -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" />
 <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,600;1,400&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
@@ -123,71 +127,6 @@
 
 
 </header>
-        
-  
-  <aside class="sidebar">
-
-    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
-      <ul class="sidebar-nav">
-        <li class="sidebar-nav-toc">
-          文章目录
-        </li>
-        <li class="sidebar-nav-overview">
-          站点概览
-        </li>
-      </ul>
-
-      <div class="sidebar-panel-container">
-        <!--noindex-->
-        <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89%EF%BC%9A%E7%AB%AF%E4%BE%A7-16GB-%E6%98%BE%E5%AD%98%E7%BA%A2%E7%BA%BF%E4%B8%8B%E7%9A%84%E9%95%BF%E7%A8%8B%E6%8E%A8%E7%90%86%E5%9B%B0%E5%A2%83"><span class="nav-number">1.</span> <span class="nav-text">一、 背景与问题定义：端侧 16GB 显存红线下的长程推理困境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%A1%AC%E4%BB%B6%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%80%A7%E8%83%BD%E7%97%9B%E7%82%B9"><span class="nav-number">1.1.</span> <span class="nav-text">1.1 硬件边界与性能痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%B7%A5%E4%B8%9A%E7%BA%A7%E4%BF%9D%E7%9C%9F%E7%BA%A6%E6%9D%9F%EF%BC%9A0-ULP-%E9%80%90-Token-%E7%BB%9D%E5%AF%B9%E5%AF%B9%E9%BD%90"><span class="nav-number">1.2.</span> <span class="nav-text">1.2 工业级保真约束：0-ULP 逐 Token 绝对对齐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E6%98%BE%E5%AD%98%E6%96%AD%E5%B4%96%E5%BC%8F%E5%8E%8B%E7%BC%A9%EF%BC%9AKV-Cache-%E5%8A%A8%E6%80%81%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%97%81%E8%B7%AF"><span class="nav-number">2.</span> <span class="nav-text">二、 显存断崖式压缩：KV Cache 动态架构与计算旁路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8E%9F%E7%94%9F-12-Head-KV-%E7%BC%93%E5%AD%98%E4%B8%8E-GQA-%E8%B7%A8%E6%AD%A5%E5%B9%BF%E6%92%AD%E5%8E%9F%E4%BD%8D%E8%9E%8D%E5%90%88"><span class="nav-number">2.1.</span> <span class="nav-text">2.1 原生 12-Head KV 缓存与 GQA 跨步广播原位融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%88%86%E5%9D%97%E9%A2%84%E5%A1%AB%E5%85%85%EF%BC%88Chunked-Prefill%EF%BC%89%E4%B8%8E%E4%B8%AD%E9%97%B4%E5%9D%97-lm-head-%E6%97%81%E8%B7%AF"><span class="nav-number">2.2.</span> <span class="nav-text">2.2 分块预填充（Chunked Prefill）与中间块 lm_head 旁路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E7%AE%97%E5%AD%90%E8%9E%8D%E5%90%88%E4%B8%8E%E9%9B%B6%E6%98%BE%E5%AD%98%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91%EF%BC%88Kernel-Fusion-0-VRAM-View-Rebinding%EF%BC%89"><span class="nav-number">3.</span> <span class="nav-text">三、 算子融合与零显存视图重绑（Kernel Fusion &amp; 0-VRAM View Rebinding）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%A5%E6%A0%BC-0-ULP-%E5%AF%B9%E9%BD%90%E7%9A%84%E6%AE%8B%E5%B7%AE%E4%B8%8E-RMSNorm-%E8%9E%8D%E5%90%88%EF%BC%9Aadd-rmsnorm-exact-1536-f16"><span class="nav-number">3.1.</span> <span class="nav-text">3.1 严格 0-ULP 对齐的残差与 RMSNorm 融合：add_rmsnorm_exact_1536_f16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Decode-%E4%B8%93%E5%B1%9E-0-VRAM-%E6%9D%83%E9%87%8D%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91"><span class="nav-number">3.2.</span> <span class="nav-text">3.2 Decode 专属 0-VRAM 权重视图重绑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8D%95%E6%AD%A5-RoPE-%E6%97%8B%E8%BD%AC%E4%B8%8E-KV-%E5%86%99%E5%85%A5%E8%9E%8D%E5%90%88"><span class="nav-number">3.3.</span> <span class="nav-text">3.3 单步 RoPE 旋转与 KV 写入融合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E6%B6%88%E9%99%A4%E4%B8%BB%E6%9C%BA%E7%AB%AF%E7%93%B6%E9%A2%88%EF%BC%9A%E5%A4%9A%E9%80%9A%E9%81%93%E5%B8%B8%E9%A9%BB%E9%9D%99%E6%80%81-HIP-Graph-%E4%BD%93%E7%B3%BB"><span class="nav-number">4.</span> <span class="nav-text">四、 消除主机端瓶颈：多通道常驻静态 HIP Graph 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E5%AE%9E%E6%9C%BA%E8%AF%84%E6%B5%8B%E4%B8%8E%E6%80%A7%E8%83%BD%E6%94%B6%E7%9B%8A%E6%80%BB%E7%BB%93"><span class="nav-number">5.</span> <span class="nav-text">四、 实机评测与性能收益总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E7%BB%93%E8%AF%AD%E4%B8%8E%E4%B8%80%E7%82%B9%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F"><span class="nav-number">6.</span> <span class="nav-text">五、 结语与一点个人感悟</span></a></li></ol></div>
-        </div>
-        <!--/noindex-->
-
-        <div class="site-overview-wrap sidebar-panel">
-          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
-    <img class="site-author-image" itemprop="image" alt="Archy"
-      src="/images/avatar.JPG">
-  <p class="site-author-name" itemprop="name">Archy</p>
-  <div class="site-description" itemprop="description">记录我的 C++ / Python 学习与大学四年的成长</div>
-</div>
-<div class="site-state-wrap animated">
-  <nav class="site-state">
-      <div class="site-state-item site-state-posts">
-        <a href="/archives/">
-          <span class="site-state-item-count">5</span>
-          <span class="site-state-item-name">日志</span>
-        </a>
-      </div>
-      <div class="site-state-item site-state-categories">
-          <a href="/categories/">
-        <span class="site-state-item-count">2</span>
-        <span class="site-state-item-name">分类</span></a>
-      </div>
-      <div class="site-state-item site-state-tags">
-          <a href="/tags/">
-        <span class="site-state-item-count">6</span>
-        <span class="site-state-item-name">标签</span></a>
-      </div>
-  </nav>
-</div>
-  <div class="links-of-author animated">
-      <span class="links-of-author-item">
-        <a href="https://github.com/Archyup" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;Archyup" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
-      </span>
-      <span class="links-of-author-item">
-        <a href="mailto:1469129906@qq.com" title="E-Mail → mailto:1469129906@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
-      </span>
-  </div>
-
-        </div>
-      </div>
-    </div>
-
-    
-  </aside>
-
-
     </div>
 
     <div class="main-inner post posts-expand">
@@ -385,8 +324,8 @@
           <div class="post-tags">
               <a href="/tags/CS/" rel="tag"># CS</a>
               <a href="/tags/%E9%AB%98%E6%80%A7%E8%83%BD%E8%AE%A1%E7%AE%97/" rel="tag"># 高性能计算</a>
-              <a href="/tags/ROCm-HIP/" rel="tag"># ROCm/HIP</a>
               <a href="/tags/%E5%A4%A7%E6%A8%A1%E5%9E%8B%E6%8E%A8%E7%90%86/" rel="tag"># 大模型推理</a>
+              <a href="/tags/ROCm-HIP/" rel="tag"># ROCm/HIP</a>
           </div>
 
         
@@ -424,21 +363,13 @@
     <span class="with-love">
       <i class="fa fa-leaf"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">Archy (张裔奇) · 格物致知</span>
-  </div>
-  <div class="powered-by">由 <a href="https://hexo.io/" rel="noopener" target="_blank">Hexo</a> & <a href="https://theme-next.js.org/" rel="noopener" target="_blank">NexT.Gemini</a> 强力驱动
+    <span class="author" itemprop="copyrightHolder">Archy (张裔奇)</span>
   </div>
 
     </div>
   </footer>
 
   
-  <div class="toggle sidebar-toggle" role="button">
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-    <span class="toggle-line"></span>
-  </div>
-  <div class="sidebar-dimmer"></div>
   <div class="back-to-top" role="button" aria-label="返回顶部">
     <i class="fa fa-arrow-up fa-lg"></i>
     <span>0%</span>
@@ -449,61 +380,53 @@
 </noscript>
 <script>
 (function() {
-  // 1. 精选中国清雅风 / 自然大漠 / 远山云雾 / 必应实时壁纸池
+  // 1. 精选中国清雅风 / 自然意境 / 必应实时壁纸池
   const WALLPAPERS = [
     {
       url: "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
-      title: "大漠孤烟 · 沙海孤木",
-      credit: "清雅自然志 · 卷一"
+      title: "大漠孤烟 · 沙海孤木"
     },
     {
       url: "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=2000&q=85",
-      title: "远山如黛 · 苍林晨雾",
-      credit: "清雅自然志 · 卷二"
+      title: "远山如黛 · 苍林晨雾"
     },
     {
       url: "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85",
-      title: "千峰竞秀 · 云海苍茫",
-      credit: "清雅自然志 · 卷三"
+      title: "千峰竞秀 · 云海苍茫"
     },
     {
       url: "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85",
-      title: "平湖秋月 · 溪山行旅",
-      credit: "清雅自然志 · 卷四"
+      title: "平湖秋月 · 溪山行旅"
     },
     {
       url: "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=85",
-      title: "晓雾初开 · 空山新雨",
-      credit: "清雅自然志 · 卷五"
+      title: "晓雾初开 · 空山新雨"
     },
     {
       url: "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85",
-      title: "寒江独钓 · 水墨丹青",
-      credit: "清雅自然志 · 卷六"
+      title: "寒江独钓 · 水墨丹青"
     },
     {
       url: "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
-      title: "今日必应 · 每日实时画卷",
-      credit: "Bing Daily 实时源"
+      title: "今日必应 · 每日实时画卷"
     },
     {
       url: "https://bing.biturl.top/?resolution=1920&format=image&index=1&mkt=zh-CN",
-      title: "昨日必应 · 岁月掠影",
-      credit: "Bing Daily 实时源"
+      title: "昨日必应 · 岁月掠影"
     }
   ];
 
-  // 2. 清雅格言 / 诗词池（点击可切换）
+  // 2. 清雅诗词池（点击可切换，带淡入淡出过渡）
   const VERSES = [
-    { text: "格物致知，知行合一。于方寸终端之间，探算力与智能之边界。", author: "《格物志 · 序》" },
-    { text: "大漠孤烟直，长河落日圆。", author: "唐 · 王维《使至塞上》" },
-    { text: "行到水穷处，坐看云起时。", author: "唐 · 王维《终南别业》" },
-    { text: "博学之，审问之，慎思之，明辨之，笃行之。", author: "《礼记 · 中庸》" },
-    { text: "落霞与孤鹜齐飞，秋水共长天一色。", author: "唐 · 王勃《滕王阁序》" },
-    { text: "竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。", author: "宋 · 苏轼《定风波》" }
+    { line: "行到水穷处，坐看云起时。", sub: "唐 · 王维《终南别业》" },
+    { line: "大漠孤烟直，长河落日圆。", sub: "唐 · 王维《使至塞上》" },
+    { line: "博学之，审问之，慎思之，明辨之，笃行之。", sub: "《礼记 · 中庸》" },
+    { line: "落霞与孤鹜齐飞，秋水共长天一色。", sub: "唐 · 王勃《滕王阁序》" },
+    { line: "竹杖芒鞋轻胜马，谁怕？一蓑烟雨任平生。", sub: "宋 · 苏轼《定风波》" },
+    { line: "明月松间照，清泉石上流。", sub: "唐 · 王维《山居秋暝》" }
   ];
 
-  // 3. 站点核心文章索引（供首屏极速检索与多级渐进披露）
+  // 3. 站点核心文章索引
   const POST_INDEX = [
     {
       title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优",
@@ -545,7 +468,7 @@
 
   const isHomePage = window.location.pathname === "/" || window.location.pathname === "/index.html";
 
-  // 4. 创建背景画布层与暗角遮罩
+  // 4. 创建背景画布层
   const bgContainer = document.createElement("div");
   bgContainer.id = "qingya-wallpaper-bg";
   bgContainer.innerHTML = `
@@ -555,81 +478,74 @@
   `;
   document.body.prepend(bgContainer);
 
-  // 5. 创建首屏「清雅导航视界」(结合 Edge 新标签页 + Chairo 导航站 + 中国清雅楷体风)
+  // 5. 创建首屏「清雅导航视界」
+  // 顶部右侧仅留图标，鼠标悬停丝滑展开文字说明；中央仅留优雅诗句、极简搜索与「展卷阅文」
   const portalHero = document.createElement("section");
   portalHero.id = "qingya-portal-hero";
   portalHero.innerHTML = `
-    <!-- 顶部极简状态栏 (Edge 标签页风格) -->
     <header class="qy-topbar">
       <div class="qy-brand" id="qy-brand-home" title="返回首屏视界">
         <span class="qy-seal">裔奇</span>
         <span class="qy-brand-text">Archy · 格物志</span>
       </div>
-      <div class="qy-top-meta">
-        <span class="qy-location"><i class="fa-solid fa-location-dot"></i> 湖南 · 长沙 · 岳麓</span>
-        <span class="qy-divider">|</span>
-        <span class="qy-wp-indicator" id="qy-wp-title">大漠孤烟 · 沙海孤木</span>
-      </div>
+
+      <!-- 右上角功能图标栏：默认只显示图标，悬停丝滑展开说明 -->
+      <nav class="qy-top-actions" aria-label="快捷功能导航">
+        <button type="button" class="qy-icon-pill" id="qy-btn-quick-peek">
+          <i class="fa-solid fa-layer-group"></i>
+          <span class="qy-icon-label">新篇速览</span>
+        </button>
+        <a href="/categories/" class="qy-icon-pill">
+          <i class="fa-solid fa-folder-tree"></i>
+          <span class="qy-icon-label">分类目录</span>
+        </a>
+        <a href="/tags/" class="qy-icon-pill">
+          <i class="fa-solid fa-tags"></i>
+          <span class="qy-icon-label">标签云集</span>
+        </a>
+        <a href="/archives/" class="qy-icon-pill">
+          <i class="fa-solid fa-scroll"></i>
+          <span class="qy-icon-label">岁月归档</span>
+        </a>
+        <a href="/about/" class="qy-icon-pill">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span class="qy-icon-label">关于裔奇</span>
+        </a>
+        <a href="https://github.com/aarchyyy" target="_blank" rel="noopener" class="qy-icon-pill">
+          <i class="fa-brands fa-github"></i>
+          <span class="qy-icon-label">GitHub</span>
+        </a>
+      </nav>
     </header>
 
-    <!-- 中央核心视觉区：第一次点击仅呈现极简关键信息 -->
+    <!-- 中央核心舞台：只保留优雅诗句 + 搜索框 + 展卷阅文 -->
     <div class="qy-center-stage">
-      <div class="qy-clock-wrap">
-        <div class="qy-time" id="qy-hero-time">00:00</div>
-        <div class="qy-date" id="qy-hero-date">丙午年 · 孟冬</div>
-      </div>
-
       <div class="qy-verse-box" id="qy-verse-box" title="点击切换清雅诗句">
-        <p class="qy-verse-text" id="qy-verse-text">「格物致知，知行合一。于方寸终端之间，探算力与智能之边界。」</p>
+        <div class="qy-verse-main" id="qy-verse-line">「 行到水穷处，坐看云起时。 」</div>
+        <div class="qy-verse-sub" id="qy-verse-sub">唐 · 王维《终南别业》</div>
       </div>
 
-      <!-- Edge 风格极简检索框（支持站内文章秒级过滤 + 回车搜索） -->
       <div class="qy-search-container">
         <div class="qy-search-box">
           <i class="fa-solid fa-magnifying-glass qy-search-icon"></i>
-          <input type="text" id="qy-search-input" placeholder="检索站内文章（如：先导杯、SpMM、Qwen、ROCm）或输入关键词回车..." autocomplete="off" />
+          <input type="text" id="qy-search-input" placeholder="寻访文卷（如：先导杯、SpMM、Qwen、ROCm）..." autocomplete="off" />
           <kbd class="qy-search-kbd">/</kbd>
         </div>
         <div class="qy-search-dropdown" id="qy-search-dropdown"></div>
       </div>
 
-      <!-- 导航站风格快捷胶囊矩阵（第一次点击：极简入口；点击后触发二级详情） -->
-      <nav class="qy-nav-pills">
-        <button type="button" class="qy-pill qy-pill-primary" id="qy-btn-expand-posts">
+      <div class="qy-hero-cta">
+        <button type="button" class="qy-btn-unroll" id="qy-btn-expand-posts">
           <i class="fa-solid fa-book-open"></i>
-          <span>展卷阅文</span>
-          <em class="qy-pill-badge">${POST_INDEX.length}</em>
+          <span id="qy-unroll-text">展卷阅文</span>
+          <i class="fa-solid fa-chevron-down qy-unroll-arrow"></i>
         </button>
-        <button type="button" class="qy-pill" id="qy-btn-quick-peek">
-          <i class="fa-solid fa-layer-group"></i>
-          <span>新篇速览</span>
-        </button>
-        <a href="/categories/" class="qy-pill">
-          <i class="fa-solid fa-folder-tree"></i>
-          <span>分类目录</span>
-        </a>
-        <a href="/tags/" class="qy-pill">
-          <i class="fa-solid fa-tags"></i>
-          <span>标签云集</span>
-        </a>
-        <a href="/archives/" class="qy-pill">
-          <i class="fa-solid fa-scroll"></i>
-          <span>岁月归档</span>
-        </a>
-        <a href="/about/" class="qy-pill">
-          <i class="fa-solid fa-user-graduate"></i>
-          <span>关于裔奇</span>
-        </a>
-        <a href="https://github.com/Archyup" target="_blank" rel="noopener" class="qy-pill">
-          <i class="fa-brands fa-github"></i>
-          <span>GitHub</span>
-        </a>
-      </nav>
+      </div>
 
-      <!-- 二级抽屉（默认收起，点击「新篇速览」展开极简标题卡片；再点击标题展开摘要或进正文） -->
+      <!-- 二级抽屉（点击右上角「新篇速览」展开） -->
       <div class="qy-peek-drawer" id="qy-peek-drawer">
         <div class="qy-peek-header">
-          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击条目可预览纲要，二次点击进入全文</span>
+          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击条目预览纲要，二次点击深读全文</span>
           <button type="button" class="qy-peek-close" id="qy-peek-close" title="收起">✕</button>
         </div>
         <div class="qy-peek-list" id="qy-peek-list"></div>
@@ -638,43 +554,42 @@
   `;
   document.body.prepend(portalHero);
 
-  // 6. 创建底部 Chairo 风格悬浮控制坞 (Bottom Floating Dock)
+  // 6. 创建底部悬浮控制坞（最左侧为「回到最顶 ↑」，下滑时平滑左移并收缩为单按钮，悬停原地向右展开）
   const dock = document.createElement("aside");
   dock.id = "qingya-dock";
   dock.innerHTML = `
     <div class="qy-dock-inner">
-      <button type="button" class="qy-dock-btn" id="qy-dock-portal" title="切换极简导航视界 / 展卷阅读模式">
-        <i class="fa-solid fa-compass"></i>
-        <span>视界</span>
-      </button>
-      <button type="button" class="qy-dock-btn" id="qy-dock-articles" title="展开全部文章卷轴">
-        <i class="fa-solid fa-scroll"></i>
-        <span>文卷</span>
-      </button>
-      <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="即时更换背景画卷">
-        <i class="fa-solid fa-image"></i>
-        <span>换景</span>
-      </button>
-      <button type="button" class="qy-dock-btn active" id="qy-dock-auto-wp" title="开启/关闭壁纸实时自动轮换 (每45秒)">
-        <i class="fa-solid fa-rotate"></i>
-        <span>时新</span>
-      </button>
-      <button type="button" class="qy-dock-btn" id="qy-dock-paper-mode" title="切换纯素宣纸阅读底色">
-        <i class="fa-solid fa-mug-hot"></i>
-        <span>素宣</span>
-      </button>
-      <button type="button" class="qy-dock-btn" id="qy-dock-top" title="回到顶部">
+      <button type="button" class="qy-dock-btn qy-dock-top-btn" id="qy-dock-top" title="回到最顶">
         <i class="fa-solid fa-arrow-up"></i>
+        <span class="qy-top-label">归顶</span>
       </button>
-      <div class="qy-dock-clock">
-        <div class="qy-dock-time" id="qy-dock-time">00:00:00</div>
-        <div class="qy-dock-date" id="qy-dock-date">2026.11.09</div>
+      <div class="qy-dock-collapsible">
+        <button type="button" class="qy-dock-btn" id="qy-dock-portal" title="切换极简导航视界 / 展卷阅读模式">
+          <i class="fa-solid fa-compass"></i>
+          <span>视界</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-articles" title="展开文章卷轴">
+          <i class="fa-solid fa-book-open"></i>
+          <span>文卷</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="即时更换背景画卷">
+          <i class="fa-solid fa-image"></i>
+          <span>换景</span>
+        </button>
+        <button type="button" class="qy-dock-btn active" id="qy-dock-auto-wp" title="开启/关闭壁纸实时轮换">
+          <i class="fa-solid fa-rotate"></i>
+          <span>时新</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-paper-mode" title="切换纯素宣纸阅读底色">
+          <i class="fa-solid fa-mug-hot"></i>
+          <span>素宣</span>
+        </button>
       </div>
     </div>
   `;
   document.body.appendChild(dock);
 
-  // 7. 渲染「新篇速览」二级渐进披露抽屉（第1次点标题展开摘要，第2次点进正文）
+  // 7. 渲染「新篇速览」抽屉
   const peekListEl = document.getElementById("qy-peek-list");
   let activePeekIdx = -1;
 
@@ -687,13 +602,15 @@
           <span class="qy-peek-date">${post.date}</span>
           <span class="qy-peek-action">${activePeekIdx === idx ? '收起纲要 ▴' : '预览纲要 ▾'}</span>
         </div>
-        <div class="qy-peek-detail">
-          <p class="qy-peek-summary">${post.summary}</p>
-          <div class="qy-peek-footer">
-            <div class="qy-peek-tags">
-              ${post.tags.map(t => `<span class="qy-mini-tag"># ${t}</span>`).join('')}
+        <div class="qy-peek-detail-wrap">
+          <div class="qy-peek-detail">
+            <p class="qy-peek-summary">${post.summary}</p>
+            <div class="qy-peek-footer">
+              <div class="qy-peek-tags">
+                ${post.tags.map(t => `<span class="qy-mini-tag"># ${t}</span>`).join('')}
+              </div>
+              <a href="${post.url}" class="qy-peek-readmore">展卷深读全文 →</a>
             </div>
-            <a href="${post.url}" class="qy-peek-readmore">展卷深读全文 →</a>
           </div>
         </div>
       </div>
@@ -710,18 +627,25 @@
   }
   renderPeekList();
 
-  // 8. 改造文章列表页卡片：实现「第一次极简只看标题，点击展开摘要，再点击进全文」
+  // 8. 改造文章列表卡片：使用 Apple 级丝滑 Grid 折叠动画展开/收起摘要
   function enhanceArticleCards() {
     if (!isHomePage) return;
     const postBlocks = document.querySelectorAll(".main-inner .post-block");
-    postBlocks.forEach((block, index) => {
+    postBlocks.forEach((block) => {
       const postBody = block.querySelector(".post-body");
       const header = block.querySelector(".post-header");
       if (!postBody || !header || block.dataset.qyEnhanced) return;
       block.dataset.qyEnhanced = "true";
 
-      // 默认折叠正文摘要，除非用户点击「展读摘要」
-      postBody.classList.add("qy-collapsed-body");
+      // 用 Grid 动画容器包裹 postBody，实现丝滑高度过渡
+      const gridWrap = document.createElement("div");
+      gridWrap.className = "qy-abstract-grid-wrap";
+      const gridInner = document.createElement("div");
+      gridInner.className = "qy-abstract-grid-inner";
+
+      postBody.parentNode.insertBefore(gridWrap, postBody);
+      gridInner.appendChild(postBody);
+      gridWrap.appendChild(gridInner);
 
       const toggleBar = document.createElement("div");
       toggleBar.className = "qy-card-progressive-bar";
@@ -741,16 +665,16 @@
 
       const toggleBtn = toggleBar.querySelector(".qy-btn-toggle-abstract");
       toggleBtn.addEventListener("click", function() {
-        const isCollapsed = postBody.classList.toggle("qy-collapsed-body");
-        this.innerHTML = isCollapsed
-          ? '<i class="fa-solid fa-eye"></i> 展读核心摘要'
-          : '<i class="fa-solid fa-eye-slash"></i> 收起摘要';
+        const isExpanded = gridWrap.classList.toggle("expanded");
+        this.innerHTML = isExpanded
+          ? '<i class="fa-solid fa-eye-slash"></i> 收起摘要'
+          : '<i class="fa-solid fa-eye"></i> 展读核心摘要';
       });
     });
   }
   enhanceArticleCards();
 
-  // 9. 壁纸切换与实时自动更新引擎
+  // 9. 壁纸切换与实时轮换引擎
   let currentWpIdx = parseInt(localStorage.getItem("qy_wp_idx") || "0", 10) % WALLPAPERS.length;
   let activeLayerIsA = true;
   let autoRotateTimer = null;
@@ -759,45 +683,38 @@
 
   const layerA = bgContainer.querySelector(".qy-bg-a");
   const layerB = bgContainer.querySelector(".qy-bg-b");
-  const wpTitleEl = document.getElementById("qy-wp-title");
   const btnAutoWp = document.getElementById("qy-dock-auto-wp");
   const btnPaperMode = document.getElementById("qy-dock-paper-mode");
 
-  function applyWallpaper(idx,preloadOnly) {
+  function applyWallpaper(idx) {
     const wp = WALLPAPERS[idx];
     const img = new Image();
     img.onload = function() {
-      if (preloadOnly) return;
       const targetLayer = activeLayerIsA ? layerA : layerB;
       const otherLayer = activeLayerIsA ? layerB : layerA;
       targetLayer.style.backgroundImage = `url("${wp.url}")`;
       targetLayer.classList.add("active");
       otherLayer.classList.remove("active");
       activeLayerIsA = !activeLayerIsA;
-      if (wpTitleEl) wpTitleEl.textContent = `${wp.title} (${wp.credit})`;
     };
     img.src = wp.url;
   }
 
-  // 初始设置第一张壁纸
   layerA.style.backgroundImage = `url("${WALLPAPERS[currentWpIdx].url}")`;
-  if (wpTitleEl) wpTitleEl.textContent = `${WALLPAPERS[currentWpIdx].title} (${WALLPAPERS[currentWpIdx].credit})`;
   activeLayerIsA = false;
 
   function nextWallpaper() {
-    if (isPaperMode) {
-      togglePaperMode(false);
-    }
+    if (isPaperMode) togglePaperMode(false);
     currentWpIdx = (currentWpIdx + 1) % WALLPAPERS.length;
     localStorage.setItem("qy_wp_idx", String(currentWpIdx));
-    applyWallpaper(currentWpIdx, false);
+    applyWallpaper(currentWpIdx);
   }
 
   function updateAutoRotateState() {
     if (autoRotateTimer) clearInterval(autoRotateTimer);
     if (isAutoRotate && !isPaperMode) {
       btnAutoWp.classList.add("active");
-      autoRotateTimer = setInterval(nextWallpaper, 45000); // 每45秒实时更新壁纸
+      autoRotateTimer = setInterval(nextWallpaper, 45000);
     } else {
       btnAutoWp.classList.remove("active");
     }
@@ -814,19 +731,26 @@
   if (isPaperMode) togglePaperMode(true);
   updateAutoRotateState();
 
-  // 10. 首屏视界模式 vs 展卷阅读模式状态控制
+  // 10. 丝滑切换「首屏视界」与「展卷阅文」模式
+  const unrollTextEl = document.getElementById("qy-unroll-text");
+  const unrollBtn = document.getElementById("qy-btn-expand-posts");
+
   function setPortalMode(zenMode) {
     if (zenMode) {
       document.body.classList.add("qy-portal-zen");
       document.body.classList.remove("qy-portal-scroll");
+      if (unrollTextEl) unrollTextEl.textContent = "展卷阅文";
+      if (unrollBtn) unrollBtn.classList.remove("expanded");
       window.scrollTo({ top: 0, behavior: "smooth" });
+      dock.classList.remove("qy-dock-scrolled");
     } else {
       document.body.classList.remove("qy-portal-zen");
       document.body.classList.add("qy-portal-scroll");
+      if (unrollTextEl) unrollTextEl.textContent = "收卷观景";
+      if (unrollBtn) unrollBtn.classList.add("expanded");
     }
   }
 
-  // 首页默认进入「极简导航视界」，内页直接进入「阅读视图」
   if (isHomePage) {
     setPortalMode(true);
   } else {
@@ -834,24 +758,46 @@
     setPortalMode(false);
   }
 
-  // 11. 绑定交互事件
-  document.getElementById("qy-btn-expand-posts").addEventListener("click", function() {
-    setPortalMode(false);
-    setTimeout(() => {
-      const mainEl = document.querySelector(".main");
-      if (mainEl) mainEl.scrollIntoView({ behavior: "smooth" });
-    }, 80);
+  // 11. 监听滚动：下滑阅读时，控制坞平滑移至左下角并收缩为「回到最顶 ↑」单按钮
+  let isScrollingToTop = false;
+  function handleScroll() {
+    if (isScrollingToTop) {
+      if (window.scrollY <= 15) {
+        isScrollingToTop = false;
+        dock.classList.remove("qy-dock-scrolled");
+      }
+      return;
+    }
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    if (scrollY > 90) {
+      dock.classList.add("qy-dock-scrolled");
+    } else {
+      dock.classList.remove("qy-dock-scrolled");
+    }
+  }
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+
+  // 12. 交互事件绑定
+  unrollBtn.addEventListener("click", function() {
+    const isCurrentlyZen = document.body.classList.contains("qy-portal-zen");
+    if (isCurrentlyZen) {
+      setPortalMode(false);
+    } else {
+      setPortalMode(true);
+    }
   });
 
   const peekDrawer = document.getElementById("qy-peek-drawer");
-  document.getElementById("qy-btn-quick-peek").addEventListener("click", function() {
+  const quickPeekBtn = document.getElementById("qy-btn-quick-peek");
+  quickPeekBtn.addEventListener("click", function() {
     peekDrawer.classList.toggle("open");
-    this.classList.toggle("qy-pill-active", peekDrawer.classList.contains("open"));
+    this.classList.toggle("active", peekDrawer.classList.contains("open"));
   });
 
   document.getElementById("qy-peek-close").addEventListener("click", function() {
     peekDrawer.classList.remove("open");
-    document.getElementById("qy-btn-quick-peek").classList.remove("qy-pill-active");
+    quickPeekBtn.classList.remove("active");
   });
 
   document.getElementById("qy-brand-home").addEventListener("click", function() {
@@ -880,7 +826,7 @@
     setTimeout(() => {
       const mainEl = document.querySelector(".main");
       if (mainEl) mainEl.scrollIntoView({ behavior: "smooth" });
-    }, 80);
+    }, 60);
   });
 
   document.getElementById("qy-dock-next-wp").addEventListener("click", nextWallpaper);
@@ -895,19 +841,31 @@
     togglePaperMode();
   });
 
+  // 点击最左侧「回到最顶」按钮：平滑回到顶部，同时控制坞丝滑回到正中间
   document.getElementById("qy-dock-top").addEventListener("click", function() {
+    isScrollingToTop = true;
+    dock.classList.remove("qy-dock-scrolled");
     window.scrollTo({ top: 0, behavior: "smooth" });
+    setTimeout(() => { isScrollingToTop = false; }, 700);
   });
 
-  // 诗词点击切换
+  // 诗句点击柔光切换
   let verseIdx = 0;
-  document.getElementById("qy-verse-box").addEventListener("click", function() {
-    verseIdx = (verseIdx + 1) % VERSES.length;
-    const v = VERSES[verseIdx];
-    document.getElementById("qy-verse-text").textContent = `「${v.text}」 —— ${v.author}`;
+  const verseBox = document.getElementById("qy-verse-box");
+  const verseLine = document.getElementById("qy-verse-line");
+  const verseSub = document.getElementById("qy-verse-sub");
+  verseBox.addEventListener("click", function() {
+    verseBox.classList.add("switching");
+    setTimeout(() => {
+      verseIdx = (verseIdx + 1) % VERSES.length;
+      const v = VERSES[verseIdx];
+      verseLine.textContent = `「 ${v.line} 」`;
+      verseSub.textContent = v.sub;
+      verseBox.classList.remove("switching");
+    }, 220);
   });
 
-  // 12. 站内文章实时检索框逻辑
+  // 13. 站内实时检索框逻辑
   const searchInput = document.getElementById("qy-search-input");
   const searchDropdown = document.getElementById("qy-search-dropdown");
 
@@ -937,7 +895,7 @@
       `).join("");
     } else {
       searchDropdown.innerHTML = `
-        <div class="qy-search-empty">未检索到匹配文卷，按回车键使用必应全网搜索「${this.value}」</div>
+        <div class="qy-search-empty">未寻得匹配文卷，按回车键使用必应搜索「${this.value}」</div>
       `;
     }
     searchDropdown.classList.add("show");
@@ -961,7 +919,6 @@
     }
   });
 
-  // 快捷键 `/` 聚焦搜索框
   document.addEventListener("keydown", function(e) {
     if (e.key === "/" && document.activeElement !== searchInput && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
       e.preventDefault();
@@ -974,31 +931,6 @@
       searchDropdown.classList.remove("show");
     }
   });
-
-  // 13. 实时时钟与干支纪年日期更新
-  const WEEKDAYS = ["星期日", "星期一", "星期二", "星期三", "星期四", "星期五", "星期六"];
-  function updateClock() {
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, "0");
-    const mm = String(now.getMinutes()).padStart(2, "0");
-    const ss = String(now.getSeconds()).padStart(2, "0");
-    const yyyy = now.getFullYear();
-    const mo = String(now.getMonth() + 1).padStart(2, "0");
-    const dd = String(now.getDate()).padStart(2, "0");
-    const wk = WEEKDAYS[now.getDay()];
-
-    const heroTime = document.getElementById("qy-hero-time");
-    const heroDate = document.getElementById("qy-hero-date");
-    const dockTime = document.getElementById("qy-dock-time");
-    const dockDate = document.getElementById("qy-dock-date");
-
-    if (heroTime) heroTime.textContent = `${hh}:${mm}`;
-    if (heroDate) heroDate.textContent = `${yyyy}年${mo}月${dd}日 · ${wk} · 岁在丙午`;
-    if (dockTime) dockTime.textContent = `${hh}:${mm}:${ss}`;
-    if (dockDate) dockDate.textContent = `${yyyy}.${mo}.${dd}`;
-  }
-  updateClock();
-  setInterval(updateClock, 1000);
 })();
 </script>
 
