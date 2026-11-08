@@ -583,8 +583,8 @@
         return;
       }
 
-      // 以屏幕上方 28% 处作为阅读视线触发基准线（包含 h2 与 h3 子章节如 3.1 / 3.2 / 3.3）
-      const readingLine = Math.max(140, winH * 0.28);
+      // 以屏幕上半区 (46% 处) 作为自然阅读视线基准线：新章节进入上半屏即刻展开对应大块下的小块
+      const readingLine = Math.max(180, winH * 0.46);
       let activeIdx = 0;
       for (let i = 0; i < headingItems.length; i++) {
         const rect = headingItems[i].targetEl.getBoundingClientRect();
