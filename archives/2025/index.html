@@ -507,27 +507,64 @@
       tocWrap.prepend(tocHeader);
     }
 
-    // 建立目录链接与正文标题元素的精确映射
+    // 建立目录链接与正文标题元素的精确映射，并接管 NexT 默认存在缺陷的 updateActiveNav
+    if (window.NexT && window.NexT.utils) {
+      window.NexT.utils.updateActiveNav = function() {};
+      window.NexT.utils.activateNavByIndex = function() {};
+    }
+
     const headingItems = tocLinks.map(link => {
       const href = link.getAttribute("href") || "";
       if (!href.startsWith("#")) return null;
       const rawId = decodeURIComponent(href.slice(1));
-      const targetEl = document.getElementById(rawId);
-      return targetEl ? { link, navItem: link.closest(".nav-item"), targetEl } : null;
+      const targetEl = document.getElementById(rawId) || document.getElementById(href.slice(1));
+      const navItem = link.closest(".nav-item");
+      const parentLevel2 = navItem ? navItem.closest(".nav-level-2") : null;
+      return targetEl ? { link, navItem, parentLevel2, targetEl } : null;
     }).filter(Boolean);
 
     if (headingItems.length === 0) return;
+
+    // 清除 NexT 内联写入的错误 --height 限制，防止多行子标题 (如 3.2, 3.3) 被截断隐藏
+    sidebar.querySelectorAll(".nav-child").forEach(child => {
+      child.style.removeProperty("--height");
+      child.style.height = "auto";
+    });
 
     let clickLockedIdx = -1;
     let clickLockTimer = null;
 
     function highlightTocIndex(activeIndex) {
-      headingItems.forEach((item, idx) => {
-        if (!item.navItem) return;
-        const isCurrent = (idx === activeIndex);
-        item.navItem.classList.toggle("qy-toc-current", isCurrent);
-        item.link.classList.toggle("qy-toc-link-current", isCurrent);
+      const activeEntry = headingItems[activeIndex];
+      const activeParent = activeEntry ? activeEntry.parentLevel2 : null;
+
+      sidebar.querySelectorAll(".nav-item").forEach(el => {
+        el.classList.remove("active", "active-current", "qy-toc-current", "qy-toc-parent-active");
       });
+
+      headingItems.forEach((item, idx) => {
+        const isCurrent = (idx === activeIndex);
+        item.link.classList.toggle("qy-toc-link-current", isCurrent);
+        if (isCurrent && item.navItem) {
+          item.navItem.classList.add("qy-toc-current", "active", "active-current");
+        }
+      });
+
+      if (activeParent) {
+        activeParent.classList.add("qy-toc-parent-active", "active");
+      }
+
+      // 确保当前高亮的目录项在左侧导读框可视区域内
+      if (activeEntry && activeEntry.link && tocWrap) {
+        const linkRect = activeEntry.link.getBoundingClientRect();
+        const wrapRect = tocWrap.getBoundingClientRect();
+        if (linkRect.top < wrapRect.top + 36 || linkRect.bottom > wrapRect.bottom - 24) {
+          tocWrap.scrollTo({
+            top: tocWrap.scrollTop + (linkRect.top - wrapRect.top) - wrapRect.height * 0.35,
+            behavior: "smooth"
+          });
+        }
+      }
     }
 
     function updateTocOnScroll() {
@@ -540,14 +577,14 @@
       const winH = window.innerHeight;
       const docH = document.documentElement.scrollHeight;
 
-      // 当页面已经滚动到最底部（距离底部不足 45px）时，精准激活最后一个目录项
+      // 当页面滚动到最底部时，精准激活最后一个目录项
       if (winH + scrollY >= docH - 45) {
         highlightTocIndex(headingItems.length - 1);
         return;
       }
 
-      // 以屏幕上方 32% 处作为自然阅读视线基准线
-      const readingLine = winH * 0.32;
+      // 以屏幕上方 28% 处作为阅读视线触发基准线（包含 h2 与 h3 子章节如 3.1 / 3.2 / 3.3）
+      const readingLine = Math.max(140, winH * 0.28);
       let activeIdx = 0;
       for (let i = 0; i < headingItems.length; i++) {
         const rect = headingItems[i].targetEl.getBoundingClientRect();
@@ -560,19 +597,22 @@
       highlightTocIndex(activeIdx);
     }
 
+    // 使用捕获阶段拦截目录点击，覆盖 NexT 默认滚动，精准对齐标题并高亮对应子章节
     headingItems.forEach((item, idx) => {
       item.link.addEventListener("click", function(e) {
         e.preventDefault();
+        e.stopImmediatePropagation();
         clickLockedIdx = idx;
         highlightTocIndex(idx);
         if (clickLockTimer) clearTimeout(clickLockTimer);
-        const topPos = item.targetEl.getBoundingClientRect().top + window.scrollY - 28;
-        window.scrollTo({ top: topPos, behavior: "smooth" });
+        const topPos = item.targetEl.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
+        history.replaceState(null, document.title, item.link.getAttribute("href"));
         clickLockTimer = setTimeout(() => {
           clickLockedIdx = -1;
           updateTocOnScroll();
-        }, 700);
-      });
+        }, 750);
+      }, true);
     });
 
     window.addEventListener("scroll", function() {

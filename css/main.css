@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #1b1781;
+    background: #ff5eff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3431,9 +3431,24 @@ body.qy-paper-mode .qy-scroll-hint {
   border-left: 2px solid var(--qy-cinnabar) !important;
   padding-left: 10px !important;
 }
-/* Show all TOC levels cleanly for quick navigation */
-.post-toc .nav .nav-child {
+/* 彻底解除 NexT 对子目录 (.nav-child) 的固定像素高度截断，完整显示 1.1/1.2/2.1/2.2/3.1/3.2/3.3 */
+.post-toc .nav .nav-child,
+.post-toc .nav .active > .nav-child,
+.post-toc .nav .qy-toc-parent-active > .nav-child {
   display: block !important;
+  height: auto !important;
+  max-height: none !important;
+  opacity: 1 !important;
+  visibility: visible !important;
+  overflow: visible !important;
+  padding-left: 12px !important;
+  margin-top: 2px !important;
+}
+.post-toc .nav-level-3 > .nav-link {
+  font-size: 13px !important;
+  line-height: 1.55 !important;
+  padding-top: 2px !important;
+  padding-bottom: 2px !important;
 }
 .content-wrap {
   width: 100% !important;
