@@ -1,0 +1,182 @@
+/* ==========================================================================
+   「Archy · 格物志」Giscus 专属中国清雅风主题 (宣纸米白 × 朱砂红 × 霞鹜文楷)
+   ========================================================================== */
+@import url("https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.7.0/style.css");
+
+main {
+  /* 核心色调：朱砂红 (140, 56, 58) 与 温润宣纸底 (245, 240, 228) */
+  --primary-default: 140, 56, 58;
+  --bg-default: 245, 240, 228;
+
+  font-family: "Kaiti SC", "STKaiti", "LXGW WenKai Screen", "LXGW WenKai", "KaiTi", "楷体-简", "楷体", "Noto Serif SC", serif;
+
+  /* 代码语法高亮色调 */
+  --color-prettylights-syntax-comment: #767e79;
+  --color-prettylights-syntax-constant: #2f5c56;
+  --color-prettylights-syntax-entity: #6f42c1;
+  --color-prettylights-syntax-storage-modifier-import: #1e2320;
+  --color-prettylights-syntax-entity-tag: #24583c;
+  --color-prettylights-syntax-keyword: #8c383a;
+  --color-prettylights-syntax-string: #1f4e5f;
+  --color-prettylights-syntax-variable: #8a5a2b;
+  --color-prettylights-syntax-brackethighlighter-unmatched: #82071e;
+  --color-prettylights-syntax-invalid-illegal-text: #faf7f0;
+  --color-prettylights-syntax-invalid-illegal-bg: #82071e;
+  --color-prettylights-syntax-carriage-return-text: #faf7f0;
+  --color-prettylights-syntax-carriage-return-bg: #8c383a;
+  --color-prettylights-syntax-string-regexp: #24583c;
+  --color-prettylights-syntax-markup-list: #3b2300;
+  --color-prettylights-syntax-markup-heading: #8c383a;
+  --color-prettylights-syntax-markup-italic: #1e2320;
+  --color-prettylights-syntax-markup-bold: #1e2320;
+  --color-prettylights-syntax-markup-deleted-text: #82071e;
+  --color-prettylights-syntax-markup-deleted-bg: #ffebe9;
+  --color-prettylights-syntax-markup-inserted-text: #116329;
+  --color-prettylights-syntax-markup-inserted-bg: #dafbe1;
+  --color-prettylights-syntax-markup-changed-text: #953800;
+  --color-prettylights-syntax-markup-changed-bg: #ffd8b5;
+  --color-prettylights-syntax-markup-ignored-text: #eaeef2;
+  --color-prettylights-syntax-markup-ignored-bg: #0550ae;
+  --color-prettylights-syntax-meta-diff-range: #8250df;
+  --color-prettylights-syntax-brackethighlighter-angle: #57606a;
+  --color-prettylights-syntax-sublimelinter-gutter-mark: #8c959f;
+  --color-prettylights-syntax-constant-other-reference-link: #8c383a;
+
+  /* 按钮与交互状态：朱砂印泥红 */
+  --color-btn-text: #2c322e;
+  --color-btn-bg: rgba(246, 241, 230, 0.85);
+  --color-btn-border: rgba(138, 121, 93, 0.3);
+  --color-btn-shadow: 0 1px 2px rgba(15, 18, 16, 0.04);
+  --color-btn-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --color-btn-hover-bg: rgba(238, 230, 214, 0.95);
+  --color-btn-hover-border: rgba(140, 56, 58, 0.45);
+  --color-btn-active-bg: rgba(140, 56, 58, 0.14);
+  --color-btn-active-border: rgba(140, 56, 58, 0.65);
+  --color-btn-selected-bg: rgba(140, 56, 58, 0.12);
+
+  --color-btn-primary-text: #faf7f0;
+  --color-btn-primary-bg: #8c383a;
+  --color-btn-primary-border: #7a2e30;
+  --color-btn-primary-shadow: 0 2px 6px rgba(140, 56, 58, 0.25);
+  --color-btn-primary-inset-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.15);
+  --color-btn-primary-hover-bg: #782d2f;
+  --color-btn-primary-hover-border: #682527;
+  --color-btn-primary-selected-bg: #6e2729;
+  --color-btn-primary-selected-shadow: inset 0 1px 0 rgba(0, 0, 0, 0.2);
+  --color-btn-primary-disabled-text: rgba(250, 247, 240, 0.75);
+  --color-btn-primary-disabled-bg: rgba(140, 56, 58, 0.45);
+  --color-btn-primary-disabled-border: rgba(140, 56, 58, 0.35);
+
+  /* 分段切换控件（输入/预览、最早/最新） */
+  --color-action-list-item-default-hover-bg: rgba(138, 121, 93, 0.14);
+  --color-segmented-control-bg: rgba(235, 228, 213, 0.75);
+  --color-segmented-control-button-bg: #fbf8f1;
+  --color-segmented-control-button-selected-border: rgba(138, 121, 93, 0.4);
+
+  /* 文本墨色层级 */
+  --color-fg-default: #1e2320;
+  --color-fg-muted: #525a56;
+  --color-fg-subtle: #7c8480;
+
+  /* 宣纸画布背景色（彻底告别刺眼冷白 #ffffff） */
+  --color-canvas-default: rgba(251, 248, 241, 0.65);
+  --color-canvas-overlay: #faf6ed;
+  --color-canvas-inset: rgba(243, 237, 224, 0.68);
+  --color-canvas-subtle: rgba(245, 239, 227, 0.8);
+
+  /* 温润金棕边框 */
+  --color-border-default: rgba(138, 121, 93, 0.28);
+  --color-border-muted: rgba(138, 121, 93, 0.18);
+  --color-neutral-muted: rgba(138, 121, 93, 0.15);
+
+  /* 强调色（朱砂与碧玉） */
+  --color-accent-fg: #8c383a;
+  --color-accent-emphasis: #8c383a;
+  --color-accent-muted: rgba(140, 56, 58, 0.35);
+  --color-accent-subtle: rgba(140, 56, 58, 0.08);
+  --color-success-fg: #2f5c56;
+  --color-attention-fg: #9a6700;
+  --color-attention-muted: rgba(212, 167, 44, 0.4);
+  --color-attention-subtle: #fff8c5;
+  --color-danger-fg: #b92b27;
+  --color-danger-muted: rgba(185, 43, 39, 0.4);
+  --color-danger-subtle: #ffebe9;
+  --color-primer-shadow-inset: 0 1px 0 rgba(138, 121, 93, 0.12), inset 0 1px 0 rgba(255, 255, 255, 0.4);
+  --color-scale-gray-1: rgba(235, 228, 213, 0.8);
+  --color-scale-blue-1: rgba(140, 56, 58, 0.14);
+  --color-social-reaction-bg-hover: var(--color-scale-gray-1);
+  --color-social-reaction-bg-reacted-hover: var(--color-scale-blue-1);
+}
+
+/* 紧凑化整体间距，消除顶部表情区与输入框之间的松散空旷感 */
+.gsc-main {
+  gap: 0.9rem !important;
+}
+
+.gsc-reactions {
+  margin-bottom: -0.15rem !important;
+}
+
+.gsc-reactions-count {
+  font-size: 0.9rem !important;
+  color: #4a524e !important;
+  margin-bottom: 0.25rem !important;
+}
+
+.gsc-comments {
+  gap: 0.95rem !important;
+}
+
+/* 输入框与评论卡片圆角及温润宣纸质感优化 */
+.gsc-comment-box:not(.gsc-comment-box-is-reply) {
+  border-radius: 10px !important;
+  border: 1px solid rgba(138, 121, 93, 0.3) !important;
+  background-color: rgba(252, 249, 242, 0.72) !important;
+  box-shadow: 0 2px 12px rgba(15, 18, 16, 0.04) !important;
+}
+
+.gsc-comment-box-tabs {
+  background-color: rgba(242, 236, 222, 0.6) !important;
+  border-bottom: 1px solid rgba(138, 121, 93, 0.22) !important;
+  border-radius: 10px 10px 0 0 !important;
+}
+
+.gsc-comment-box-textarea {
+  background-color: rgba(253, 251, 246, 0.9) !important;
+  border-color: rgba(138, 121, 93, 0.25) !important;
+  border-radius: 6px 6px 0 0 !important;
+  font-family: inherit !important;
+  font-size: 0.95rem !important;
+}
+
+.gsc-comment-box-textarea-extras {
+  background-color: rgba(247, 242, 231, 0.85) !important;
+  border-color: rgba(138, 121, 93, 0.25) !important;
+  border-radius: 0 0 6px 6px !important;
+}
+
+/* 已发布的单条评论卡片样式 */
+.gsc-comment > div {
+  border-radius: 10px !important;
+  border-color: rgba(138, 121, 93, 0.28) !important;
+  background-color: rgba(252, 249, 242, 0.75) !important;
+  box-shadow: 0 2px 8px rgba(15, 18, 16, 0.03) !important;
+}
+
+.gsc-reply-box {
+  background-color: rgba(244, 238, 225, 0.55) !important;
+  border-top: 1px dashed rgba(138, 121, 93, 0.24) !important;
+  border-radius: 0 0 10px 10px !important;
+}
+
+.gsc-comment:not(.gsc-reply-box) .gsc-replies {
+  border-radius: unset;
+}
+
+main .pagination-loader-container {
+  background-image: url(https://github.com/images/modules/pulls/progressive-disclosure-line.svg);
+}
+
+main .gsc-loading-image {
+  background-image: url(https://github.githubassets.com/images/mona-loading-default.gif);
+}
