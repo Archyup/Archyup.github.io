@@ -249,7 +249,7 @@
     <span class="with-love">
       <i class="fa fa-leaf"></i>
     </span>
-    <span class="author" itemprop="copyrightHolder">Archy (张裔奇)</span>
+    <span class="author" itemprop="copyrightHolder">Archy</span>
   </div>
 
     </div>
@@ -896,7 +896,31 @@
   // 12. 交互事件绑定
   const peekDrawer = document.getElementById("qy-peek-drawer");
   const quickPeekBtn = document.getElementById("qy-btn-quick-peek");
+
+  // 支持从内页点击「新篇速览」自动切回首屏视界并直接展开速览抽屉
+  const urlParams = new URLSearchParams(window.location.search);
+  if (isHomePage && (urlParams.get("peek") === "1" || sessionStorage.getItem("qy_open_peek") === "1")) {
+    sessionStorage.removeItem("qy_open_peek");
+    if (urlParams.get("peek") === "1") {
+      history.replaceState(null, document.title, "/");
+    }
+    setPortalMode(true);
+    peekDrawer.classList.add("open");
+    quickPeekBtn.classList.add("active");
+  }
+
   quickPeekBtn.addEventListener("click", function() {
+    if (!isHomePage) {
+      sessionStorage.setItem("qy_open_peek", "1");
+      window.location.href = "/?peek=1";
+      return;
+    }
+    if (!document.body.classList.contains("qy-portal-zen")) {
+      setPortalMode(true);
+      peekDrawer.classList.add("open");
+      this.classList.add("active");
+      return;
+    }
     peekDrawer.classList.toggle("open");
     this.classList.toggle("active", peekDrawer.classList.contains("open"));
   });

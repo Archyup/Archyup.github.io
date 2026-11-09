@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #881dcf;
+    background: #ff7c1b;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3743,6 +3743,10 @@ body.qy-paper-mode .footer {
 .footer-inner {
   font-size: 13.5px !important;
   margin: 0 auto !important;
+  padding-left: 0 !important;
+  padding-right: 0 !important;
+  width: 100% !important;
+  text-align: center !important;
   float: none !important;
 }
 /* 移动端自适应 */
