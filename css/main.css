@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #ff7c1b;
+    background: #050396;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3507,7 +3507,8 @@ body.qy-paper-mode .qy-scroll-hint {
   box-sizing: border-box !important;
   overflow-x: hidden !important;
 }
-.post-block::before {
+.post-block::before,
+.comments::before {
   content: "";
   position: absolute;
   top: 0;
@@ -3516,6 +3517,26 @@ body.qy-paper-mode .qy-scroll-hint {
   height: 2px;
   background: linear-gradient(90deg, transparent, var(--qy-cinnabar), transparent);
   opacity: 0.4;
+}
+.qy-comment-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--qy-cinnabar);
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+  border-bottom: 1px dashed rgba(138,121,93,0.32);
+  letter-spacing: 0.08em;
+}
+.qy-comment-header i {
+  font-size: 16px;
+}
+.giscus,
+.giscus-frame {
+  width: 100% !important;
+  min-height: 150px;
 }
 .post-title,
 .post-title-link {
