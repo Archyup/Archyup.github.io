@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #424bff;
+    background: #881dcf;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2908,10 +2908,12 @@ html.qy-is-inner .qy-center-stage,
 body.qy-inner-page .qy-center-stage {
   margin-top: 2px;
 }
-html.qy-is-inner .main {
+html.qy-is-inner .main,
+body.qy-inner-page .main {
   opacity: 1 !important;
   transform: none !important;
   filter: none !important;
+  will-change: auto !important;
 }
 html.qy-is-inner .main-inner {
   animation: qyGentleEmergence 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
@@ -2948,7 +2950,7 @@ body.qy-portal-scroll .main,
 body.qy-portal-scroll .footer {
   opacity: 1 !important;
   pointer-events: auto !important;
-  transform: translate3d(0, 0, 0) scale(1) !important;
+  transform: none !important;
 }
 /* 4. 顶部导航栏：左上角印章品牌 + 右上角悬停展开图标栏 */
 .qy-topbar {
@@ -3369,6 +3371,20 @@ body.qy-paper-mode .qy-scroll-hint {
     width: 250px !important;
     flex: 0 0 250px !important;
     margin: 0 !important;
+    align-self: stretch !important;
+    position: relative !important;
+  }
+  body.qy-has-toc aside.sidebar {
+    display: block !important;
+    position: -webkit-sticky !important;
+    position: sticky !important;
+    top: 24px !important;
+    width: 250px !important;
+    flex: 0 0 250px !important;
+    margin: 0 !important;
+    background: transparent !important;
+    box-shadow: none !important;
+    z-index: 30 !important;
   }
   body.qy-has-toc .main-inner {
     flex: 1 1 0% !important;
@@ -3384,16 +3400,6 @@ body.qy-paper-mode .qy-scroll-hint {
     width: 100% !important;
     min-width: 0 !important;
     box-sizing: border-box !important;
-  }
-  body.qy-has-toc aside.sidebar {
-    display: block !important;
-    position: sticky !important;
-    top: 24px !important;
-    width: 250px !important;
-    flex: 0 0 250px !important;
-    margin: 0 !important;
-    background: transparent !important;
-    box-shadow: none !important;
   }
 }
 .sidebar-inner {
