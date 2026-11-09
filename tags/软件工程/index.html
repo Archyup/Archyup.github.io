@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20261109">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=20261109">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=20261109">
+  <link rel="mask-icon" href="/images/apple-touch-icon.png?v=20261109" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="记录我的 C++ &#x2F; Python 学习与大学四年的成长">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Archyのcs之旅">
+<meta property="og:url" content="https://archyup.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/index.html">
+<meta property="og:site_name" content="Archyのcs之旅">
+<meta property="og:description" content="记录我的 C++ &#x2F; Python 学习与大学四年的成长">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Archy">
+<meta name="twitter:card" content="summary">
+
+
+<link rel="canonical" href="https://archyup.github.io/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":false,"lang":"zh-CN","comments":"","permalink":"","path":"tags/软件工程/index.html","title":""}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>标签: 软件工程 | Archyのcs之旅</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"neutral","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261109">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=20261109">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=20261109">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20261109">
+<script>
+  // 首帧同步判定首页与内页，彻底消除点击右上角功能页时的等待与高度跳变
+  (function() {
+    var p = window.location.pathname;
+    var isHome = (p === "/" || p === "/index.html");
+    document.documentElement.classList.add(isHome ? "qy-is-home" : "qy-is-inner");
+  })();
+</script>
+<!-- 异步非阻塞加载霞鹜文楷与 KaTeX 数学公式，0 阻塞首屏渲染 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" media="print" onload="this.media='all'">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Archyのcs之旅" type="application/atom+xml">
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Archyのcs之旅</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">相信未来,热爱生命</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa-solid fa-compass fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa-solid fa-scroll fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa-solid fa-folder-tree fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa-solid fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa-solid fa-user-graduate fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-overview-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Archy"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">Archy</p>
+  <div class="site-description" itemprop="description">记录我的 C++ / Python 学习与大学四年的成长</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">6</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">10</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aarchyyy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aarchyyy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1469129906@qq.com" title="E-Mail → mailto:1469129906@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner tag posts-collapse">
+
+
+  
+  
+  
+  <div class="post-block">
+    <div class="post-content">
+      <div class="collection-title">
+        <h1 class="collection-header">软件工程
+          <small>标签</small>
+        </h1>
+      </div>
+
+      
+    <div class="collection-year">
+      <span class="collection-header">2026</span>
+    </div>
+
+  <article itemscope itemtype="http://schema.org/Article">
+    <header class="post-header">
+      <div class="post-meta-container">
+        <time itemprop="dateCreated"
+              datetime="2026-11-09T14:35:00+08:00"
+              content="2026-11-09">
+          11-09
+        </time>
+      </div>
+
+      <div class="post-title">
+          <a class="post-title-link" href="/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/" itemprop="url">
+            <span itemprop="name">从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体实践</span>
+          </a>
+      </div>
+
+      
+    </header>
+  </article>
+
+    </div>
+  </div>
+  
+  
+  
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2025 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-leaf"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Archy (张裔奇)</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+(function() {
+  // 1. 实时壁纸抓取引擎：结合必应实时源 + 随机风景 API + 精选东方自然意境底座
+  const SEED_WALLPAPERS = [
+    "https://bing.biturl.top/?resolution=1920&format=image&index=0&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=1&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=2&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=3&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=4&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=5&mkt=zh-CN",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=85",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=6&mkt=zh-CN",
+    "https://bing.biturl.top/?resolution=1920&format=image&index=7&mkt=zh-CN"
+  ];
+
+  // 生成实时动态壁纸 URL（每次调用生成全新的随机壁纸流地址）
+  let liveCounter = parseInt(localStorage.getItem("qy_wp_seq") || "0", 10);
+  function generateLiveWallpaperUrl() {
+    liveCounter += 1;
+    localStorage.setItem("qy_wp_seq", String(liveCounter));
+    const uniqueToken = `${Date.now()}_${liveCounter}_${Math.floor(Math.random() * 100000)}`;
+    const mode = liveCounter % 3;
+    if (mode === 0) {
+      // 实时随机高清摄影流 (Fastly CDN 全球加速，无限不重样图库)
+      return `https://picsum.photos/1920/1080?random=${uniqueToken}`;
+    } else if (mode === 1) {
+      // Paugram 实时随机必应/Unsplash 壁纸源
+      const src = (liveCounter % 2 === 0) ? "bing" : "unsplash";
+      return `https://api.paugram.com/wallpaper/?source=${src}&t=${uniqueToken}`;
+    } else {
+      // 必应近 8 日实时官方画卷与精选 4K 东方山水轮替
+      return SEED_WALLPAPERS[liveCounter % SEED_WALLPAPERS.length];
+    }
+  }
+
+  // 2. 站点核心文章索引
+  const POST_INDEX = [
+    {
+      title: "从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体实践",
+      shortTitle: "基于 TDD 测试门禁的代码自迭代智能体实践",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["CS", "AI Agent", "软件工程", "TDD", "自动化测试"],
+      url: "/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/",
+      summary: "面向黑客松“碳硅接力 / 夜间自主研发”赛制，开源自研 ACS-Agent：通过 TDD 测试套件只读隔离、落盘前 AST 语法预检看门狗与 15s 超时守卫，在 SpMM CSR、0-ULP 向量与 GQA 广播三大算子基准上实现 2 轮 100% 闭环自愈。"
+    },
+    {
+      title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优",
+      shortTitle: "动态稀疏矩阵乘 (SpMM) Wave64 标量化与满占用调优",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["高性能计算", "算子优化", "ROCm/HIP"],
+      url: "/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/",
+      summary: "先导杯第二题核心复盘：通过 __builtin_amdgcn_readfirstlane 标量提权、4×4 Burst Unroll-16 突发加载流水线、N=512 零分支 24-VGPR 100% 满占用特化内核与 Non-Temporal Store，实现 7.24x 综合加速与 370 项门禁全通过。"
+    },
+    {
+      title: "面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践",
+      shortTitle: "Qwen2.5-1.5B 端侧 32K 极速推理底座与静态图实践",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["高性能计算", "大模型推理", "ROCm/HIP"],
+      url: "/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/",
+      summary: "先导杯第一题核心复盘：在 16GB 显存红线下，通过原生 12-Head KV 广播融合、前 31 块 lm_head 旁路、Decode 0-VRAM 视图重绑与 4 路 Capacity=300 静态 HIP Graph，将 32.5K 显存压降 94.2%，Decode 吞吐提升 4.07x。"
+    },
+    {
+      title: "第一次参加 Hackathon · 岳麓黑客松初体验",
+      shortTitle: "岳麓黑客松初体验 · 初识工程化",
+      date: "2025-12-20",
+      cat: "学习历程",
+      tags: ["随笔", "CS"],
+      url: "/2025/12/20/黑客松初体验/",
+      summary: "大一刚入学码龄两个月时的第一次黑客松之旅。记录与学长组队开发可视化预测项目的过程，以及对“将 AI 工程化、落地化”的最初思考。"
+    },
+    {
+      title: "我的 CS 学习之路 · 序章",
+      shortTitle: "我的 CS 学习之路 · 序章",
+      date: "2025-11-11",
+      cat: "学习历程",
+      tags: ["随笔", "CS"],
+      url: "/2025/11/11/我的CS学习之路-序章/",
+      summary: "高考之后在 AI 浪潮下选择计算机科学，来到湖南大学开启大学四年的 CS 探索之旅。"
+    }
+  ];
+
+  const isHomePage = window.location.pathname === "/" || window.location.pathname === "/index.html";
+
+  // 3. 创建背景画布层
+  const bgContainer = document.createElement("div");
+  bgContainer.id = "qingya-wallpaper-bg";
+  bgContainer.innerHTML = `
+    <div class="qy-bg-layer qy-bg-a active"></div>
+    <div class="qy-bg-layer qy-bg-b"></div>
+    <div class="qy-bg-overlay"></div>
+  `;
+  document.body.prepend(bgContainer);
+
+  // 4. 创建首屏「清雅导航视界」
+  const portalHero = document.createElement("section");
+  portalHero.id = "qingya-portal-hero";
+  portalHero.innerHTML = `
+    <header class="qy-topbar">
+      <div class="qy-brand" id="qy-brand-home" title="返回首屏视界">
+        <span class="qy-seal">裔奇</span>
+        <span class="qy-brand-text">Archy · 格物志</span>
+      </div>
+
+      <!-- 右上角功能图标栏：默认只显示图标，鼠标悬停丝滑展开说明 -->
+      <nav class="qy-top-actions" aria-label="快捷功能导航">
+        <button type="button" class="qy-icon-pill" id="qy-btn-quick-peek">
+          <i class="fa-solid fa-layer-group"></i>
+          <span class="qy-icon-label">新篇速览</span>
+        </button>
+        <a href="/categories/" class="qy-icon-pill">
+          <i class="fa-solid fa-folder-tree"></i>
+          <span class="qy-icon-label">分类目录</span>
+        </a>
+        <a href="/tags/" class="qy-icon-pill">
+          <i class="fa-solid fa-tags"></i>
+          <span class="qy-icon-label">标签云集</span>
+        </a>
+        <a href="/archives/" class="qy-icon-pill">
+          <i class="fa-solid fa-scroll"></i>
+          <span class="qy-icon-label">岁月归档</span>
+        </a>
+        <a href="/about/" class="qy-icon-pill">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span class="qy-icon-label">关于裔奇</span>
+        </a>
+        <a href="https://github.com/aarchyyy" target="_blank" rel="noopener" class="qy-icon-pill">
+          <i class="fa-brands fa-github"></i>
+          <span class="qy-icon-label">GitHub</span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- 中央核心视觉区：仅保留精致半透明搜索框与轻滑展卷引导 -->
+    <div class="qy-center-stage">
+      <div class="qy-search-container">
+        <div class="qy-search-box">
+          <i class="fa-solid fa-magnifying-glass qy-search-icon"></i>
+          <input type="text" id="qy-search-input" placeholder="寻访文卷（Agent、TDD、先导杯、SpMM、Qwen）..." autocomplete="off" />
+          <kbd class="qy-search-kbd">/</kbd>
+        </div>
+        <div class="qy-search-dropdown" id="qy-search-dropdown"></div>
+      </div>
+
+      <div class="qy-scroll-hint" id="qy-scroll-hint" title="向下滑动展开文卷">
+        <span>轻滑展卷</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+
+      <!-- 二级抽屉（点击右上角「新篇速览」展开） -->
+      <div class="qy-peek-drawer" id="qy-peek-drawer">
+        <div class="qy-peek-header">
+          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击预览摘要，二次点击深读</span>
+          <button type="button" class="qy-peek-close" id="qy-peek-close" title="收起">✕</button>
+        </div>
+        <div class="qy-peek-list" id="qy-peek-list"></div>
+      </div>
+    </div>
+  `;
+  document.body.prepend(portalHero);
+
+  // 5. 创建底部悬浮控制坞
+  const dock = document.createElement("aside");
+  dock.id = "qingya-dock";
+  dock.innerHTML = `
+    <div class="qy-dock-inner">
+      <button type="button" class="qy-dock-btn qy-dock-top-btn" id="qy-dock-top" title="回到最顶">
+        <i class="fa-solid fa-arrow-up"></i>
+        <span class="qy-top-label">归顶</span>
+      </button>
+      <div class="qy-dock-collapsible">
+        <button type="button" class="qy-dock-btn" id="qy-dock-portal" title="切换极简导航视界 / 展卷阅读模式">
+          <i class="fa-solid fa-compass"></i>
+          <span>视界</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-articles" title="展开文章卷轴">
+          <i class="fa-solid fa-book-open"></i>
+          <span>文卷</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="实时抓取更换新壁纸">
+          <i class="fa-solid fa-image" id="qy-wp-icon"></i>
+          <span>换景</span>
+        </button>
+        <button type="button" class="qy-dock-btn active" id="qy-dock-auto-wp" title="开启/关闭壁纸实时轮换">
+          <i class="fa-solid fa-rotate"></i>
+          <span>时新</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-paper-mode" title="切换纯素宣纸阅读底色">
+          <i class="fa-solid fa-mug-hot"></i>
+          <span>素宣</span>
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dock);
+
+  // 6. 文章页左侧「文章导读 (TOC)」与高精度滚动定位引擎（解决滑到底部仍停留在上一节的问题）
+  function setupArticleTOC() {
+    const sidebar = document.querySelector("aside.sidebar");
+    if (!sidebar) return;
+    const tocWrap = sidebar.querySelector(".post-toc-wrap");
+    const tocLinks = Array.from(sidebar.querySelectorAll(".post-toc a.nav-link"));
+    if (!tocWrap || tocLinks.length === 0) {
+      sidebar.style.display = "none";
+      return;
+    }
+
+    document.body.classList.add("qy-has-toc");
+    if (!tocWrap.querySelector(".qy-toc-header")) {
+      const tocHeader = document.createElement("div");
+      tocHeader.className = "qy-toc-header";
+      tocHeader.innerHTML = '<i class="fa-solid fa-list-ul"></i><span>文章导读</span>';
+      tocWrap.prepend(tocHeader);
+    }
+
+    // 建立目录链接与正文标题元素的精确映射，并接管 NexT 默认存在缺陷的 updateActiveNav
+    if (window.NexT && window.NexT.utils) {
+      window.NexT.utils.updateActiveNav = function() {};
+      window.NexT.utils.activateNavByIndex = function() {};
+    }
+
+    const headingItems = tocLinks.map(link => {
+      const href = link.getAttribute("href") || "";
+      if (!href.startsWith("#")) return null;
+      const rawId = decodeURIComponent(href.slice(1));
+      const targetEl = document.getElementById(rawId) || document.getElementById(href.slice(1));
+      const navItem = link.closest(".nav-item");
+      const parentLevel2 = navItem ? navItem.closest(".nav-level-2") : null;
+      return targetEl ? { link, navItem, parentLevel2, targetEl } : null;
+    }).filter(Boolean);
+
+    if (headingItems.length === 0) return;
+
+    // 清除 NexT 内联写入的错误 --height 限制，防止多行子标题 (如 3.2, 3.3) 被截断隐藏
+    sidebar.querySelectorAll(".nav-child").forEach(child => {
+      child.style.removeProperty("--height");
+      child.style.height = "auto";
+    });
+
+    let clickLockedIdx = -1;
+    let clickLockTimer = null;
+
+    function highlightTocIndex(activeIndex) {
+      const activeEntry = headingItems[activeIndex];
+      const activeParent = activeEntry ? activeEntry.parentLevel2 : null;
+
+      sidebar.querySelectorAll(".nav-item").forEach(el => {
+        el.classList.remove("active", "active-current", "qy-toc-current", "qy-toc-parent-active");
+      });
+
+      headingItems.forEach((item, idx) => {
+        const isCurrent = (idx === activeIndex);
+        item.link.classList.toggle("qy-toc-link-current", isCurrent);
+        if (isCurrent && item.navItem) {
+          item.navItem.classList.add("qy-toc-current", "active", "active-current");
+        }
+      });
+
+      if (activeParent) {
+        activeParent.classList.add("qy-toc-parent-active", "active");
+      }
+
+      // 确保当前高亮的目录项在左侧导读框可视区域内
+      if (activeEntry && activeEntry.link && tocWrap) {
+        const linkRect = activeEntry.link.getBoundingClientRect();
+        const wrapRect = tocWrap.getBoundingClientRect();
+        if (linkRect.top < wrapRect.top + 36 || linkRect.bottom > wrapRect.bottom - 24) {
+          tocWrap.scrollTo({
+            top: tocWrap.scrollTop + (linkRect.top - wrapRect.top) - wrapRect.height * 0.35,
+            behavior: "smooth"
+          });
+        }
+      }
+    }
+
+    function updateTocOnScroll() {
+      if (clickLockedIdx !== -1) {
+        highlightTocIndex(clickLockedIdx);
+        return;
+      }
+
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const winH = window.innerHeight;
+      const docH = document.documentElement.scrollHeight;
+
+      // 当页面滚动到最底部时，精准激活最后一个目录项
+      if (winH + scrollY >= docH - 45) {
+        highlightTocIndex(headingItems.length - 1);
+        return;
+      }
+
+      // 以屏幕上半区 (46% 处) 作为自然阅读视线基准线：新章节进入上半屏即刻展开对应大块下的小块
+      const readingLine = Math.max(180, winH * 0.46);
+      let activeIdx = 0;
+      for (let i = 0; i < headingItems.length; i++) {
+        const rect = headingItems[i].targetEl.getBoundingClientRect();
+        if (rect.top <= readingLine) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
+      highlightTocIndex(activeIdx);
+    }
+
+    // 使用捕获阶段拦截目录点击，覆盖 NexT 默认滚动，精准对齐标题并高亮对应子章节
+    headingItems.forEach((item, idx) => {
+      item.link.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        clickLockedIdx = idx;
+        highlightTocIndex(idx);
+        if (clickLockTimer) clearTimeout(clickLockTimer);
+        const topPos = item.targetEl.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
+        history.replaceState(null, document.title, item.link.getAttribute("href"));
+        clickLockTimer = setTimeout(() => {
+          clickLockedIdx = -1;
+          updateTocOnScroll();
+        }, 750);
+      }, true);
+    });
+
+    window.addEventListener("scroll", function() {
+      window.requestAnimationFrame(updateTocOnScroll);
+    }, { passive: true });
+    updateTocOnScroll();
+  }
+  setupArticleTOC();
+
+  // 7. 渲染「新篇速览」抽屉
+  const peekListEl = document.getElementById("qy-peek-list");
+  let activePeekIdx = -1;
+
+  function renderPeekList() {
+    peekListEl.innerHTML = POST_INDEX.map((post, idx) => `
+      <div class="qy-peek-item ${activePeekIdx === idx ? 'expanded' : ''}" data-idx="${idx}">
+        <div class="qy-peek-row">
+          <span class="qy-peek-cat">${post.cat}</span>
+          <span class="qy-peek-title">${post.shortTitle}</span>
+          <span class="qy-peek-date">${post.date}</span>
+          <span class="qy-peek-action">${activePeekIdx === idx ? '收起 ▴' : '摘要 ▾'}</span>
+        </div>
+        <div class="qy-peek-detail-wrap">
+          <div class="qy-peek-detail">
+            <p class="qy-peek-summary">${post.summary}</p>
+            <div class="qy-peek-footer">
+              <div class="qy-peek-tags">
+                ${post.tags.map(t => `<span class="qy-mini-tag"># ${t}</span>`).join('')}
+              </div>
+              <a href="${post.url}" class="qy-peek-readmore">深读 →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+    peekListEl.querySelectorAll(".qy-peek-row").forEach(row => {
+      row.addEventListener("click", function() {
+        const item = this.parentElement;
+        const idx = parseInt(item.getAttribute("data-idx"), 10);
+        activePeekIdx = (activePeekIdx === idx) ? -1 : idx;
+        renderPeekList();
+      });
+    });
+  }
+  renderPeekList();
+
+  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮
+  function enhanceArticleCards() {
+    if (!isHomePage) return;
+    const postBlocks = document.querySelectorAll(".main-inner .post-block");
+    postBlocks.forEach((block) => {
+      const postBody = block.querySelector(".post-body");
+      const header = block.querySelector(".post-header");
+      if (!postBody || !header || block.dataset.qyEnhanced) return;
+      block.dataset.qyEnhanced = "true";
+
+      const gridWrap = document.createElement("div");
+      gridWrap.className = "qy-abstract-grid-wrap";
+      const gridInner = document.createElement("div");
+      gridInner.className = "qy-abstract-grid-inner";
+
+      postBody.parentNode.insertBefore(gridWrap, postBody);
+      gridInner.appendChild(postBody);
+      gridWrap.appendChild(gridInner);
+
+      const toggleBar = document.createElement("div");
+      toggleBar.className = "qy-card-progressive-bar";
+      const titleLink = block.querySelector(".post-title-link");
+      const postUrl = titleLink ? titleLink.getAttribute("href") : "#";
+
+      toggleBar.innerHTML = `
+        <button type="button" class="qy-btn-toggle-abstract">摘要</button>
+        <a href="${postUrl}" class="qy-btn-enter-article">深读</a>
+      `;
+
+      header.after(toggleBar);
+
+      const toggleBtn = toggleBar.querySelector(".qy-btn-toggle-abstract");
+      toggleBtn.addEventListener("click", function() {
+        const isExpanded = gridWrap.classList.toggle("expanded");
+        this.textContent = isExpanded ? "收起" : "摘要";
+      });
+    });
+  }
+  enhanceArticleCards();
+
+  // 9. 实时壁纸抓取 + 后台预加载双缓冲引擎（每次切换均实时拉取新壁纸且0等待）
+  let activeLayerIsA = true;
+  let autoRotateTimer = null;
+  let isAutoRotate = localStorage.getItem("qy_auto_wp") !== "false";
+  let isPaperMode = localStorage.getItem("qy_paper_mode") === "true";
+  let nextPreloadedUrl = null;
+  let isFetchingWp = false;
+
+  const layerA = bgContainer.querySelector(".qy-bg-a");
+  const layerB = bgContainer.querySelector(".qy-bg-b");
+  const btnAutoWp = document.getElementById("qy-dock-auto-wp");
+  const btnPaperMode = document.getElementById("qy-dock-paper-mode");
+  const wpIconEl = document.getElementById("qy-wp-icon");
+
+  function preloadNextLiveWallpaper() {
+    const candidateUrl = generateLiveWallpaperUrl();
+    const img = new Image();
+    img.onload = function() {
+      nextPreloadedUrl = candidateUrl;
+    };
+    img.onerror = function() {
+      // 若某个实时随机源偶发超时，自动回退到保底高清画卷池
+      const fallback = SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
+      nextPreloadedUrl = fallback;
+    };
+    img.src = candidateUrl;
+  }
+
+  function crossfadeToUrl(url) {
+    const targetLayer = activeLayerIsA ? layerA : layerB;
+    const otherLayer = activeLayerIsA ? layerB : layerA;
+    targetLayer.style.backgroundImage = `url("${url}")`;
+    targetLayer.classList.add("active");
+    otherLayer.classList.remove("active");
+    activeLayerIsA = !activeLayerIsA;
+    localStorage.setItem("qy_last_wp_url", url);
+  }
+
+  // 初始壁纸展示并立即在后台预抓取下一张实时新图
+  const savedLastUrl = localStorage.getItem("qy_last_wp_url") || SEED_WALLPAPERS[0];
+  layerA.style.backgroundImage = `url("${savedLastUrl}")`;
+  activeLayerIsA = false;
+  preloadNextLiveWallpaper();
+
+  function nextWallpaper() {
+    if (isPaperMode) togglePaperMode(false);
+    if (nextPreloadedUrl) {
+      const readyUrl = nextPreloadedUrl;
+      nextPreloadedUrl = null;
+      crossfadeToUrl(readyUrl);
+      preloadNextLiveWallpaper();
+      return;
+    }
+    if (isFetchingWp) return;
+    isFetchingWp = true;
+    if (wpIconEl) wpIconEl.classList.add("fa-spin");
+
+    const liveUrl = generateLiveWallpaperUrl();
+    const img = new Image();
+    img.onload = function() {
+      isFetchingWp = false;
+      if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+      crossfadeToUrl(liveUrl);
+      preloadNextLiveWallpaper();
+    };
+    img.onerror = function() {
+      isFetchingWp = false;
+      if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+      const fallback = SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
+      crossfadeToUrl(fallback);
+      preloadNextLiveWallpaper();
+    };
+    img.src = liveUrl;
+  }
+
+  function updateAutoRotateState() {
+    if (autoRotateTimer) clearInterval(autoRotateTimer);
+    if (isAutoRotate && !isPaperMode) {
+      btnAutoWp.classList.add("active");
+      autoRotateTimer = setInterval(nextWallpaper, 35000); // 每 35 秒实时抓取新壁纸
+    } else {
+      btnAutoWp.classList.remove("active");
+    }
+  }
+
+  function togglePaperMode(forceState) {
+    isPaperMode = typeof forceState === "boolean" ? forceState : !isPaperMode;
+    localStorage.setItem("qy_paper_mode", String(isPaperMode));
+    document.body.classList.toggle("qy-paper-mode", isPaperMode);
+    btnPaperMode.classList.toggle("active", isPaperMode);
+    updateAutoRotateState();
+  }
+
+  if (isPaperMode) togglePaperMode(true);
+  updateAutoRotateState();
+
+  // 10. 人体工学「下滑自动展开文卷 / 上滑到顶自动收起」状态机
+  let modeTransitionLock = false;
+
+  function setPortalMode(zenMode) {
+    if (modeTransitionLock) return;
+    modeTransitionLock = true;
+    setTimeout(() => { modeTransitionLock = false; }, 480);
+
+    if (zenMode) {
+      document.body.classList.add("qy-portal-zen");
+      document.body.classList.remove("qy-portal-scroll");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      dock.classList.remove("qy-dock-scrolled");
+    } else {
+      document.body.classList.remove("qy-portal-zen");
+      document.body.classList.add("qy-portal-scroll");
+    }
+  }
+
+  if (isHomePage) {
+    document.body.classList.add("qy-portal-zen");
+  } else {
+    document.body.classList.add("qy-inner-page", "qy-portal-scroll");
+  }
+
+  if (isHomePage) {
+    window.addEventListener("wheel", function(e) {
+      if (e.target.closest(".qy-peek-drawer") || e.target.closest(".qy-search-dropdown")) return;
+      const isZen = document.body.classList.contains("qy-portal-zen");
+      if (isZen && e.deltaY > 12) {
+        setPortalMode(false);
+      } else if (!isZen && (window.scrollY || document.documentElement.scrollTop) <= 4 && e.deltaY < -18) {
+        setPortalMode(true);
+      }
+    }, { passive: true });
+
+    let touchStartY = 0;
+    window.addEventListener("touchstart", function(e) {
+      if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener("touchmove", function(e) {
+      if (e.touches.length !== 1) return;
+      const dy = touchStartY - e.touches[0].clientY;
+      const isZen = document.body.classList.contains("qy-portal-zen");
+      if (isZen && dy > 28) {
+        setPortalMode(false);
+      } else if (!isZen && (window.scrollY || document.documentElement.scrollTop) <= 4 && dy < -35) {
+        setPortalMode(true);
+      }
+    }, { passive: true });
+  }
+
+  document.getElementById("qy-scroll-hint").addEventListener("click", function() {
+    setPortalMode(false);
+  });
+
+  // 11. 监听滚动：下滑阅读时，控制坞平滑移至左下角并收缩为「归顶 ↑」单按钮
+  let isScrollingToTop = false;
+  function handleScroll() {
+    if (isScrollingToTop) {
+      if (window.scrollY <= 10) {
+        isScrollingToTop = false;
+        dock.classList.remove("qy-dock-scrolled");
+      }
+      return;
+    }
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    if (scrollY > 75 || (isHomePage && document.body.classList.contains("qy-portal-scroll") && scrollY > 30)) {
+      dock.classList.add("qy-dock-scrolled");
+    } else {
+      dock.classList.remove("qy-dock-scrolled");
+    }
+  }
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+
+  // 12. 交互事件绑定
+  const peekDrawer = document.getElementById("qy-peek-drawer");
+  const quickPeekBtn = document.getElementById("qy-btn-quick-peek");
+  quickPeekBtn.addEventListener("click", function() {
+    peekDrawer.classList.toggle("open");
+    this.classList.toggle("active", peekDrawer.classList.contains("open"));
+  });
+
+  document.getElementById("qy-peek-close").addEventListener("click", function() {
+    peekDrawer.classList.remove("open");
+    quickPeekBtn.classList.remove("active");
+  });
+
+  document.getElementById("qy-brand-home").addEventListener("click", function() {
+    if (isHomePage) {
+      setPortalMode(true);
+    } else {
+      window.location.href = "/";
+    }
+  });
+
+  document.getElementById("qy-dock-portal").addEventListener("click", function() {
+    if (!isHomePage) {
+      window.location.href = "/";
+      return;
+    }
+    const isCurrentlyZen = document.body.classList.contains("qy-portal-zen");
+    setPortalMode(!isCurrentlyZen);
+  });
+
+  document.getElementById("qy-dock-articles").addEventListener("click", function() {
+    if (!isHomePage) {
+      window.location.href = "/archives/";
+      return;
+    }
+    setPortalMode(false);
+  });
+
+  document.getElementById("qy-dock-next-wp").addEventListener("click", nextWallpaper);
+
+  btnAutoWp.addEventListener("click", function() {
+    isAutoRotate = !isAutoRotate;
+    localStorage.setItem("qy_auto_wp", String(isAutoRotate));
+    updateAutoRotateState();
+  });
+
+  btnPaperMode.addEventListener("click", function() {
+    togglePaperMode();
+  });
+
+  document.getElementById("qy-dock-top").addEventListener("click", function() {
+    isScrollingToTop = true;
+    dock.classList.remove("qy-dock-scrolled");
+    if (isHomePage) {
+      setPortalMode(true);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setTimeout(() => { isScrollingToTop = false; }, 600);
+  });
+
+  // 13. 站内实时检索框逻辑
+  const searchInput = document.getElementById("qy-search-input");
+  const searchDropdown = document.getElementById("qy-search-dropdown");
+
+  searchInput.addEventListener("input", function() {
+    const q = this.value.trim().toLowerCase();
+    if (!q) {
+      searchDropdown.classList.remove("show");
+      return;
+    }
+    const matches = POST_INDEX.filter(p =>
+      p.title.toLowerCase().includes(q) ||
+      p.summary.toLowerCase().includes(q) ||
+      p.tags.some(t => t.toLowerCase().includes(q)) ||
+      p.cat.toLowerCase().includes(q)
+    );
+
+    if (matches.length > 0) {
+      searchDropdown.innerHTML = matches.map(m => `
+        <a href="${m.url}" class="qy-search-item">
+          <div class="qy-search-item-top">
+            <span class="qy-search-item-cat">${m.cat}</span>
+            <span class="qy-search-item-title">${m.shortTitle}</span>
+            <span class="qy-search-item-date">${m.date}</span>
+          </div>
+          <div class="qy-search-item-desc">${m.summary}</div>
+        </a>
+      `).join("");
+    } else {
+      searchDropdown.innerHTML = `
+        <div class="qy-search-empty">未寻得匹配文卷，按回车键使用必应搜索「${this.value}」</div>
+      `;
+    }
+    searchDropdown.classList.add("show");
+  });
+
+  searchInput.addEventListener("keydown", function(e) {
+    if (e.key === "Enter" && this.value.trim()) {
+      const q = this.value.trim().toLowerCase();
+      const firstMatch = POST_INDEX.find(p =>
+        p.title.toLowerCase().includes(q) ||
+        p.summary.toLowerCase().includes(q)
+      );
+      if (firstMatch) {
+        window.location.href = firstMatch.url;
+      } else {
+        window.open(`https://cn.bing.com/search?q=${encodeURIComponent(this.value.trim())}`, "_blank");
+      }
+    } else if (e.key === "Escape") {
+      searchDropdown.classList.remove("show");
+      this.blur();
+    }
+  });
+
+  document.addEventListener("keydown", function(e) {
+    if (e.key === "/" && document.activeElement !== searchInput && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  document.addEventListener("click", function(e) {
+    if (!e.target.closest(".qy-search-container")) {
+      searchDropdown.classList.remove("show");
+    }
+  });
+})();
+</script>
+
+</body>
+</html>

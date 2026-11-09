@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #9affac;
+    background: #424bff;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2833,8 +2833,9 @@ pre,
 .site-overview-wrap {
   display: none !important;
 }
-/* 非文章页（无导读目录时）完全隐藏 sidebar */
-body:not(.qy-has-toc) aside.sidebar {
+/* 非文章页（无导读目录时）完全隐藏 sidebar 与占位列 */
+body:not(.qy-has-toc) aside.sidebar,
+body:not(.qy-has-toc) .column {
   display: none !important;
 }
 /* 2. 动态全屏壁纸层与「素宣模式」 */
@@ -3348,21 +3349,41 @@ body.qy-paper-mode .qy-scroll-hint {
   margin: 0 auto !important;
   padding: 6px 20px 44px !important;
   float: none !important;
+  box-sizing: border-box !important;
 }
 /* 当进入带有目录导读的文章内页时：展开双栏布局（左侧清雅导读 + 右侧正文） */
 @media (min-width: 1024px) {
-  body.qy-has-toc .main-inner {
+  body.qy-has-toc .main {
     max-width: 1140px !important;
+    width: 100% !important;
+    margin: 0 auto !important;
+    padding: 0 20px !important;
     display: flex !important;
-    flex-direction: row-reverse !important;
+    flex-direction: row !important;
     align-items: flex-start !important;
     justify-content: center !important;
     gap: 22px !important;
+    box-sizing: border-box !important;
   }
-  body.qy-has-toc .content-wrap {
-    flex: 1 1 auto !important;
+  body.qy-has-toc .column {
+    width: 250px !important;
+    flex: 0 0 250px !important;
+    margin: 0 !important;
+  }
+  body.qy-has-toc .main-inner {
+    flex: 1 1 0% !important;
+    min-width: 0 !important;
     max-width: 840px !important;
-    width: auto !important;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 6px 0 44px !important;
+  }
+  body.qy-has-toc .content-wrap,
+  body.qy-has-toc .post-block {
+    max-width: 840px !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
   }
   body.qy-has-toc aside.sidebar {
     display: block !important;
@@ -3474,6 +3495,11 @@ body.qy-paper-mode .qy-scroll-hint {
   padding: 28px 40px !important;
   margin-bottom: 20px !important;
   position: relative;
+  width: 100% !important;
+  max-width: 840px !important;
+  min-width: 0 !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
 }
 .post-block::before {
   content: "";
@@ -3581,9 +3607,21 @@ body.qy-is-home .post-button,
   padding: 10px 16px;
   border-radius: 0 8px 8px 0;
 }
+.post-body table {
+  width: 100% !important;
+  max-width: 100% !important;
+  table-layout: auto !important;
+  word-break: break-word !important;
+}
 .post-body table th {
   background: rgba(59,89,88,0.1) !important;
   color: var(--qy-ink-primary) !important;
+}
+.post-body figure.highlight,
+.post-body pre {
+  max-width: 100% !important;
+  overflow-x: auto !important;
+  box-sizing: border-box !important;
 }
 /* 7. 底部悬浮控制坞：更小巧通透，下滑左移收缩与悬停原地向右展开 */
 #qingya-dock {

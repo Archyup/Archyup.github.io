@@ -165,7 +165,7 @@
   <nav class="site-state">
       <div class="site-state-item site-state-posts">
         <a href="/archives/">
-          <span class="site-state-item-count">5</span>
+          <span class="site-state-item-count">6</span>
           <span class="site-state-item-name">日志</span>
         </a>
       </div>
@@ -176,7 +176,7 @@
       </div>
       <div class="site-state-item site-state-tags">
           <a href="/tags/">
-        <span class="site-state-item-count">6</span>
+        <span class="site-state-item-count">10</span>
         <span class="site-state-item-name">标签</span></a>
       </div>
   </nav>
@@ -391,6 +391,15 @@
   // 2. 站点核心文章索引
   const POST_INDEX = [
     {
+      title: "从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体实践",
+      shortTitle: "基于 TDD 测试门禁的代码自迭代智能体实践",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["CS", "AI Agent", "软件工程", "TDD", "自动化测试"],
+      url: "/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/",
+      summary: "面向黑客松“碳硅接力 / 夜间自主研发”赛制，开源自研 ACS-Agent：通过 TDD 测试套件只读隔离、落盘前 AST 语法预检看门狗与 15s 超时守卫，在 SpMM CSR、0-ULP 向量与 GQA 广播三大算子基准上实现 2 轮 100% 闭环自愈。"
+    },
+    {
       title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优",
       shortTitle: "动态稀疏矩阵乘 (SpMM) Wave64 标量化与满占用调优",
       date: "2026-11-09",
@@ -484,7 +493,7 @@
       <div class="qy-search-container">
         <div class="qy-search-box">
           <i class="fa-solid fa-magnifying-glass qy-search-icon"></i>
-          <input type="text" id="qy-search-input" placeholder="寻访文卷（先导杯、SpMM、Qwen、ROCm）..." autocomplete="off" />
+          <input type="text" id="qy-search-input" placeholder="寻访文卷（Agent、TDD、先导杯、SpMM、Qwen）..." autocomplete="off" />
           <kbd class="qy-search-kbd">/</kbd>
         </div>
         <div class="qy-search-dropdown" id="qy-search-dropdown"></div>
