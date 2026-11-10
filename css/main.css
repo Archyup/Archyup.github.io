@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #ff241f;
+    background: #ff1334;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -3235,10 +3235,15 @@ body.qy-paper-mode .qy-scroll-hint {
   transition: all 0.2s ease;
   text-align: center;
 }
-.qy-search-external-hint:hover,
-.qy-search-external-hint.active {
+.qy-search-external-hint:hover {
   background: rgba(140,56,58,0.12);
   border-color: var(--qy-cinnabar);
+}
+.qy-search-external-hint.active {
+  background: rgba(140,56,58,0.16);
+  border-color: var(--qy-cinnabar);
+  box-shadow: 0 0 0 2px rgba(140,56,58,0.25);
+  transform: translateY(-1px);
 }
 /* 二级「新篇速览」渐进披露抽屉 */
 .qy-peek-drawer {
