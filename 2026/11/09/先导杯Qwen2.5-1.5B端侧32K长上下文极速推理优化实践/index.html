@@ -18,15 +18,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="好久没更新博客了。从大一刚入学参加岳麓黑客松时连 API 调用都要抱学长大腿，到现在大二上学期一头扎进先导杯（CSCC）搞海光 DCU &#x2F; AMD 异构计算与大模型底层推理优化，这一年的跨度确实有点大。 yysy，放到两三年前，让一个刚上大二的本科生去手搓 HIP 算子融合、扣 Wave64 寄存器和 HBM2 访存带宽，几乎是不可能完成的任务。但现在处于 AI 大爆发的时代，AI 某种">
+    <meta name="description" content="好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 HIP C++ Kernel、抓 Graph Capture 时序气泡，光查文档就很容易劝退。现在用 AI 辅助写样板代码、查 RO">
 <meta property="og:type" content="article">
-<meta property="og:title" content="面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践">
+<meta property="og:title" content="面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践">
 <meta property="og:url" content="https://archyup.github.io/2026/11/09/%E5%85%88%E5%AF%BC%E6%9D%AFQwen2.5-1.5B%E7%AB%AF%E4%BE%A732K%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%81%E9%80%9F%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5/index.html">
 <meta property="og:site_name" content="Archyのcs之旅">
-<meta property="og:description" content="好久没更新博客了。从大一刚入学参加岳麓黑客松时连 API 调用都要抱学长大腿，到现在大二上学期一头扎进先导杯（CSCC）搞海光 DCU &#x2F; AMD 异构计算与大模型底层推理优化，这一年的跨度确实有点大。 yysy，放到两三年前，让一个刚上大二的本科生去手搓 HIP 算子融合、扣 Wave64 寄存器和 HBM2 访存带宽，几乎是不可能完成的任务。但现在处于 AI 大爆发的时代，AI 某种">
+<meta property="og:description" content="好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 HIP C++ Kernel、抓 Graph Capture 时序气泡，光查文档就很容易劝退。现在用 AI 辅助写样板代码、查 RO">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-11-08T16:36:00.000Z">
-<meta property="article:modified_time" content="2026-11-08T18:44:01.139Z">
+<meta property="article:modified_time" content="2026-11-12T18:07:10.811Z">
 <meta property="article:author" content="Archy">
 <meta property="article:tag" content="CS">
 <meta property="article:tag" content="ROCm&#x2F;HIP">
@@ -38,10 +38,10 @@
 <link rel="canonical" href="https://archyup.github.io/2026/11/09/%E5%85%88%E5%AF%BC%E6%9D%AFQwen2.5-1.5B%E7%AB%AF%E4%BE%A732K%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%81%E9%80%9F%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://archyup.github.io/2026/11/09/%E5%85%88%E5%AF%BC%E6%9D%AFQwen2.5-1.5B%E7%AB%AF%E4%BE%A732K%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%81%E9%80%9F%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5/","path":"2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","title":"面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://archyup.github.io/2026/11/09/%E5%85%88%E5%AF%BC%E6%9D%AFQwen2.5-1.5B%E7%AB%AF%E4%BE%A732K%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E6%9E%81%E9%80%9F%E6%8E%A8%E7%90%86%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5/","path":"2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践 | Archyのcs之旅</title>
+<title>面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践 | Archyのcs之旅</title>
   
 
 
@@ -92,7 +92,7 @@
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 <link rel="alternate" href="/atom.xml" title="Archyのcs之旅" type="application/atom+xml">
-<script>window.__QINGYA_POST_INDEX__ = [{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体实践","shortTitle":"基于 TDD 测试门禁的代码自迭代智能体实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"回顾大一刚入学参加岳麓黑客松时，我还是个码龄刚满两个月的纯小白，连调用外部 API 都得紧紧抱住学长大腿，最后顺了一兜书签抽了件体恤就乐得不行（在当时那篇随笔里我还写道：“AI 算法应该交给中科院少年班的妖孽，我们需要做的是把 AI 应用化”）。 转眼到了大二上学期，刚..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","算子优化"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇关于 Qwen2.5-1.5B 端侧超长上下文推理底座的总结，这篇继续整理本次先导杯（CSCC）校内选拔赛的第二道核心赛题——面向神经-符号融合大模型的动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, $C &#x3D; A \\times B$）算子极限优化。 yy..."},{"title":"面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践","shortTitle":"32K 超长上下文显存极限压缩与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","大模型推理","ROCm/HIP"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时连 API 调用都要抱学长大腿，到现在大二上学期一头扎进先导杯（CSCC）搞海光 DCU &#x2F; AMD 异构计算与大模型底层推理优化，这一年的跨度确实有点大。 yysy，放到两三年前，让一个刚上大二的本科生去手搓 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["随笔","CS"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["随笔","CS"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["随笔","CS"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
+<script>window.__QINGYA_POST_INDEX__ = [{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践","shortTitle":"基于 TDD 测试门禁的代码自迭代智能体原型实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都要跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，这段时间刚打完先导杯（海光 DCU 上的算子与推理优化），这两天又在看 世界计..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","算子优化"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇 Qwen2.5-1.5B 推理底座的总结，这篇复盘先导杯（CSCC）第二道赛题——动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, C &#x3D; A × B） 与扩展掩码融合算子 ns_spmm_fused_mask 的 HIP 内核调优过程。 yysy，以前..."},{"title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践","shortTitle":"32K 长上下文 KV 复用与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","大模型推理","ROCm/HIP"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -153,7 +153,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%83%8C%E6%99%AF%E4%B8%8E%E9%97%AE%E9%A2%98%E5%AE%9A%E4%B9%89%EF%BC%9A%E7%AB%AF%E4%BE%A7-16GB-%E6%98%BE%E5%AD%98%E7%BA%A2%E7%BA%BF%E4%B8%8B%E7%9A%84%E9%95%BF%E7%A8%8B%E6%8E%A8%E7%90%86%E5%9B%B0%E5%A2%83"><span class="nav-text">一、 背景与问题定义：端侧 16GB 显存红线下的长程推理困境</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E7%A1%AC%E4%BB%B6%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%80%A7%E8%83%BD%E7%97%9B%E7%82%B9"><span class="nav-text">1.1 硬件边界与性能痛点</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E5%B7%A5%E4%B8%9A%E7%BA%A7%E4%BF%9D%E7%9C%9F%E7%BA%A6%E6%9D%9F%EF%BC%9A0-ULP-%E9%80%90-Token-%E7%BB%9D%E5%AF%B9%E5%AF%B9%E9%BD%90"><span class="nav-text">1.2 工业级保真约束：0-ULP 逐 Token 绝对对齐</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E6%98%BE%E5%AD%98%E6%96%AD%E5%B4%96%E5%BC%8F%E5%8E%8B%E7%BC%A9%EF%BC%9AKV-Cache-%E5%8A%A8%E6%80%81%E6%9E%B6%E6%9E%84%E4%B8%8E%E8%AE%A1%E7%AE%97%E6%97%81%E8%B7%AF"><span class="nav-text">二、 显存断崖式压缩：KV Cache 动态架构与计算旁路</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E5%8E%9F%E7%94%9F-12-Head-KV-%E7%BC%93%E5%AD%98%E4%B8%8E-GQA-%E8%B7%A8%E6%AD%A5%E5%B9%BF%E6%92%AD%E5%8E%9F%E4%BD%8D%E8%9E%8D%E5%90%88"><span class="nav-text">2.1 原生 12-Head KV 缓存与 GQA 跨步广播原位融合</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E5%88%86%E5%9D%97%E9%A2%84%E5%A1%AB%E5%85%85%EF%BC%88Chunked-Prefill%EF%BC%89%E4%B8%8E%E4%B8%AD%E9%97%B4%E5%9D%97-lm-head-%E6%97%81%E8%B7%AF"><span class="nav-text">2.2 分块预填充（Chunked Prefill）与中间块 lm_head 旁路</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E7%AE%97%E5%AD%90%E8%9E%8D%E5%90%88%E4%B8%8E%E9%9B%B6%E6%98%BE%E5%AD%98%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91%EF%BC%88Kernel-Fusion-0-VRAM-View-Rebinding%EF%BC%89"><span class="nav-text">三、 算子融合与零显存视图重绑（Kernel Fusion &amp; 0-VRAM View Rebinding）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E4%B8%A5%E6%A0%BC-0-ULP-%E5%AF%B9%E9%BD%90%E7%9A%84%E6%AE%8B%E5%B7%AE%E4%B8%8E-RMSNorm-%E8%9E%8D%E5%90%88%EF%BC%9Aadd-rmsnorm-exact-1536-f16"><span class="nav-text">3.1 严格 0-ULP 对齐的残差与 RMSNorm 融合：add_rmsnorm_exact_1536_f16</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-Decode-%E4%B8%93%E5%B1%9E-0-VRAM-%E6%9D%83%E9%87%8D%E8%A7%86%E5%9B%BE%E9%87%8D%E7%BB%91"><span class="nav-text">3.2 Decode 专属 0-VRAM 权重视图重绑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E5%8D%95%E6%AD%A5-RoPE-%E6%97%8B%E8%BD%AC%E4%B8%8E-KV-%E5%86%99%E5%85%A5%E8%9E%8D%E5%90%88"><span class="nav-text">3.3 单步 RoPE 旋转与 KV 写入融合</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E6%B6%88%E9%99%A4%E4%B8%BB%E6%9C%BA%E7%AB%AF%E7%93%B6%E9%A2%88%EF%BC%9A%E5%A4%9A%E9%80%9A%E9%81%93%E5%B8%B8%E9%A9%BB%E9%9D%99%E6%80%81-HIP-Graph-%E4%BD%93%E7%B3%BB"><span class="nav-text">四、 消除主机端瓶颈：多通道常驻静态 HIP Graph 体系</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E5%AE%9E%E6%9C%BA%E8%AF%84%E6%B5%8B%E4%B8%8E%E6%80%A7%E8%83%BD%E6%94%B6%E7%9B%8A%E6%80%BB%E7%BB%93"><span class="nav-text">五、 实机评测与性能收益总结</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81-%E7%BB%93%E8%AF%AD%E4%B8%8E%E4%B8%80%E7%82%B9%E4%B8%AA%E4%BA%BA%E6%84%9F%E6%82%9F"><span class="nav-text">六、 结语与一点个人感悟</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%B5%9B%E9%A2%98%E7%BA%A6%E6%9D%9F%E4%B8%8E%E6%B5%8B%E8%AF%95%E5%9F%BA%E5%87%86%E8%AF%B4%E6%98%8E"><span class="nav-text">一、 赛题约束与测试基准说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E6%A0%B8%E5%BF%83%E4%BC%98%E5%8C%96%E5%AE%9E%E7%8E%B0%E4%B8%8E%E5%B7%A5%E7%A8%8B%E6%9D%83%E8%A1%A1"><span class="nav-text">二、 核心优化实现与工程权衡</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E9%95%BF%E4%B8%8A%E4%B8%8B%E6%96%87%E5%88%86%E5%9D%97-Prefill-%E4%B8%8E%E6%97%A0-Padding-Mask-%E7%9C%81%E7%95%A5"><span class="nav-text">2.1 长上下文分块 Prefill 与无 Padding Mask 省略</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E9%9D%99%E6%80%81-HIP-Graph-%E6%B1%A0%EF%BC%9A%E5%85%83%E6%95%B0%E6%8D%AE%E5%A4%8D%E7%94%A8%E3%80%81REPLAY-CHUNK-8-%E4%B8%8E%E5%86%85%E5%AD%98%E4%BB%A3%E4%BB%B7"><span class="nav-text">2.2 静态 HIP Graph 池：元数据复用、REPLAY_CHUNK&#x3D;8 与内存代价</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-rope-exact-hip%E3%80%81candidate-support-py-%E4%B8%8E%E6%9D%83%E9%87%8D%E5%90%88%E5%B9%B6%E6%89%93%E5%8C%85"><span class="nav-text">2.3 rope_exact.hip、candidate_support.py 与权重合并打包</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E6%9C%80%E5%90%8E%E4%B8%80%E5%85%AC%E9%87%8C%E7%9A%84-gate-up-gemv-silu%EF%BC%88mlp-gemv-probe-hip%EF%BC%89"><span class="nav-text">2.4 最后一公里的 gate_up_gemv_silu（mlp_gemv_probe.hip）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-BW-gfx936-%E5%AE%9E%E6%B5%8B%E6%95%B0%E6%8D%AE%E4%B8%8E%E9%97%A8%E7%A6%81%E6%A0%B8%E9%AA%8C"><span class="nav-text">三、 BW (gfx936) 实测数据与门禁核验</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E7%AB%AF%E5%88%B0%E7%AB%AF%E6%80%A7%E8%83%BD%E4%B8%8E%E5%8D%95%E7%BB%84%E4%BB%B6%E6%B6%88%E8%9E%8D%E8%A1%A8%E7%8E%B0"><span class="nav-text">3.1 端到端性能与单组件消融表现</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%BF%85%E9%A1%BB%E5%86%99%E6%B8%85%E7%9A%84%E6%AD%A3%E7%A1%AE%E6%80%A7%E8%BE%B9%E7%95%8C%E4%B8%8E%E6%9C%AA%E8%A7%A3%E5%86%B3%E4%BA%8B%E9%A1%B9"><span class="nav-text">3.2 必须写清的正确性边界与未解决事项</span></a></li></ol></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -227,12 +227,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践 | Archyのcs之旅">
+      <meta itemprop="name" content="面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践 | Archyのcs之旅">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践
+          面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践
         </h1>
 
         <div class="post-meta-container">
@@ -242,9 +242,15 @@
         <i class="far fa-calendar"></i>
       </span>
       <span class="post-meta-item-text">发表于</span>
-      
 
-      <time title="创建时间：2026-11-09 00:36:00 / 修改时间：02:44:01" itemprop="dateCreated datePublished" datetime="2026-11-09T00:36:00+08:00">2026-11-09</time>
+      <time title="创建时间：2026-11-09 00:36:00" itemprop="dateCreated datePublished" datetime="2026-11-09T00:36:00+08:00">2026-11-09</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar-check"></i>
+      </span>
+      <span class="post-meta-item-text">更新于</span>
+      <time title="修改时间：2026-11-13 02:07:10" itemprop="dateModified" datetime="2026-11-13T02:07:10+08:00">2026-11-13</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -265,128 +271,140 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>好久没更新博客了。从大一刚入学参加岳麓黑客松时连 API 调用都要抱学长大腿，到现在大二上学期一头扎进先导杯（CSCC）搞海光 DCU &#x2F; AMD 异构计算与大模型底层推理优化，这一年的跨度确实有点大。</p>
-<p><i>yysy，放到两三年前，让一个刚上大二的本科生去手搓 HIP 算子融合、扣 Wave64 寄存器和 HBM2 访存带宽，几乎是不可能完成的任务。但现在处于 AI 大爆发的时代，AI 某种程度上抹平了底层语法和繁琐工程细节的信息差，让我们学生有机会直接跳过漫长的“造轮子”蓄力期，直接站到系统架构设计、性能瓶颈剖析和严格评测验证的一线。</i></p>
-<p>这篇文章主要复盘并沉淀一下近期在先导杯校内选拔赛中，围绕 <strong>Qwen2.5-1.5B 超长上下文（32.5K）端侧极速推理底座</strong> 所做的一系列软硬件协同优化实践。</p>
+    <div class="post-body" itemprop="articleBody"><p>好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。</p>
+<p><i>yysy，放在以前，让一个刚上大二的本科生去读 <code>transformers</code> 底层注意力源码、改 HIP C++ Kernel、抓 Graph Capture 时序气泡，光查文档就很容易劝退。现在用 AI 辅助写样板代码、查 ROCm 编译参数确实省掉了很大一部分信息差；不过真到做技术方案和实验验收时，哪些融合真带来加速、哪些显存省在哪儿、哪些精度会暗地里漂移，还是得老老实实盯硬件约束、写对比实验、对着实机日志一条条核对。</i></p>
+<p>这篇文章复盘先导杯第一题围绕 <strong><code>Qwen2.5-1.5B-Instruct</code></strong> 所做的推理优化实践，并在 11 月 12 日完整核验与代码审计之后，把早期草稿里混杂的不同硬件口径、不严谨的“零开销”表述以及未标注边界的地方全部修订成经实测日志核验的真实记录。</p>
 <span id="more"></span>
 
 <hr>
-<h2 id="一、-背景与问题定义：端侧-16GB-显存红线下的长程推理困境"><a href="#一、-背景与问题定义：端侧-16GB-显存红线下的长程推理困境" class="headerlink" title="一、 背景与问题定义：端侧 16GB 显存红线下的长程推理困境"></a>一、 背景与问题定义：端侧 16GB 显存红线下的长程推理困境</h2><h3 id="1-1-硬件边界与性能痛点"><a href="#1-1-硬件边界与性能痛点" class="headerlink" title="1.1 硬件边界与性能痛点"></a>1.1 硬件边界与性能痛点</h3><p>在本地端侧网关或单卡边缘计算场景中，显存容量与访存带宽往往是不可逾越的物理红线。本次优化的目标硬件涵盖两类典型的海光 DCU（兼容 AMD ROCm 生态）平台：</p>
+<h2 id="一、-赛题约束与测试基准说明"><a href="#一、-赛题约束与测试基准说明" class="headerlink" title="一、 赛题约束与测试基准说明"></a>一、 赛题约束与测试基准说明</h2><p>先交代清楚背景与硬件口径，避免把不同机器的数据混为一谈：</p>
 <ul>
-<li><strong>海光 DCU Z200SM_80（<code>gfx906</code> 架构）</strong>：64 个计算单元（CU），配备 <strong>16GB HBM2 显存</strong>（4096-bit 位宽，理论峰值带宽 1024 GB&#x2F;s）。</li>
-<li><strong>海光 DCU BW（<code>gfx936</code> 架构）</strong>：配备 <strong>64GB HBM2 显存</strong>，具备更强的双精度与张量吞吐能力。</li>
+<li><strong>赛题背景</strong>：围绕 <strong>Qwen2.5-1.5B（FP16、28 层、12 Query 头、2 KV 头、Head Dim 128、Hidden 1536、Intermediate 8960）</strong>，同时考核短&#x2F;中文本批处理吞吐延迟（A&#x2F;B 集）以及接近 32K~32.5K 上下文的超长序列推理（C 集，受端侧 16GB 显存与 OOM 边界约束）。</li>
+<li><strong>本文对齐硬件与软件环境</strong>：本文全部最终数据均来自 11 月 12 日归档的交付包 <code>team_submission</code> 在海光 <strong>BW（<code>gfx936:sramecc+:xnack-</code>，可见显存 63.98 GiB）</strong> 实机上的完整验证；软件栈为 Python 3.10.16、PyTorch 2.4.1、HIP 6.1.25065、Transformers 4.46.3、DTK 25.04。早期测试草稿中出现的另一套 Z200（<code>gfx906</code>）数据对应旧版源码，未与最终集成 <code>mlp_gemv_probe.hip</code> 的版本重新实测对比，故本文不再混用。</li>
+<li><strong>官方基线执行特征</strong>：基线实现（<code>hf_sdpa_math_chunked_prefill_v2</code>）已包含 <code>prefill_chunk_size=1024</code>、<code>DynamicCache</code>、<code>num_logits_to_keep=1</code>、<code>SDPBackend.MATH</code>（强制对齐数学参考精度）及每步有限性检查（<code>every_forward_finite</code>）。</li>
 </ul>
-<p>当我们将 <code>Qwen2.5-1.5B</code> 模型置于 <strong>32.5K（32,768 Tokens）</strong> 的超长上下文多轮交互场景时，原生 PyTorch &#x2F; HuggingFace 推理管线会瞬间暴露两大瓶颈：</p>
-<ol>
-<li><strong>显存爆炸（OOM）</strong>：在 32.5K 序列长度下，全量中间激活值（Activations）、未压缩的 KV Cache 广播副本以及词表投影层（<code>lm_head</code>）产生的临时大张量，会使峰值显存飙升至 <strong>&gt;75GB</strong>，在 16GB 端侧设备上直接触发 OOM；即便开启官方基础分块优化，峰值显存仍高达 <strong>8.45GB</strong>。</li>
-<li><strong>高频交互迟滞</strong>：Decode 阶段属于典型的 <strong>访存受限（Memory-Bound）</strong> 型负载（$M&#x3D;1$ 的 GEMV 运算），频繁的小内核发射（Kernel Launch）与 Host-Device 同步气泡导致 GPU 计算单元大量空转，逐词生成延迟（TPOT）居高不下。</li>
-</ol>
-<h3 id="1-2-工业级保真约束：0-ULP-逐-Token-绝对对齐"><a href="#1-2-工业级保真约束：0-ULP-逐-Token-绝对对齐" class="headerlink" title="1.2 工业级保真约束：0-ULP 逐 Token 绝对对齐"></a>1.2 工业级保真约束：0-ULP 逐 Token 绝对对齐</h3><p>不同于常规业务场景允许一定的近似误差，本次优化设定了极其严苛的正确性门禁：</p>
-<ul>
-<li>采用贪心解码（Greedy Decoding），最多生成 256 个新 Token（遇到 <code>EOS = 151645</code> 立即截断并保留该 Token）；</li>
-<li>短文本测试集（Dataset A，10 条）必须实现单条与批量推理的 <strong>10&#x2F;10 0-ULP（Unit in the Last Place）逐 Token 绝对一致</strong>；</li>
-<li>超长上下文测试集（Dataset C，4 条 32K 样本）位置匹配率需达到 <strong>1.000</strong>（远超官方 0.98 阈值）。</li>
-</ul>
-<p>这意味着任何破坏 IEEE 754 浮点归约顺序的激进近似（例如在 $M&gt;1$ 时随意合并矩阵乘输出维度改变 2D Tile 归约树）都会引发 1-ULP 漂移并在长序列自回归中被指数级放大。</p>
-<hr>
-<h2 id="二、-显存断崖式压缩：KV-Cache-动态架构与计算旁路"><a href="#二、-显存断崖式压缩：KV-Cache-动态架构与计算旁路" class="headerlink" title="二、 显存断崖式压缩：KV Cache 动态架构与计算旁路"></a>二、 显存断崖式压缩：KV Cache 动态架构与计算旁路</h2><p>为了在 16GB 显存红线下留出充足的多任务余量，我们对推理全生命周期的显存分配进行了重构，将 32.5K 峰值显存从官方基线的 8.45GB 进一步压降至 <strong>4.3GB ~ 5.68GB</strong>。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">flowchart LR</span><br><span class="line">    A[&quot;输入序列 (32.5K Tokens)&quot;] --&gt; B[&quot;自适应分块 Prefill (1024/2048 Chunk)&quot;]</span><br><span class="line">    B --&gt; C&#123;&quot;是否为最后一个分块?&quot;&#125;</span><br><span class="line">    C --&gt;|否 (前 31 块)| D[&quot;仅更新原生 12-Head KV Cache\n旁路跳过 lm_head 词表投影&quot;]</span><br><span class="line">    C --&gt;|是 (最终块)| E[&quot;执行最后块 Attention + MLP\n仅对末位 Token 计算 lm_head&quot;]</span><br><span class="line">    D --&gt; B</span><br><span class="line">    E --&gt; F[&quot;进入 Decode 阶段 (静态图回放)&quot;]</span><br></pre></td></tr></table></figure>
+<p>面对这套基准，短请求慢主要卡在 <strong>Python 框架调度和每步重复启动大量小 Kernel（Launch Overhead）</strong>，以及 RoPE、RMSNorm、SiLU 等逐元素算子的反复全局内存往返；长文本则要求在显存可控的前提下稳定跑过 32.5K。系统整体拆成了两套路径：</p>
+<pre>
+<code class="mermaid">
 
-<h3 id="2-1-原生-12-Head-KV-缓存与-GQA-跨步广播原位融合"><a href="#2-1-原生-12-Head-KV-缓存与-GQA-跨步广播原位融合" class="headerlink" title="2.1 原生 12-Head KV 缓存与 GQA 跨步广播原位融合"></a>2.1 原生 12-Head KV 缓存与 GQA 跨步广播原位融合</h3><p><code>Qwen2.5-1.5B</code> 采用了 <strong>分组查询注意力（Grouped-Query Attention, GQA）</strong> 架构：包含 12 个 Query 头，但仅有 2 个 Key&#x2F;Value 头（分组比 $G &#x3D; 6$）。</p>
-<p>在原生实现中，每步注意力计算前都需要调用 <code>repeat_interleave</code> 将 2 个 KV 头显式复制扩展为 12 个头以对齐矩阵乘维度。在 28 层 Transformer 结构下，这意味着每步推理都要额外发生 <strong>56 次显存张量搬运与临时缓冲分配</strong>。</p>
-<p>为此，我们编写了自定义 HIP 内核 <code>kv_update_repeat6_f16</code> 与 <code>rope_kv_update_repeat6_decode_f16</code>：</p>
-<ul>
-<li>在预分配的静态连续 KV Cache 缓冲区上，直接以 <code>[Batch, 12, MaxSeqLen, HeadDim]</code> 布局进行管理；</li>
-<li>当新 Token 的 2 个 KV 头完成计算后，内核在写入静态缓冲的<strong>同一条访存指令周期内</strong>，利用线程块映射一步完成 $2 \to 12$ 头的跨步广播写入（Stride Broadcast Write），彻底抹平了运行时的 <code>repeat_interleave</code> 显存拷贝开销。</li>
-</ul>
-<h3 id="2-2-分块预填充（Chunked-Prefill）与中间块-lm-head-旁路"><a href="#2-2-分块预填充（Chunked-Prefill）与中间块-lm-head-旁路" class="headerlink" title="2.2 分块预填充（Chunked Prefill）与中间块 lm_head 旁路"></a>2.2 分块预填充（Chunked Prefill）与中间块 <code>lm_head</code> 旁路</h3><p>针对 32.5K 超长输入，我们采用 <code>1024 / 2048</code> 自适应分块预填充（Chunked Prefill），并且针对单条请求直通 <code>attention_mask = None</code>（依靠底层算子原生因果掩码规避数十 MB 的显式三角掩码矩阵开销）。</p>
-<p>更关键的一项观察是：<strong>在自回归预填充的前 $N-1$ 个分块中，模型的唯一任务是构建并填充 KV Cache，根本不需要预测下一个词。</strong></p>
-<ul>
-<li><code>Qwen2.5</code> 的词表大小高达 <code>151,936</code>。如果对全部 32K Token 执行 <code>lm_head</code> 投影（维度 $1536 \to 151936$），仅输出 Logits 张量就会瞬间吞噬近 <strong>9.6GB 显存</strong>，并产生 <strong>14.8 GFLOPs</strong> 的无效浮点计算与 <strong>14.5 GB</strong> 的 HBM 读写流量。</li>
-<li>通过在前 31 个分块彻底旁路（Bypass）<code>lm_head</code>，且在最后一个分块仅切片提取序列末尾最后一个 Token（<code>hidden_states[:, -1:, :]</code>）送入词表投影层，我们实现了长文本 Prefill 阶段的零冗余显存占用。</li>
-</ul>
-<hr>
-<h2 id="三、-算子融合与零显存视图重绑（Kernel-Fusion-0-VRAM-View-Rebinding）"><a href="#三、-算子融合与零显存视图重绑（Kernel-Fusion-0-VRAM-View-Rebinding）" class="headerlink" title="三、 算子融合与零显存视图重绑（Kernel Fusion &amp; 0-VRAM View Rebinding）"></a>三、 算子融合与零显存视图重绑（Kernel Fusion &amp; 0-VRAM View Rebinding）</h2><p>在消除显存峰值后，优化的重心转向削减 Kernel Launch 次数与 HBM 往返流量。</p>
-<h3 id="3-1-严格-0-ULP-对齐的残差与-RMSNorm-融合：add-rmsnorm-exact-1536-f16"><a href="#3-1-严格-0-ULP-对齐的残差与-RMSNorm-融合：add-rmsnorm-exact-1536-f16" class="headerlink" title="3.1 严格 0-ULP 对齐的残差与 RMSNorm 融合：add_rmsnorm_exact_1536_f16"></a>3.1 严格 0-ULP 对齐的残差与 RMSNorm 融合：<code>add_rmsnorm_exact_1536_f16</code></h3><p>Transformer 每层包含两次残差相加与 <code>RMSNorm</code> 归一化。常规算子融合很容易因为改变浮点数累加顺序而破坏 0-ULP 精度对齐。<br>我们在自研的 <code>add_rmsnorm_exact_1536_f16</code> HIP 内核中：</p>
-<ol>
-<li>将残差加法 $x &#x3D; x + \text{residual}$ 与均方根求原位融合，省去一次完整的全局内存写回与重读；</li>
-<li><strong>严格复刻 PyTorch ATen 底层的向量化加载与蝶形归约树（Butterfly Reduction Tree）顺序</strong>，确保 FP32 累加器中的舍入行为与官方基准逐 bit 一致，在通过全部 62 项精度门禁的前提下大幅降低了访存延迟。</li>
-</ol>
-<h3 id="3-2-Decode-专属-0-VRAM-权重视图重绑"><a href="#3-2-Decode-专属-0-VRAM-权重视图重绑" class="headerlink" title="3.2 Decode 专属 0-VRAM 权重视图重绑"></a>3.2 Decode 专属 0-VRAM 权重视图重绑</h3><p>为什么不能无脑将 <code>q_proj</code>、<code>k_proj</code>、<code>v_proj</code> 拼接成一个大矩阵？<br>我们在 <code>gfx936</code> 实机测试中发现了一个极其隐蔽的硬件底层特性：当 $M &gt; 1$（即 Prefill 阶段的 GEMM 矩阵乘）时，合并输出维度 $N$ 会改变 <code>rocBLAS</code> 内部 2D Tile 的分块尺寸与归约树路径，从而引入 1-ULP 的浮点精度漂移。</p>
-<p><strong>但在 $M &#x3D; 1$（即 Decode 阶段的 GEMV 矩阵向量乘）时，输出向量的每一个元素都是独立的一维行向量点积，合并输出维度完全不会改变任何一行的归约顺序，100% 保持 0-ULP 绝对一致！</strong></p>
-<p>基于这一发现，我们设计了 <strong>Decode 专属视图重绑机制</strong>：</p>
-<ul>
-<li>如果直接 <code>torch.cat</code> 复制一份合并权重，会额外占用数 GB 显存；</li>
-<li>我们利用 PyTorch 底层的 <code>UntypedStorage</code> 内存池重排技术，将各层的 <code>q/k/v</code> 权重（合并为 $2048 \times 1536$）以及 MLP 层的 <code>gate/up</code> 权重（合并为 $17920 \times 1536$）放置在物理连续的存储块上，同时暴露<strong>独立子视图</strong>（供 $M&gt;1$ Prefill 使用）与<strong>合并整视图</strong>（供 $M&#x3D;1$ Decode 使用）。</li>
-<li>这一设计以 <strong>0 字节额外显存开销（0-VRAM Overhead）</strong>，在每生成 1 个 Token 时直接砍掉了 $28 \times 3 &#x3D; 84$ 次 GEMV 内核发射！</li>
-</ul>
-<h3 id="3-3-单步-RoPE-旋转与-KV-写入融合"><a href="#3-3-单步-RoPE-旋转与-KV-写入融合" class="headerlink" title="3.3 单步 RoPE 旋转与 KV 写入融合"></a>3.3 单步 RoPE 旋转与 KV 写入融合</h3><p>在 <code>rope_exact.hip</code> 中，我们将 Decode 阶段（<code>seq_len == 1</code>）的 Query&#x2F;Key 旋转位置编码（RoPE）计算与上述 12-Head KV Cache 广播写入进一步融合为单个轻量级 HIP 内核（<code>Grid = 14, Block = 128</code>），每生成 1 个 Token 再次省去 28 次 Kernel Launch。</p>
-<hr>
-<h2 id="四、-消除主机端瓶颈：多通道常驻静态-HIP-Graph-体系"><a href="#四、-消除主机端瓶颈：多通道常驻静态-HIP-Graph-体系" class="headerlink" title="四、 消除主机端瓶颈：多通道常驻静态 HIP Graph 体系"></a>四、 消除主机端瓶颈：多通道常驻静态 HIP Graph 体系</h2><p>在单步 Decode 计算耗时被压缩至亚毫秒级后，Python 解释器调度与 HIP Driver API 的发射开销成为了新的主要矛盾。</p>
-<figure class="highlight plaintext"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">sequenceDiagram</span><br><span class="line">    participant Host as CPU Host (Pinned Memory)</span><br><span class="line">    participant Pool as 4-Lane Static HIP Graph Pool</span><br><span class="line">    participant HBM as DCU Device (gfx906 / gfx936)</span><br><span class="line">    </span><br><span class="line">    Host-&gt;&gt;Pool: 动态工作窃取分配空闲 Lane (Capacity=300)</span><br><span class="line">    loop REPLAY_CHUNK = 8 步批量回放</span><br><span class="line">        Pool-&gt;&gt;HBM: 单次 hipGraphLaunch 连续回放 8 步 Decode</span><br><span class="line">        HBM--&gt;&gt;Host: 异步非阻塞 D2H 拷贝 Token ID 与 EOS 状态</span><br><span class="line">    end</span><br><span class="line">    Host-&gt;&gt;Host: 检查 Pinned Buffer 中是否命中 EOS (151645)</span><br></pre></td></tr></table></figure>
+flowchart TD
+    IN[&quot;输入 Batch 请求&quot;] --&gt; ROUTE{&quot;输入与生成总长不超过 300?&quot;}
+    ROUTE -- &quot;是（短文本走静态图池）&quot; --&gt; POOL[&quot;ExactPrefixGraphPool\n（4 条常驻 Lane 线程 + work_queue）&quot;]
+    POOL --&gt; PRE[&quot;PrefillGraphBank（width 1..64）或 Eager Prefill&quot;]
+    PRE --&gt; DEC[&quot;Decode 静态图回放（REPLAY_CHUNK&#x3D;8）\nExactPrefixCache 预扩展 12 头 KV&quot;]
+    ROUTE -- &quot;否（超长文本 &#x2F; 32K C 集）&quot; --&gt; LONG[&quot;_generate_chunk 通用路径&quot;]
+    LONG --&gt; CHUNK[&quot;1024-token 分块 Prefill\n无 Padding 时跳过 4D Mask&quot;]
+    CHUNK --&gt; KEEP[&quot;每块 num_logits_to_keep&#x3D;1 有限性校验\n+ Standard Decode&quot;]
+</code>
+</pre>
 
-<ol>
-<li><strong>4 路常驻并发图池（<code>PREFIX_GRAPH_LANES = 4</code>）与容量扩充</strong>：<br>我们将静态图容量扩充至 <code>Capacity = 300</code>（完整覆盖短文本 Prompt 长度 + 256 步生成预算的生命周期上限）。同时建立 4 条独立的 HIP Stream 静态图通道，配合 <code>queue.SimpleQueue</code> 实现多线程动态工作窃取，无需触发动态重捕获即可 100% 保持单条与批量推理的 0-ULP 一致性。</li>
-<li><strong><code>REPLAY_CHUNK = 8</code> 细粒度回放与锁页内存异步 D2H</strong>：<br>如果每回放 1 步就同步拷贝 Token ID 回 CPU 检查是否遇到 <code>EOS</code>，PCIe 同步延迟会彻底抵消静态图的收益；如果一次性回放过多步，又会在遇到 <code>EOS</code> 后产生大量无效尾步计算。我们采用 8 步微批次图回放，配合 <code>Pinned Host Memory</code>（锁页内存）进行非阻塞异步 <code>Device-to-Host</code> 传输，彻底消除了 CPU 等待 GPU 的同步气泡。</li>
-</ol>
 <hr>
-<h2 id="五、-实机评测与性能收益总结"><a href="#五、-实机评测与性能收益总结" class="headerlink" title="五、 实机评测与性能收益总结"></a>五、 实机评测与性能收益总结</h2><p>在海光 DCU Z200（<code>gfx906</code>, 16GB）与 BW（<code>gfx936</code>, 64GB）双平台上，经过三轮 Formal 标准评测取中位数，最终交付版取得了显著的端到端性能突破：</p>
+<h2 id="二、-核心优化实现与工程权衡"><a href="#二、-核心优化实现与工程权衡" class="headerlink" title="二、 核心优化实现与工程权衡"></a>二、 核心优化实现与工程权衡</h2><h3 id="2-1-长上下文分块-Prefill-与无-Padding-Mask-省略"><a href="#2-1-长上下文分块-Prefill-与无-Padding-Mask-省略" class="headerlink" title="2.1 长上下文分块 Prefill 与无 Padding Mask 省略"></a>2.1 长上下文分块 Prefill 与无 Padding Mask 省略</h3><p>长文本路径（<code>_generate_chunk</code>）并没有搞玄学，主要做了三件干净的减法：</p>
+<ol>
+<li><strong>分块尺寸解析与自适应开关</strong>：默认沿用 <code>PREFILL_CHUNK_SIZE=1024</code> 切片处理宽序列（超过 <code>chunk_size</code> 时分块推进 <code>DynamicCache</code>），同时代码中保留了 <code>PREFILL_CHUNK_SIZE=auto</code> 选项，当可用显存 $\ge 12\text{ GiB}$ 时切到 <code>2048</code> 减少 Python 分块循环次数。</li>
+<li><strong>只保留块尾 logits 检查，而非跳过 <code>lm_head</code></strong>：早期总结里误写过“跳过前 31 块 <code>lm_head</code>”。实际检查 <code>native_027.py</code> 代码可知，为了与官方基线 <code>every_forward_finite</code> 对齐，<code>for chunk_start in range(0, width, chunk_size)</code> 中每一块调用 <code>self.model(...)</code> 都传入 <code>num_logits_to_keep=1</code>，然后对返回的尾 token logits 调用 <code>require_finite_logits</code>。这样做的作用是<strong>避免一次性实例化 <code>[batch, chunk_size, 151936]</code> 的全词表巨大张量</strong>，而不是把中间块的非有限值检查删掉。</li>
+<li><strong>无 Padding 省略 4D Mask 缓冲</strong>：当单条或等长批处理不需要左填充 Padding（<code>has_padding == False</code>）时，<code>mask_buffer</code> 直接置为 <code>None</code>，省掉长序列下额外构造维护的 <code>(batch, width + max_new_tokens)</code> 注意力掩码。</li>
+</ol>
+<p>在 C 集 4 条长文本（上限 32K~32.5K 上下文范围，<code>max_new_tokens=256</code>）实测中，PyTorch 进程峰值已分配显存为 <strong><code>5797.74 MiB</code>（约 <code>5.66 GiB</code>）</strong>，<code>kv_cache_oom</code> 为 <code>false</code>。需要遵循审计说明标明口径：<strong>该指标是 PyTorch 进程侧测得的峰值已分配显存（包含模型权重与推理激活），既不等于纯粹 KV Cache 独占大小，也可能未计入部分外部运行时底层分配。</strong></p>
+<h3 id="2-2-静态-HIP-Graph-池：元数据复用、REPLAY-CHUNK-8-与内存代价"><a href="#2-2-静态-HIP-Graph-池：元数据复用、REPLAY-CHUNK-8-与内存代价" class="headerlink" title="2.2 静态 HIP Graph 池：元数据复用、REPLAY_CHUNK=8 与内存代价"></a>2.2 静态 HIP Graph 池：元数据复用、<code>REPLAY_CHUNK=8</code> 与内存代价</h3><p>短请求的 Decode 阶段一次只算一个 token（<code>M=1</code>），如果不做静态图，每步都要经过 Python 调度几十层的 PyTorch 算子发射，时间全耗在 CPU-GPU 发令间隙里。</p>
+<p><code>native_027.py</code> 围绕 <code>ExactPrefixGraph</code> 与 <code>ExactPrefixGraphPool</code> 做了以下调度改造：</p>
+<ul>
+<li><strong>4 路常驻 Capture 线程 + 私有 BLAS 句柄</strong>：<code>ExactPrefixGraphPool</code> 默认开启 <code>PREFIX_GRAPH_LANES=4</code>、<code>PREFIX_GRAPH_CAPACITY=300</code>（预留位置覆盖 prompt + decode 总长 300 内），并为每个 Lane 配一条单线程 <code>ThreadPoolExecutor</code> 长期保持线程存活，防止临时线程销毁或切换导致底层 rocBLAS&#x2F;hipBLAS handle 重建错乱；批量请求通过 <code>work_queue</code> 动态派发到空闲 Lane。</li>
+<li><strong><code>PrefillGraphBank</code> 覆盖小宽度 Prefill</strong>：默认启用 <code>PREFIX_PREFILL_GRAPH=1</code> 时，每条 Lane 还会针对 <code>width = 1..64</code> 预先捕获 64 张固定宽度 Prefill 静态图，使短输入的 TTFT 也摆脱 eager launch 气泡。</li>
+<li><strong>元数据指针重置 KV Cache（<code>PREFIX_CLEAR_KV=0</code>）</strong>：每条 Lane 的 <code>ExactPrefixCache</code> 静态申请了 <code>key_cache12</code> &#x2F; <code>value_cache12</code>（形状 <code>(28, 1, 12, 300, 128)</code>）。关闭清零后，跨请求复用不再调 <code>.zero_()</code> 刷整块显存，只重置 <code>past_length</code> 与 <code>visible_length</code>：新请求的 Prefill 会直接覆盖 <code>[0, width)</code> 槽位，Attention 只切片读取 <code>[:visible_length]</code>，历史残留槽位位于因果掩码和可见窗口之外。</li>
+<li><strong>批量异步回放 <code>REPLAY_CHUNK=8</code>（带必须说明的代价）</strong>：Decode 循环不再每生成 1 个 token 就同步 <code>.item()</code> 拿回 CPU，而是在静态图里把每次采样 token 与 <code>torch.isfinite</code> 标志写入预设的 <code>token_history</code> &#x2F; <code>finite_history</code> 显存缓冲，默认按 <code>CHUNK=8</code> 连续发射 8 张 Graph 后做一次 <code>.tolist()</code> 回传检查。<ul>
+<li><strong>客观纠偏</strong>：早期版本宣传“<code>REPLAY_CHUNK=8</code> 彻底消除了 EOS 后的无效步”。实际从 <code>generate_encoded</code> 代码来看恰恰相反：<strong>如果序列在某个 Chunk 中间第 $k$ 步已经吐出 <code>eos_token_id</code>，同一个 Chunk 里剩下的至多 7 步 Decode Graph 依然已经在 GPU 上发射并执行完，而且这部分计算时间全算在端到端统计窗口内</strong>。<code>CHUNK=8</code> 真正换来的是把原本每步 1 次的 CPU-GPU 同步等待摊薄为每 8 步 1 次，是以少量冗余算力换同步延迟的折中设计。</li>
+</ul>
+</li>
+</ul>
+<p>此外，这套多路静态图设计有明确的<strong>初始化与内存代价</strong>（直接记录自 <code>delivery_package_validation.log</code>）：</p>
+<ul>
+<li>启动初始化耗时 <strong><code>322.05 s</code></strong>（需为 4 条 Lane 各捕获 299 张 Decode 图 + 64 张 Prefill 图）；</li>
+<li>捕获期间 PyTorch 保留显存（reserved）从 <strong>3,441,426,432 字节（约 3.20 GiB）上升至 7,438,598,144 字节（约 6.93 GiB）</strong>（相当于额外占下约 3.72 GiB 静态图与缓存保留空间）。在 64GB 的 BW 卡上很充裕；如果直接迁移到严格只有 16GB 的端侧设备再叠加上下文缓存，必须下调 <code>PREFIX_GRAPH_LANES</code> 或压缩容量上限，否则静态图池本身就会挤压长文本可用空间。</li>
+</ul>
+<h3 id="2-3-rope-exact-hip、candidate-support-py-与权重合并打包"><a href="#2-3-rope-exact-hip、candidate-support-py-与权重合并打包" class="headerlink" title="2.3 rope_exact.hip、candidate_support.py 与权重合并打包"></a>2.3 <code>rope_exact.hip</code>、<code>candidate_support.py</code> 与权重合并打包</h3><p>在算子层，主要通过 <code>candidate_support.py</code> 对 <code>transformers</code> 里的 <code>Qwen2SdpaAttention.forward</code>、<code>Qwen2DecoderLayer.forward</code>、<code>Qwen2RMSNorm.forward</code>、<code>Qwen2MLP.forward</code> 等入口进行 Monkey-Patch，在保证输入条件满足（FP16、contiguous、无梯度）时切入自研 HIP C++ 算子（编译参数明确强制关闭激进融合优化：<code>-fno-fast-math -ffp-contract=off</code>）：</p>
+<ol>
+<li><strong>位级对齐的 RoPE 与归约型 Add-RMSNorm（<code>rope_exact.hip</code>）</strong>：<ul>
+<li><code>rope_exact_f16_kernel</code> 将旋转位置编码中的两项乘积分别显式执行 <code>__float2half_rn(...)</code> 截断回半精度后再相加，复现 PyTorch Eager FP16 的舍入顺序。</li>
+<li><code>add_rmsnorm_exact_1536_kernel&lt;BW&gt;</code>（以及独立版 <code>rmsnorm_exact_1536_kernel&lt;BW&gt;</code>）把 <code>residual + hidden_states</code> 与随后的 <code>RMSNorm</code> 合并为一个 Kernel；实现上按 ATen <code>thread_reduce_impl</code> 写 4 路局部求和再通过 <code>__shared__ float shared[BW]</code> 归约树完成块内规约（根据 <code>rows</code> 在 256&#x2F;128&#x2F;64 线程块间分档），并没有使用 Wave64 shuffle 改变加法结合序，以此稳住短文本逐位对齐。</li>
+</ul>
+</li>
+<li><strong>12 头 KV Cache 写入时预展开（<code>kv_update_repeat6_f16_kernel</code>）</strong>：<ul>
+<li>Qwen2.5-1.5B 采用 GQA（12 个 Q 头，2 个 KV 头，<code>n_rep=6</code>）。每次 Attention 计算都调一次 <code>repeat_kv</code> 会产生额外的拷贝内核发射。</li>
+<li>在走静态图池的 <code>ExactPrefixCache</code> 中，<code>kv_update_repeat6_f16_kernel</code> 在把本步生成的 2 个 KV 头写入静态 Cache 时，直接循环 <code>#pragma unroll</code> 展开到连续的 12 头槽位（<code>h12 = h2 * 6 + r</code>）；随后 Attention 主流程调 <code>apply_repeat_kv</code> 时，只要检测到 <code>hidden_states.shape[1] == 12</code> 就直接原样透传返回。长序列分支用 <code>DynamicCache</code> 时仍安全回退原路径。</li>
+</ul>
+</li>
+<li><strong>关于 <code>torch.cat</code> 权重融合与“0-VRAM”标签的纠偏</strong>：<ul>
+<li><code>prepare_model</code> 将每层的 <code>q_proj</code>&#x2F;<code>k_proj</code>&#x2F;<code>v_proj</code> 权重拼接为 <code>_packed_qkv_weight</code>（Decode 单 Token 走一次 <code>linear</code> 再切片分头），并将 MLP 的 <code>gate_proj</code>&#x2F;<code>up_proj</code> 拼接为 <code>(17920, 1536)</code> 的 <code>_packed_gate_up</code>，随后用 <code>.narrow()</code> 视图把原来的 <code>nn.Parameter</code> 指向新连续内存，最后 <code>gc.collect()</code> + <code>torch.cuda.empty_cache()</code>。</li>
+<li><strong>必须明确说明</strong>：虽然推理稳态下的投影共享了同一份权重存储，但在模型初始化执行 <code>torch.cat</code> 那一瞬间会存在一次<strong>拼接所需的瞬态额外显存峰值</strong>（需要旧分片与新整块同时短暂驻留再回收），并非绝对意义上完全零额外显存占用。此外，<code>candidate_support.py</code> 里虽包含 <code>W8A16Linear</code>（可通过 <code>QUANTIZATION=int8</code> 或 <code>w8a16</code> 开关激活的权重量化预留接口），但本次交付验证默认全部走原精度 FP16 路径，未启用该量化实验开关。</li>
+</ul>
+</li>
+</ol>
+<h3 id="2-4-最后一公里的-gate-up-gemv-silu（mlp-gemv-probe-hip）"><a href="#2-4-最后一公里的-gate-up-gemv-silu（mlp-gemv-probe-hip）" class="headerlink" title="2.4 最后一公里的 gate_up_gemv_silu（mlp_gemv_probe.hip）"></a>2.4 最后一公里的 <code>gate_up_gemv_silu</code>（<code>mlp_gemv_probe.hip</code>）</h3><p>11 月中旬对比 Profiling 后，我们发现前面 28 层的 QKV 与 RoPE 融合完成后，单个 Decode token 阶段占比最高的小算子落到了 MLP 上半段的 <code>gate_proj</code>、<code>up_proj</code> 与 <code>SiLU(gate) * up</code> 三连跳。</p>
+<p>为此在 <code>mlp_gemv_probe.hip</code> 里加了一个专门接管 Decode 单 token Contiguous FP16（<code>x.numel() == 1536</code>）的融合 GEMV 算子 <code>gate_up_gemv_silu</code>：</p>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">// Grid=8960 (对应中间维度每行一个 Workgroup), Block=256 (4 个 Wavefront)</span></span><br><span class="line"><span class="keyword">for</span> (<span class="type">int</span> i = tid; i &lt; <span class="number">1536</span>; i += <span class="number">256</span>) &#123;</span><br><span class="line">    <span class="type">float</span> a = __half2float(x[i]);</span><br><span class="line">    gate = <span class="built_in">fmaf</span>(a, __half2float(w[row * <span class="number">1536</span> + i]), gate);</span><br><span class="line">    up   = <span class="built_in">fmaf</span>(a, __half2float(w[(row + <span class="number">8960</span>) * <span class="number">1536</span> + i]), up);</span><br><span class="line">&#125;</span><br><span class="line"><span class="comment">// 波前内 __shfl_down(..., 64) + 跨 4 Wave 共享内存累加</span></span><br></pre></td></tr></table></figure>
+
+<p>在单层微基准测试（<code>mlp_microbench.json</code>，Layer-0 实权重，单流 Graph Replay）里，单次 MLP 前半程执行时间从基线 <strong><code>0.1488 ms</code> 降到 <code>0.0892 ms</code>（约 -40.1%）</strong>，8960 维输出中有 8946 个元素与 PyTorch 基线逐位相等，最大绝对偏差 <strong><code>1.22e-4</code></strong>（由于改变了 FP32 点积融合累加顺序并在输出 SiLU 相乘前做 <code>__float2half_rn</code> 截断所致）。</p>
+<hr>
+<h2 id="三、-BW-gfx936-实测数据与门禁核验"><a href="#三、-BW-gfx936-实测数据与门禁核验" class="headerlink" title="三、 BW (gfx936) 实测数据与门禁核验"></a>三、 BW (<code>gfx936</code>) 实测数据与门禁核验</h2><p>以下所有数据均按 <code>CSCC/team_submission</code> 归档证据原样汇总，不跨版混用：</p>
+<h3 id="3-1-端到端性能与单组件消融表现"><a href="#3-1-端到端性能与单组件消融表现" class="headerlink" title="3.1 端到端性能与单组件消融表现"></a>3.1 端到端性能与单组件消融表现</h3><ol>
+<li><strong>3 轮验证中位数（<code>delivery_package_validation.json</code>，BW <code>gfx936</code>）</strong>：</li>
+</ol>
 <table>
 <thead>
 <tr>
-<th align="left">评测平台与核心指标</th>
-<th align="center">官方基线 (Baseline)</th>
-<th align="center">优化后终极版 (Ours)</th>
-<th align="center">性能提升 &#x2F; 收益幅度</th>
+<th align="left">核心指标</th>
+<th align="left">实测三轮原始值</th>
+<th align="left">中位数结果</th>
+<th align="left">说明 &#x2F; 对比参考</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><strong>BW (<code>gfx936</code>) Decode 吞吐</strong></td>
-<td align="center">31.92 tokens&#x2F;s</td>
-<td align="center"><strong>129.93 tokens&#x2F;s</strong></td>
-<td align="center"><strong>4.07x 提速</strong></td>
+<td align="left"><strong>Decode 吞吐</strong></td>
+<td align="left">169.28 &#x2F; 169.00 &#x2F; 186.19</td>
+<td align="left"><strong>169.28 tok&#x2F;s</strong></td>
+<td align="left">总输出 token &#x2F; 含 Prefill 总批处理时间；第 3 轮波动至 ~186 原因暂未定，按保守中位数汇报</td>
 </tr>
 <tr>
-<td align="left"><strong>BW (<code>gfx936</code>) TPOT 逐词延迟</strong></td>
-<td align="center">31.42 ms</td>
-<td align="center"><strong>11.43 ms</strong></td>
-<td align="center"><strong>2.75x 加速</strong></td>
+<td align="left"><strong>TPOT</strong></td>
+<td align="left">8.31 &#x2F; 8.30 &#x2F; 8.29</td>
+<td align="left"><strong>8.30 ms</strong></td>
+<td align="left">每步自回归平均延迟</td>
 </tr>
 <tr>
-<td align="left"><strong>BW (<code>gfx936</code>) Prefill 吞吐</strong></td>
-<td align="center">319.16 tokens&#x2F;s</td>
-<td align="center"><strong>926.01 tokens&#x2F;s</strong></td>
-<td align="center"><strong>2.90x 提速</strong></td>
+<td align="left"><strong>Prefill 吞吐</strong></td>
+<td align="left">930.43 &#x2F; 929.86 &#x2F; 921.50</td>
+<td align="left"><strong>929.86 tok&#x2F;s</strong></td>
+<td align="left">长短请求混合基准中位数</td>
 </tr>
 <tr>
-<td align="left"><strong>BW (<code>gfx936</code>) TTFT 首字延迟</strong></td>
-<td align="center">32.87 ms</td>
-<td align="center"><strong>11.34 ms</strong></td>
-<td align="center"><strong>2.90x 加速</strong></td>
+<td align="left"><strong>TTFT</strong></td>
+<td align="left">11.29 &#x2F; 11.29 &#x2F; 11.39</td>
+<td align="left"><strong>11.29 ms</strong></td>
+<td align="left">首 token 响应延迟</td>
 </tr>
 <tr>
-<td align="left"><strong>Z200 (<code>gfx906</code>) Decode 吞吐</strong></td>
-<td align="center">21.35 tokens&#x2F;s</td>
-<td align="center"><strong>56.36 tokens&#x2F;s</strong></td>
-<td align="center"><strong>2.64x 提速</strong></td>
-</tr>
-<tr>
-<td align="left"><strong>Z200 (<code>gfx906</code>) 32.5K 峰值显存</strong></td>
-<td align="center">&gt;75 GB (原生 OOM) &#x2F; 8.45 GB</td>
-<td align="center"><strong>5.68 GB</strong> (双通道) &#x2F; <strong>4.30 GB</strong> (单通道)</td>
-<td align="center"><strong>彻底消除端侧 OOM</strong></td>
-</tr>
-<tr>
-<td align="left"><strong>正确性与精度门禁 (62项全量)</strong></td>
-<td align="center">-</td>
-<td align="center"><strong>A集 10&#x2F;10 0-ULP &#x2F; C集 1.000</strong></td>
-<td align="center"><strong>100% 严苛通过</strong></td>
+<td align="left"><strong>C 集进程峰值显存</strong></td>
+<td align="left">5797.74 &#x2F; 5797.74 &#x2F; 5798.74</td>
+<td align="left"><strong>5797.74 MiB</strong></td>
+<td align="left"><code>kv_cache_oom = false</code>；包含权重、激活与部分上下文缓冲</td>
 </tr>
 </tbody></table>
-<hr>
-<h2 id="六、-结语与一点个人感悟"><a href="#六、-结语与一点个人感悟" class="headerlink" title="六、 结语与一点个人感悟"></a>六、 结语与一点个人感悟</h2><p>回看整个优化过程，最深的一个体会是：<strong>高性能计算与大模型推理系统优化，从来不是靠单一的“银弹”，而是对硬件微架构边界、内存层级与数学等价性的极致抠细节。</strong> 从发现 $M&#x3D;1$ 下合并投影不破坏归约树的数学特性，到用 <code>UntypedStorage</code> 省下几 GB 显存，每一步都需要拿真实的 Profiler 数据和严苛的门禁测试说话。</p>
-<p>作为一名在校本科生，很庆幸能在这个技术变革的时代，借助先进的工具快速跨越底层门槛，去触碰以前只有资深系统工程师才能接触到的工业级真问题。先把系统跑通、把性能榨干、把每一个优化背后的物理逻辑彻底搞懂，这大概就是属于我们这一代 CS 学生最踏实的进阶路径吧。</p>
-<p><em>（下一篇准备整理一下本次比赛第二题——动态稀疏矩阵乘 SpMM 在 Wave64 架构下的标量化与 100% Occupancy 调优笔记，敬请期待 hh）</em></p>
+<p><em>注：与早期同平台官方未经图池与算子融合的基准（Decode <code>31.92 tok/s</code>）相比，当前 <code>169.28 tok/s</code> 实现了约 <code>5.30x</code> 吞吐提升。</em></p>
+<ol start="2">
+<li><strong>8 轮交替配对盲测（<code>mlp_paired_b.json</code>，BAAB&#x2F;ABBA，B 集 10 样本）</strong>：<br>在<strong>同一套已经开启 QKV 融合与 RoPE&#x2F;Add-RMSNorm 优化</strong>的对照模型基础上，单独对比开启与关闭 <code>gate_up_gemv_silu</code>：<ul>
+<li>Decode 吞吐中位数由 <strong><code>137.74 tok/s</code> 提升至 <code>169.22 tok/s</code>（+22.85%）</strong>；</li>
+<li>TPOT 中位数由 <strong><code>10.21 ms</code> 压缩至 <code>8.37 ms</code></strong>。</li>
+</ul>
+</li>
+</ol>
+<h3 id="3-2-必须写清的正确性边界与未解决事项"><a href="#3-2-必须写清的正确性边界与未解决事项" class="headerlink" title="3.2 必须写清的正确性边界与未解决事项"></a>3.2 必须写清的正确性边界与未解决事项</h3><p>做系统优化最怕只报加速比、把边角分歧藏在桌底下。经多轮审计后，这版代码在正确性与门禁覆盖上明确存在三条边界：</p>
+<ul>
+<li><strong>A 集与 C 集完全对齐，Inject 测试通过</strong>：A 集单条 10&#x2F;10、A 集批量 10&#x2F;10 的 <code>exact_match_rate</code> 均为 <code>1.0</code>；C 集 4 条长上下文位置匹配率（<code>position_match_rate</code>）为 <code>1.0</code>。另外在 <code>mlp_real_nonfinite_probe</code> 中向 Decode Graph 注入 NaN&#x2F;Inf 后，成功抛出了 <code>FloatingPointError(&quot;Non-finite model logits in graph decode&quot;)</code>，证明异常保护仍在生效。</li>
+<li><strong>B 集 10 条样本中存在 2 条离散 token 分歧</strong>：在公开 B 集 10 条 × 256 步生成对比中，候选方案与不带 <code>gate_up_gemv_silu</code> 的对照版本相比，<strong>第 3 条样本（第 137 步）与第 5 条样本（第 69 步）</strong> 出现了 argmax 选词分歧，其余 8 条全对齐。根因正是融合 GEMV 改变了 <code>gate/up</code> 的浮点累加结合序，单层 1e-4 量级的极微差异在长程自回归中遇到次高概率非常接近 Top-1 的位置时翻转了选词。是否接受这类分歧取决于评测集容忍度。</li>
+<li><strong>阈值口径属于练习策略而非正式终审</strong>：本次 C 集检测所依据的 <code>0.98</code> 最低位置匹配率来自本地练习策略文件 <code>practice_policy.json</code>（策略文本备注明确说明 <em>“仅供学生练习……正式阈值以组委会后续公布为准”</em>，官方正式评判策略中的 C 集阈值彼时尚未设定）。因此这个 <code>PASS</code> 只代表符合本地练习门禁，不能外推表述为“官方终评完全验收”。</li>
+</ul>
+<p>回头看这题最大的收获，不是把吞吐从 30 多拉到 169 的数字本身，而是在最后两次审查里亲手把“看似无代价的 0-VRAM”、“以为能停掉 EOS 尾巴的 REPLAY_CHUNK”、“微米级误差会如何传导成第 69 步的 token 分歧”全拆了一遍——知道每一毫秒加速是用什么假设和代价换来的，比单纯挂个加速比靠谱得多。</p>
 
     </div>
 
@@ -411,8 +429,8 @@
                 </a>
             </div>
             <div class="post-nav-item">
-                <a href="/2026/11/09/%E5%85%88%E5%AF%BC%E6%9D%AF%E5%8A%A8%E6%80%81%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E4%B9%98SpMM%E5%BC%82%E6%9E%84%E7%AE%97%E5%AD%90%E6%9E%81%E9%99%90%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5/" rel="next" title="深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优">
-                  深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优 <i class="fa fa-angle-right"></i>
+                <a href="/2026/11/09/%E5%85%88%E5%AF%BC%E6%9D%AF%E5%8A%A8%E6%80%81%E7%A8%80%E7%96%8F%E7%9F%A9%E9%98%B5%E4%B9%98SpMM%E5%BC%82%E6%9E%84%E7%AE%97%E5%AD%90%E6%9E%81%E9%99%90%E4%BC%98%E5%8C%96%E5%AE%9E%E8%B7%B5/" rel="next" title="深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优">
+                  深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优 <i class="fa fa-angle-right"></i>
                 </a>
             </div>
           </div>
