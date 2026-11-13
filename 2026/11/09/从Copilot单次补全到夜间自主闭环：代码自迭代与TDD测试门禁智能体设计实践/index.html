@@ -18,15 +18,15 @@
 
 <script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
 
-    <meta name="description" content="大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都要跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，这段时间刚打完先导杯（海光 DCU 上的算子与推理优化），这两天又在看 世界计算大会 × 昆仑元 × AMD 黑客松 的赛题规则。 赛制里有个让我特别在意的环节叫 “碳硅接力 &#x2F; 夜间自主研发”：白">
+    <meta name="description" content="大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在跟进 世界计算大会 × 昆仑元 × AMD 黑客松。这次赛制里最戳我的环节是 “24h 碳硅接力 &#x2F; 夜间自主研发”——白天由人类定义任务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践">
+<meta property="og:title" content="从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践">
 <meta property="og:url" content="https://archyup.github.io/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/index.html">
 <meta property="og:site_name" content="Archyのcs之旅">
-<meta property="og:description" content="大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都要跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，这段时间刚打完先导杯（海光 DCU 上的算子与推理优化），这两天又在看 世界计算大会 × 昆仑元 × AMD 黑客松 的赛题规则。 赛制里有个让我特别在意的环节叫 “碳硅接力 &#x2F; 夜间自主研发”：白">
+<meta property="og:description" content="大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在跟进 世界计算大会 × 昆仑元 × AMD 黑客松。这次赛制里最戳我的环节是 “24h 碳硅接力 &#x2F; 夜间自主研发”——白天由人类定义任务">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2026-11-09T06:35:00.000Z">
-<meta property="article:modified_time" content="2026-11-12T18:07:25.021Z">
+<meta property="article:modified_time" content="2026-11-13T18:00:00.000Z">
 <meta property="article:author" content="Archy">
 <meta property="article:tag" content="AI Agent">
 <meta property="article:tag" content="CS">
@@ -39,10 +39,10 @@
 <link rel="canonical" href="https://archyup.github.io/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/">
 
 
-<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://archyup.github.io/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/","path":"2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践"}</script>
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://archyup.github.io/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/","path":"2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践"}</script>
 
 <script class="next-config" data-name="calendar" type="application/json">""</script>
-<title>从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践 | Archyのcs之旅</title>
+<title>从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践 | Archyのcs之旅</title>
   
 
 
@@ -93,7 +93,7 @@
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 <link rel="alternate" href="/atom.xml" title="Archyのcs之旅" type="application/atom+xml">
-<script>window.__QINGYA_POST_INDEX__ = [{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践","shortTitle":"基于 TDD 测试门禁的代码自迭代智能体原型实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都要跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，这段时间刚打完先导杯（海光 DCU 上的算子与推理优化），这两天又在看 世界计..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","算子优化"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇 Qwen2.5-1.5B 推理底座的总结，这篇复盘先导杯（CSCC）第二道赛题——动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, C &#x3D; A × B） 与扩展掩码融合算子 ns_spmm_fused_mask 的 HIP 内核调优过程。 yysy，以前..."},{"title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践","shortTitle":"32K 长上下文 KV 复用与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","大模型推理","ROCm/HIP"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
+<script>window.__QINGYA_POST_INDEX__ = [{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践","shortTitle":"基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在跟进 世界计算大会..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","算子优化","ROCm/HIP"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇 Qwen2.5-1.5B 推理底座的总结，这篇复盘先导杯（CSCC）第二道赛题——动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, C &#x3D; A × B） 与扩展掩码融合算子 ns_spmm_fused_mask 的 HIP 内核调优过程。 yysy，以前..."},{"title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践","shortTitle":"32K 长上下文 KV 复用与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","大模型推理"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -154,7 +154,7 @@
       <div class="sidebar-panel-container">
         <!--noindex-->
         <div class="post-toc-wrap sidebar-panel">
-            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E9%97%AE%E9%A2%98%E6%8B%86%E8%A7%A3%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E8%BF%AD%E4%BB%A3%E4%B8%8D%E8%83%BD%E5%8F%AA%E6%98%AF%E2%80%9C%E5%A4%9A%E8%BD%AE%E5%AF%B9%E8%AF%9D%E2%80%9D"><span class="nav-text">一、 问题拆解：为什么夜间自主迭代不能只是“多轮对话”</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E7%8E%B0%E6%9C%89%E6%A0%B8%E5%BF%83%E6%A8%A1%E5%9D%97%EF%BC%9A%E5%88%B0%E5%BA%95%E5%81%9A%E4%BA%86%E4%BB%80%E4%B9%88%EF%BC%8C%E6%B2%A1%E5%81%9A%E4%BB%80%E4%B9%88"><span class="nav-text">二、 现有核心模块：到底做了什么，没做什么</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-ToolBox-%E7%9A%84%E7%BA%A6%E6%9D%9F%E8%AE%BE%E8%AE%A1%EF%BC%8C%E4%BB%A5%E5%8F%8A%E7%9B%AE%E5%89%8D%E7%A6%BB%E2%80%9C%E7%9C%9F%E6%B2%99%E7%AE%B1%E2%80%9D%E7%9A%84%E5%B7%AE%E8%B7%9D"><span class="nav-text">2.1 ToolBox 的约束设计，以及目前离“真沙箱”的差距</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-%E7%8A%B6%E6%80%81%E6%9C%BA%E4%B8%BB%E5%BE%AA%E7%8E%AF%E4%B8%8E-AST-%E6%8B%A6%E6%88%AA"><span class="nav-text">2.2 状态机主循环与 AST 拦截</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-%E5%8F%8C%E5%90%8E%E7%AB%AF%EF%BC%9ALiveLLMClient-%E4%B8%8E%E7%A6%BB%E7%BA%BF-DeterministicMockLLM"><span class="nav-text">2.3 双后端：LiveLLMClient 与离线 DeterministicMockLLM</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E9%97%AD%E7%8E%AF%E6%B5%81%E7%A8%8B%E6%BC%94%E7%A4%BA%E4%B8%8E%E7%B2%BE%E5%BA%A6%E8%87%AA%E6%9F%A5"><span class="nav-text">三、 闭环流程演示与精度自查</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E5%B7%B2%E7%9F%A5%E9%99%90%E5%88%B6%E4%B8%8E%E5%90%8E%E7%BB%AD%E5%BE%85%E5%AE%8C%E5%96%84%E8%BE%B9%E7%95%8C"><span class="nav-text">四、 已知限制与后续待完善边界</span></a></li></ol></div>
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E4%BB%8E%E2%80%9C%E5%8E%9F%E5%9E%8B%E6%BC%8F%E6%B4%9E%E6%B8%85%E5%8D%95%E2%80%9D%E5%88%B0-24h-%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%E7%9A%84%E5%B7%A5%E7%A8%8B%E8%BF%9B%E5%8C%96"><span class="nav-text">一、 从“原型漏洞清单”到 24h 碳硅接力的工程进化</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E5%88%86%E5%B1%82%E9%9A%94%E7%A6%BB%E6%B2%99%E7%AE%B1%E4%B8%8E%E9%98%B2%E4%BD%9C%E5%BC%8A%E8%BE%B9%E7%95%8C%EF%BC%9Asrc-sandbox-py"><span class="nav-text">二、 分层隔离沙箱与防作弊边界：src&#x2F;sandbox.py</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-PathGuard%EF%BC%9A%E5%B0%81%E6%AD%BB%E7%9B%AE%E5%BD%95%E7%A9%BF%E8%B6%8A%E3%80%81%E8%BD%AF%E9%93%BE%E9%80%83%E9%80%B8%E4%B8%8E%E9%9A%90%E8%97%8F%E6%B5%8B%E8%AF%95%E7%AA%A5%E6%8E%A2"><span class="nav-text">2.1 PathGuard：封死目录穿越、软链逃逸与隐藏测试窥探</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-IsolatedTestRunner%EF%BC%9A%E4%B8%B4%E6%97%B6%E5%8F%AA%E8%AF%BB%E5%89%AF%E6%9C%AC%E3%80%81%E7%8E%AF%E5%A2%83%E5%8F%98%E9%87%8F%E6%B8%85%E6%B4%97%E4%B8%8E%E8%BF%9B%E7%A8%8B%E7%BB%84%E7%9C%8B%E9%97%A8%E7%8B%97"><span class="nav-text">2.2 IsolatedTestRunner：临时只读副本、环境变量清洗与进程组看门狗</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-3-ASTPolicyInspector-%E4%B8%8E-IntegrityMonitor"><span class="nav-text">2.3 ASTPolicyInspector 与 IntegrityMonitor</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-4-%E8%AF%9A%E5%AE%9E%E6%A0%87%E6%B3%A8%E7%89%A9%E7%90%86%E9%9A%94%E7%A6%BB%E8%BE%B9%E7%95%8C"><span class="nav-text">2.4 诚实标注物理隔离边界</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-ReAct-%E5%A4%9A%E6%96%87%E4%BB%B6%E5%8D%8F%E5%90%8C%E3%80%81%E5%8F%8C%E5%8D%8F%E8%AE%AE%E9%99%8D%E7%BA%A7%E4%B8%8E%E9%98%B2%E9%80%80%E5%8C%96%E9%97%AD%E7%8E%AF"><span class="nav-text">三、 ReAct 多文件协同、双协议降级与防退化闭环</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-Patch-ReAct-%E5%8F%8C%E6%A8%A1%E5%B7%A5%E5%85%B7%E9%93%BE%EF%BC%88src-tools-py-src-agent-py%EF%BC%89"><span class="nav-text">3.1 Patch &#x2F; ReAct 双模工具链（src&#x2F;tools.py &amp; src&#x2F;agent.py）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E5%8F%8C%E5%8D%8F%E8%AE%AE%E8%87%AA%E5%8A%A8%E9%99%8D%E7%BA%A7%E4%B8%8E%E6%9C%AC%E5%9C%B0%E7%AE%97%E5%8A%9B%E9%A2%84%E8%AE%BE%EF%BC%88src-llm-backend-py%EF%BC%89"><span class="nav-text">3.2 双协议自动降级与本地算力预设（src&#x2F;llm_backend.py）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E8%AF%84%E5%88%86%E9%98%B2%E9%80%80%E5%8C%96%E5%9B%9E%E6%BB%9A%E3%80%81%E5%81%9C%E6%BB%9E%E7%86%94%E6%96%AD%E4%B8%8E-Holdout-%E9%AA%8C%E6%94%B6"><span class="nav-text">3.3 评分防退化回滚、停滞熔断与 Holdout 验收</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-24h%E3%80%8C%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%E3%80%8D%E7%BC%96%E6%8E%92%E5%99%A8%E4%B8%8E%E9%9B%B6%E4%BE%9D%E8%B5%96%E5%AE%9E%E6%97%B6%E5%B7%A5%E4%BD%9C%E5%8F%B0"><span class="nav-text">四、 24h「碳硅接力」编排器与零依赖实时工作台</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E8%B7%A8%E4%BB%BB%E5%8A%A1%E5%85%A8%E9%87%8F%E5%9B%9E%E5%BD%92%E4%B8%8E%E6%99%A8%E9%97%B4%E4%BA%A4%E6%8E%A5%E7%AE%80%E6%8A%A5%EF%BC%88src-relay-py-run-relay-py%EF%BC%89"><span class="nav-text">4.1 跨任务全量回归与晨间交接简报（src&#x2F;relay.py + run_relay.py）</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E9%9B%B6%E4%BE%9D%E8%B5%96-HTTP-SSE-%E5%8F%8C%E6%A8%A1%E5%B7%A5%E4%BD%9C%E5%8F%B0%EF%BC%88run-web-py-web-index-html%EF%BC%89"><span class="nav-text">4.2 零依赖 HTTP + SSE 双模工作台（run_web.py + web&#x2F;index.html）</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E5%9F%BA%E5%87%86%E9%87%8D%E6%9E%84%E4%B8%8E%E5%AE%9E%E6%B5%8B%E9%AA%8C%E8%AF%81%EF%BC%88Proof-of-Work%EF%BC%89"><span class="nav-text">五、 基准重构与实测验证（Proof of Work）</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#5-1-23-%E9%A1%B9%E5%8D%95%E5%85%83%E6%B5%8B%E8%AF%95%E4%B8%8E%E5%AF%B9%E6%8A%97%E6%80%A7%E8%87%AA%E6%A3%80%E5%AE%9E%E6%B5%8B"><span class="nav-text">5.1 23 项单元测试与对抗性自检实测</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#5-2-CLI-%E5%86%92%E7%83%9F%E4%B8%8E-24h-%E5%A4%9C%E9%97%B4%E6%8E%A5%E5%8A%9B%E5%AE%9E%E8%B7%91%E8%BE%93%E5%87%BA"><span class="nav-text">5.2 CLI 冒烟与 24h 夜间接力实跑输出</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%85%AD%E3%80%81-%E5%B7%B2%E7%9F%A5%E8%BE%B9%E7%95%8C%E4%B8%8E%E4%B8%8B%E4%B8%80%E6%AD%A5%E6%BC%94%E8%BF%9B"><span class="nav-text">六、 已知边界与下一步演进</span></a></li></ol></div>
         </div>
         <!--/noindex-->
 
@@ -228,12 +228,12 @@
     </span>
 
     <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
-      <meta itemprop="name" content="从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践 | Archyのcs之旅">
+      <meta itemprop="name" content="从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践 | Archyのcs之旅">
       <meta itemprop="description" content="">
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体原型实践
+          从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践
         </h1>
 
         <div class="post-meta-container">
@@ -251,7 +251,7 @@
         <i class="far fa-calendar-check"></i>
       </span>
       <span class="post-meta-item-text">更新于</span>
-      <time title="修改时间：2026-11-13 02:07:25" itemprop="dateModified" datetime="2026-11-13T02:07:25+08:00">2026-11-13</time>
+      <time title="修改时间：2026-11-14 02:00:00" itemprop="dateModified" datetime="2026-11-14T02:00:00+08:00">2026-11-14</time>
     </span>
     <span class="post-meta-item">
       <span class="post-meta-item-icon">
@@ -272,114 +272,234 @@
     
     
     
-    <div class="post-body" itemprop="articleBody"><p>大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都要跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。</p>
-<p>转到大二上学期，这段时间刚打完先导杯（海光 DCU 上的算子与推理优化），这两天又在看 <strong>世界计算大会 × 昆仑元 × AMD 黑客松</strong> 的赛题规则。</p>
-<p>赛制里有个让我特别在意的环节叫 <strong>“碳硅接力 &#x2F; 夜间自主研发”</strong>：白天由选手写清楚接口骨架和测试用例，夜间人离场，交给脚本里的 Agent 自己跑编译与单测、读取报错再改代码，第二天早上看结果。</p>
-<p><i>yysy，平时用 Copilot 或 Cursor 补全时，我们其实很少意识到自己充当了多少“人肉胶水”：模型给一段代码，人手动点 Accept、跑测试、把 Traceback 贴回对话框、再让它改。一旦真的让人退场过夜，最大的问题通常不是模型不会写某一行语法，而是没有强约束时很容易出现两种翻车：要么死循环空转，要么模型为了“让单测通过”干脆把测试文件里的断言改掉。</i></p>
-<p>为了先把这套思路跑通，我这几天写了一个叫 <strong>ACS-Agent（Autonomous Code Synthesis &amp; Verification Agent）</strong> 的实验性脚手架。先说明边界：目前它还是一个<strong>验证控制流与 TDD 闭环机制的轻量原型</strong>，在真实 LLM 泛化评估、系统级安全沙箱和严格数值测试上都还有明显的待完善项。这篇笔记就把代码架构、演示机制以及这次代码审查后暴露出的问题和工程边界一起摊开记录清楚。</p>
+    <div class="post-body" itemprop="articleBody"><p>大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。</p>
+<p>转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在跟进 <strong>世界计算大会 × 昆仑元 × AMD 黑客松</strong>。这次赛制里最戳我的环节是 <strong>“24h 碳硅接力 &#x2F; 夜间自主研发”</strong>——白天由人类定义任务队列、接口骨架与测试契约，夜间选手全部撤场，让 Agent 在本地算力或网关节点（如昆仑 GPT-Factory One &#x2F; AI Agent Gateway、AMD Ryzen AI MAX+ 395 本地推理等）上无人值守自主编码、自测、纠错、回滚，第二天早上人类直接拿交接报告接续推进。</p>
+<p><i>yysy，平时用 Copilot 或 Cursor 写代码时，我们很容易低估自己充当了多少“人肉胶水”：模型给一段补全，人手动点 Accept、切终端跑单测、把 Traceback 贴回对话框再改。真到夜间撤场跑自主循环时，没有强约束马上会翻车：要么死循环把 Token 烧干，要么模型为了“让单测通过”直接去改测试断言；而更隐蔽的翻车点，则是我 11 月 9 日写第一版原型后回头审代码时暴露出来的那一堆工程欠账——没有路径逃逸校验、测试跑在原工作区没有只读隔离、单文件全量覆写、以及拿 <code>round(..., 6)</code> 去冒充 <code>0-ULP</code> 精度。</i></p>
+<p>这几天我把这套 <strong>ACS-Agent（Autonomous Code Synthesis &amp; Verification Agent）</strong> 彻底重构了一遍，开源在 GitHub：<a target="_blank" rel="noopener" href="https://github.com/aarchyyy/autonomous-code-agent">https://github.com/aarchyyy/autonomous-code-agent</a>。新版核心引擎与实时工作台完全基于 <strong>Python 3.9+ 标准库（零第三方强制依赖）</strong>，补齐了 <strong><code>PathGuard</code> 路径与软链拦截、临时只读副本 + 密钥脱敏 + <code>python -I</code> + <code>RLIMIT</code> 沙箱、SHA-256 门禁完整性核验、多文件 ReAct 与双协议降级、最佳分数回滚与防停滞熔断、隐藏 Holdout 防过拟合、以及 24h 夜间接力编排与晨间交接简报</strong>。目前 <strong>23 项框架与对抗性单元测试全部通过</strong>（<code>6.003s</code>），这篇就把重构前后的工程对比、核心模块实现和真实验证边界一次记清楚。</p>
 <span id="more"></span>
 
 <hr>
-<h2 id="一、-问题拆解：为什么夜间自主迭代不能只是“多轮对话”"><a href="#一、-问题拆解：为什么夜间自主迭代不能只是“多轮对话”" class="headerlink" title="一、 问题拆解：为什么夜间自主迭代不能只是“多轮对话”"></a>一、 问题拆解：为什么夜间自主迭代不能只是“多轮对话”</h2><p>把代码生成从单次交互拉长成无人值守的循环，本质上是把原本由人类做的三件事接管下来：<strong>运行门禁、截取有限上下文的报错、限制允许改动的文件范围</strong>。</p>
+<h2 id="一、-从“原型漏洞清单”到-24h-碳硅接力的工程进化"><a href="#一、-从“原型漏洞清单”到-24h-碳硅接力的工程进化" class="headerlink" title="一、 从“原型漏洞清单”到 24h 碳硅接力的工程进化"></a>一、 从“原型漏洞清单”到 24h 碳硅接力的工程进化</h2><p>在 11 月 9 日初版复盘里，我列出了当时原型暴露的几项硬伤：文件写入没有原子替换、<code>_resolve_path</code> 没拦截 <code>..</code> 穿越、测试直接在宿主机原目录跑、没有测试前后哈希校验、Case 1 缺负索引检查、Case 2 用 <code>round(..., 6)</code> 充数等。这次重构直接按“<strong>人夜间真的敢撤场</strong>”的标准，把这些问题逐项用代码填实：</p>
 <table>
 <thead>
 <tr>
-<th align="left">维度</th>
-<th align="left">常见补全工具</th>
-<th align="left">对话框多轮调试</th>
-<th align="left">带 TDD 门禁的脚本闭环</th>
+<th align="left">工程维度</th>
+<th align="left">初版原型（11 月 9 日审计前）</th>
+<th align="left">重构后系统（当前 <code>main</code>）</th>
 </tr>
 </thead>
 <tbody><tr>
-<td align="left"><strong>驱动模式</strong></td>
-<td align="left">光标处被动预测下一行</td>
-<td align="left">依赖人复制报错与发起下一轮</td>
-<td align="left">由 <code>unittest</code> 失败状态触发下一轮迭代</td>
+<td align="left"><strong>路径与写权限控制</strong></td>
+<td align="left">应用层约定只传 <code>target_file</code>，未拦截 <code>..</code> 与软链</td>
+<td align="left"><code>PathGuard</code> 基于 <code>os.path.realpath</code> + <code>os.path.commonpath</code> 封死穿越与软链逃逸，强制 <code>writable_files</code> 白名单与 <code>.git</code>&#x2F;<code>.acs_runs</code> 禁用</td>
 </tr>
 <tr>
-<td align="left"><strong>上下文来源</strong></td>
-<td align="left">附近代码窗口</td>
-<td align="left">人手动粘贴整段终端日志</td>
-<td align="left">扫描并截取关键报错行，避免撑爆上下文</td>
+<td align="left"><strong>测试执行隔离</strong></td>
+<td align="left"><code>subprocess.run</code> 直接在当前目录与环境跑 <code>unittest</code></td>
+<td align="left"><code>IsolatedTestRunner</code>：临时目录拷贝（隐藏 Holdout 隔离）、受保护文件 <code>0o444</code> 只读、剥离密钥环境变量、<code>python -I</code>、POSIX <code>RLIMIT</code> 与进程组超时强杀</td>
 </tr>
 <tr>
-<td align="left"><strong>防作弊边界</strong></td>
-<td align="left">人肉审代码</td>
-<td align="left">人肉阻止改测试</td>
-<td align="left">调度层限定可写路径，不向测试文件开放写接口</td>
+<td align="left"><strong>落盘与门禁完整性</strong></td>
+<td align="left">普通 <code>open(..., &quot;w&quot;)</code> 覆写；无哈希校验</td>
+<td align="left">临时文件写入 + <code>os.replace</code> 原子替换；<code>IntegrityMonitor</code> 测试前后双次核验受保护&#x2F;Holdout 文件 <strong>SHA-256</strong></td>
 </tr>
 <tr>
-<td align="left"><strong>当前定位</strong></td>
-<td align="left">成熟日常助手</td>
-<td align="left">成熟交互方式</td>
-<td align="left">探索夜间循环的自动化脚本原型</td>
+<td align="left"><strong>编辑与推理范式</strong></td>
+<td align="left">单文件全量覆写，仅适配标准 Chat 接口</td>
+<td align="left"><strong>Patch &#x2F; ReAct 双模</strong>：支持 <code>list_files</code>、<code>read_file</code>、<code>search_code</code>、<code>patch_file</code>、<code>write_file</code>、<code>run_tests</code>，HTTP 400 自动降级文本 <code>[TOOL_CALL]</code> 协议</td>
+</tr>
+<tr>
+<td align="left"><strong>防退化与防过拟合</strong></td>
+<td align="left">改坏越改越烂只能硬撞 <code>max_iterations</code></td>
+<td align="left"><code>FileSnapshotManager</code> 按 <code>(passed_flag, passed_count, -failed_count)</code> 退化即回滚；Patch 模式连续重复错误态 3 次以 <code>STALLED</code> 熔断；支持 <strong>隐藏 Holdout</strong> 门禁</td>
+</tr>
+<tr>
+<td align="left"><strong>夜间多任务接力</strong></td>
+<td align="left">仅支持单算例 Demo</td>
+<td align="left"><code>RelayOrchestrator</code>：多任务队列、墙钟预算与连续失败熔断、<strong>跨任务全量回归回滚</strong>、可选 <code>acs-relay/&lt;run_id&gt;</code> Git 分支提交、生成 <code>HANDOVER_REPORT.md</code> 与 <code>audit_events.jsonl</code></td>
+</tr>
+<tr>
+<td align="left"><strong>基准测试严谨度</strong></td>
+<td align="left">Case 2 用 <code>round(..., 6)</code> 误标为 <code>0-ULP</code></td>
+<td align="left">Case 2 改用 <code>struct.pack(&quot;!f&quot;, ...)</code> 真实 IEEE-754 <code>float32</code> 比特对齐（<code>test_benchmarks_rigor.py</code> 验证 <code>round(..., 6)</code> 必挂）；新增 Case 4 多文件调度 + Holdout</td>
 </tr>
 </tbody></table>
-<p>整个系统的主循环可以画成下面这条控制流：</p>
+<p>整套“夜间自主接力 + 隔离验证”的控制流如下：</p>
 <pre>
 <code class="mermaid">
 
 flowchart TD
-    S[&quot;读取目标源码与 TDD 测试说明&quot;] --&gt; G[&quot;调用 LLM 后端生成完整目标源码&quot;]
-    G --&gt; AST{&quot;AST 语法预检&quot;}
-    AST -- &quot;SyntaxError&quot; --&gt; F1[&quot;拒绝落盘 (SYNTAX_ERROR)，保留磁盘旧代码&quot;]
-    F1 --&gt; LIMIT{&quot;超过 max_iterations?&quot;}
-    AST -- &quot;通过&quot; --&gt; W[&quot;写入 target_file（测试文件不在写接口作用域）&quot;]
-    W --&gt; T{&quot;执行 unittest 子进程（15s 超时）&quot;}
-    T -- &quot;returncode &#x3D;&#x3D; 0&quot; --&gt; OK[&quot;退出循环并输出 diff 记录&quot;]
-    T -- &quot;FAIL &#x2F; ERROR &#x2F; Timeout&quot; --&gt; E[&quot;按关键字提取 Traceback 喂给下一轮&quot;]
-    E --&gt; LIMIT
-    LIMIT -- &quot;否&quot; --&gt; G
-    LIMIT -- &quot;是&quot; --&gt; FAIL[&quot;终止并保留过程历史&quot;]
+    IN[&quot;白天碳基输入: relay_plan.json &#x2F; 目标源码 &#x2F; 不可变测试 + 可选 Holdout&quot;] --&gt; SBX[&quot;IsolatedTestRunner: 临时只读副本 + 密钥脱敏 + python -I + rlimit&quot;]
+    SBX --&gt; GATE{&quot;TDD 门禁是否全量 PASS?&quot;}
+    GATE -- &quot;是&quot; --&gt; POST{&quot;隐藏 Holdout 与跨任务全量回归&quot;}
+    POST -- &quot;全部通过&quot; --&gt; OUT[&quot;保存快照 &#x2F; 可选 Git 分支提交 -&gt; 生成 HANDOVER_REPORT.md&quot;]
+    POST -- &quot;Holdout 或回归失败&quot; --&gt; RB1[&quot;FileSnapshotManager 自动回滚并记录告警&quot;]
+    GATE -- &quot;否&quot; --&gt; SCORE{&quot;通过数是否发生退化?&quot;}
+    SCORE -- &quot;是&quot; --&gt; RB2[&quot;回滚至最高分最佳快照并注入反馈&quot;]
+    SCORE -- &quot;否&quot; --&gt; LOOP[&quot;Patch &#x2F; ReAct 推理引擎 (含停滞检测与历史记忆)&quot;]
+    RB2 --&gt; LOOP
+    LOOP --&gt; AST{&quot;AST 语法&#x2F;策略预检 + PathGuard 写白名单&quot;}
+    AST -- &quot;拦截&quot; --&gt; LOOP
+    AST -- &quot;通过&quot; --&gt; ATOM[&quot;原子写入授权文件 + 生成 Unified Diff&quot;]
+    ATOM --&gt; SBX
 </code>
 </pre>
 
 <hr>
-<h2 id="二、-现有核心模块：到底做了什么，没做什么"><a href="#二、-现有核心模块：到底做了什么，没做什么" class="headerlink" title="二、 现有核心模块：到底做了什么，没做什么"></a>二、 现有核心模块：到底做了什么，没做什么</h2><p>按真实代码结构看，这个项目主要拆成工具层（<code>src/tools.py</code>）、LLM 后端适配层（<code>src/llm_backend.py</code>）、提示词组装（<code>src/prompts.py</code>）和 ReAct 状态机主循环（<code>src/agent.py</code>）。</p>
-<h3 id="2-1-ToolBox-的约束设计，以及目前离“真沙箱”的差距"><a href="#2-1-ToolBox-的约束设计，以及目前离“真沙箱”的差距" class="headerlink" title="2.1 ToolBox 的约束设计，以及目前离“真沙箱”的差距"></a>2.1 <code>ToolBox</code> 的约束设计，以及目前离“真沙箱”的差距</h3><p>在原型设计里，我希望保证 Agent <strong>只改被测的实现文件，不碰门禁测试文件</strong>，同时别把明显残缺的代码写进工作区，也不能让死循环脚本把宿主机一直卡死。</p>
-<p>在 <code>src/tools.py</code> 里实际落地了三个基础动作：</p>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">class</span> <span class="title class_">ToolBox</span>:</span><br><span class="line">    <span class="keyword">def</span> <span class="title function_">validate_syntax</span>(<span class="params">self, code_str: <span class="built_in">str</span></span>) -&gt; <span class="type">Tuple</span>[<span class="built_in">bool</span>, <span class="built_in">str</span>]:</span><br><span class="line">        <span class="string">&quot;&quot;&quot;落盘前做一次原生 ast.parse 检查&quot;&quot;&quot;</span></span><br><span class="line">        <span class="keyword">try</span>:</span><br><span class="line">            ast.parse(code_str)</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">True</span>, <span class="string">&quot;AST syntax check passed.&quot;</span></span><br><span class="line">        <span class="keyword">except</span> SyntaxError <span class="keyword">as</span> e:</span><br><span class="line">            <span class="keyword">return</span> <span class="literal">False</span>, <span class="string">f&quot;SyntaxError at line <span class="subst">&#123;e.lineno&#125;</span>, col <span class="subst">&#123;e.offset&#125;</span>: <span class="subst">&#123;e.msg&#125;</span>\n  <span class="subst">&#123;e.text&#125;</span>&quot;</span></span><br></pre></td></tr></table></figure>
-
+<h2 id="二、-分层隔离沙箱与防作弊边界：src-sandbox-py"><a href="#二、-分层隔离沙箱与防作弊边界：src-sandbox-py" class="headerlink" title="二、 分层隔离沙箱与防作弊边界：src/sandbox.py"></a>二、 分层隔离沙箱与防作弊边界：<code>src/sandbox.py</code></h2><p>要让 Agent 在夜间自由修改代码而不搞坏仓库，核心防线全部收敛在 <a target="_blank" rel="noopener" href="https://github.com/aarchyyy/autonomous-code-agent/blob/main/src/sandbox.py"><code>src/sandbox.py</code></a> 的四个核心组件中。</p>
+<h3 id="2-1-PathGuard：封死目录穿越、软链逃逸与隐藏测试窥探"><a href="#2-1-PathGuard：封死目录穿越、软链逃逸与隐藏测试窥探" class="headerlink" title="2.1 PathGuard：封死目录穿越、软链逃逸与隐藏测试窥探"></a>2.1 <code>PathGuard</code>：封死目录穿越、软链逃逸与隐藏测试窥探</h3><p>早期的路径解析没有做 <code>realpath</code> 前缀约束，很容易被 <code>../</code> 或符号链接绕过。现在的 <code>PathGuard</code> 在每次读写前都会走一遍 <code>canonicalize</code>：</p>
 <ol>
-<li><strong>文件读写与路径限定</strong>：<code>CodeIterationAgent.execute_step</code> 在代码逻辑上只把 <code>self.target_file</code> 传给 <code>ToolBox.write_source</code>，因此在这个固定 ReAct 循环里，模型输出的代码只会写到目标实现文件，不会覆盖 <code>test_file</code>。<code>write_source</code> 内部就是普通的 <code>open(..., &quot;w&quot;)</code> 工作区文件覆写，还<strong>没有</strong>做临时文件落盘再 <code>os.replace</code> 的原子替换。</li>
-<li><strong>报错行提取</strong>：测试失败时，<code>run_tdd_gate</code> 会按行扫描标准输出与错误流，遇到包含 <code>&quot;FAIL:&quot;</code>、<code>&quot;ERROR:&quot;</code> 或 <code>&quot;Traceback&quot;</code> 的行时打开捕获开关并将后续输出收集起来作为 <code>traceback</code> 片段（若未命中则回退为整段剥除首尾空白的原始输出 <code>raw_output.strip()</code>），而不是依赖复杂正则解析调用帧。</li>
-<li><strong>关于“沙箱”的真实水位（重要边界）</strong>：<code>run_tdd_gate</code> 目前底层只是调用标准库 <code>subprocess.run(..., timeout=timeout)</code> 在当前 Python 环境中跑 <code>unittest</code>（<code>[sys.executable, &quot;-m&quot;, &quot;unittest&quot;, abs_test_path]</code>），默认超时 15 秒。也就是说，<strong>现阶段代码里并没有文件系统权限隔离（比如 <code>chmod</code> 只读锁）、路径穿越校验（<code>_resolve_path</code> 未拦截 <code>..</code> 逃逸）、网络隔离或容器&#x2F;chroot 进程隔离</strong>。它依赖的是调度层不乱传路径的“应用层约定”；如果直接挂接一个拥有自由 Bash 权限的模型或跑在不可信代码仓库里，这样的隔离力度显然是不够的。</li>
+<li><strong>符号链接与逃逸拦截</strong>：将相对或绝对路径统一通过 <code>os.path.realpath</code> 解析到真实物理路径（即使目标文件尚未创建，其父目录若是指向工作区外的软链同样会被 <code>realpath</code> 展开），随后校验 <code>os.path.commonpath([self.workspace_root, real_candidate]) == self.workspace_root</code>。</li>
+<li><strong>读写访问控制矩阵（ACL）</strong>：<ul>
+<li>任何访问 <code>.git</code> 或 <code>.acs_runs</code> 目录内部路径的请求直接抛出 <code>PathSecurityError</code>；</li>
+<li><code>hidden_files</code>（隐藏 Holdout 测试）在 <code>check_read</code>、<code>list_files</code>、<code>search_code</code> 中彻底不可见，且在 <code>include_hidden=False</code> 时禁止通过 <code>run_tests</code> 触发；</li>
+<li><code>check_write</code> 强制拦截 <code>protected_files</code>（可见测试文件）并校验文件必须落在 <code>writable_files</code> 授权白名单内。</li>
+</ul>
+</li>
 </ol>
-<h3 id="2-2-状态机主循环与-AST-拦截"><a href="#2-2-状态机主循环与-AST-拦截" class="headerlink" title="2.2 状态机主循环与 AST 拦截"></a>2.2 状态机主循环与 AST 拦截</h3><p><code>src/agent.py</code> 里的 <code>CodeIterationAgent</code> 把每轮执行结果记录在 <code>self.history</code> 列表里，单轮 <code>execute_step</code> 的节奏很直接：</p>
+<h3 id="2-2-IsolatedTestRunner：临时只读副本、环境变量清洗与进程组看门狗"><a href="#2-2-IsolatedTestRunner：临时只读副本、环境变量清洗与进程组看门狗" class="headerlink" title="2.2 IsolatedTestRunner：临时只读副本、环境变量清洗与进程组看门狗"></a>2.2 <code>IsolatedTestRunner</code>：临时只读副本、环境变量清洗与进程组看门狗</h3><p>即便限制了 Agent 的写权限，待测代码本身在 <code>unittest</code> 运行时也可能顺手往当前目录写垃圾文件、试图修改测试文件、读取宿主机环境变量里的 <code>OPENAI_API_KEY</code>，或者陷入死循环。<code>IsolatedTestRunner.run_tests</code> 做了五层隔离：</p>
+<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># src/sandbox.py 核心沙箱隔离执行切片</span></span><br><span class="line">cmd = [</span><br><span class="line">    sys.executable,</span><br><span class="line">    <span class="string">&quot;-I&quot;</span>,  <span class="comment"># 隔离 Python 模式：忽略用户 site-packages 与环境变量 PYTHON*</span></span><br><span class="line">    <span class="string">&quot;-c&quot;</span>,</span><br><span class="line">    _CHILD_RUNNER_BOOTSTRAP,</span><br><span class="line">    exec_ws,         <span class="comment"># 临时拷贝目录 tempfile.TemporaryDirectory(prefix=&quot;acs_sbx_&quot;)</span></span><br><span class="line">    staged_test_dir,</span><br><span class="line">    staged_test,</span><br><span class="line">    <span class="built_in">str</span>(<span class="built_in">max</span>(<span class="number">1</span>, <span class="built_in">int</span>(timeout))),</span><br><span class="line">    <span class="built_in">str</span>(<span class="variable language_">self</span>.policy.file_size_limit_mb),</span><br><span class="line">    <span class="built_in">str</span>(<span class="variable language_">self</span>.policy.memory_limit_mb),</span><br><span class="line">]</span><br><span class="line"></span><br><span class="line">proc = subprocess.Popen(</span><br><span class="line">    cmd,</span><br><span class="line">    stdout=subprocess.PIPE,</span><br><span class="line">    stderr=subprocess.PIPE,</span><br><span class="line">    text=<span class="literal">True</span>,</span><br><span class="line">    cwd=staged_test_dir,</span><br><span class="line">    env=_sanitized_subprocess_env(),  <span class="comment"># 剔除 KEY / TOKEN / SECRET / PASS / AUTH 等变量</span></span><br><span class="line">    start_new_session=<span class="literal">True</span>,           <span class="comment"># 独立进程组，便于超时整体强杀</span></span><br><span class="line">)</span><br></pre></td></tr></table></figure>
+
+<p>具体运行行为：</p>
 <ul>
-<li><strong>门禁驱动</strong>：先跑一遍 <code>run_tdd_gate(self.test_file)</code>；如果返回 <code>passed == True</code>，立即以 <code>CONVERGED_SUCCESS</code> 状态结束；如果失败，再读取当前磁盘上的 <code>target_file</code> 源码和 <code>traceback</code>（或 <code>output</code>）调用 <code>build_error_feedback_prompt</code> 构造下一轮提示词。</li>
-<li><strong>生成与语法预检</strong>：通过 <code>self.llm.generate_patch(...)</code> 返回 <code>(thought, patched_code)</code> 后，先调用 <code>validate_syntax</code> 做 <code>ast.parse</code>。如果不合法，直接返回 <code>SYNTAX_ERROR</code> 状态<strong>拒绝写盘</strong>，防止坏补丁把当前工作区搞坏；合法才会计算 unified diff（<code>compute_diff</code>）并调用 <code>write_source</code> 覆盖目标文件。从目前实现上看，被 <code>AST</code> 拦下的那轮报错还只是记录在 <code>step_log</code> 供前端&#x2F;日志查看，并没有拼进下一轮 <code>prompt</code>，这点也留待后续顺手补齐。</li>
-<li><strong>可观测性</strong>：<code>run_demo.py</code> 在终端打印每一轮的 diff 行数与状态，仓库中也附带了 <code>run_web.py</code> 供 Streamlit 面板回放每一步的 <code>step_log</code>。</li>
+<li><strong>临时只读副本</strong>：默认将工作区复制进 <code>tempfile.TemporaryDirectory</code>（跳过 <code>.git</code>、<code>__pycache__</code> 等目录，并在常规 TDD 阶段直接<strong>不复制</strong> <code>hidden_files</code>）；所有 <code>protected_files</code> 与 <code>hidden_files</code> 在临时目录内设为 <code>0o444</code> 只读。</li>
+<li><strong>密钥脱敏与隔离模式</strong>：<code>_sanitized_subprocess_env()</code> 过滤掉名称包含 <code>KEY</code>、<code>TOKEN</code>、<code>SECRET</code>、<code>PASS</code>、<code>CREDENTIAL</code>、<code>AUTH</code>、<code>COOKIE</code>、<code>SESSION</code>、<code>PRIVATE</code> 的环境变量，附加 <code>PYTHONNOUSERSITE=1</code> 与 <code>PYTHONDONTWRITEBYTECODE=1</code>，并以 <code>python -I</code> 启动。</li>
+<li><strong>资源限额与进程组强杀</strong>：子进程引导器在执行 <code>unittest</code> 前通过 <code>resource.setrlimit</code> 施加 <code>RLIMIT_CPU</code>（默认 15s）与 <code>RLIMIT_FSIZE</code>（默认 16MB，Linux 下额外加 <code>RLIMIT_AS</code> 512MB）；一旦触发 <code>subprocess.TimeoutExpired</code>，直接调用 <code>os.killpg(os.getpgid(proc.pid), signal.SIGKILL)</code> 清空整个进程组，返回 <code>exit_code=124</code>、<code>summary=&quot;WATCHDOG_TIMEOUT&quot;</code>。</li>
 </ul>
-<h3 id="2-3-双后端：LiveLLMClient-与离线-DeterministicMockLLM"><a href="#2-3-双后端：LiveLLMClient-与离线-DeterministicMockLLM" class="headerlink" title="2.3 双后端：LiveLLMClient 与离线 DeterministicMockLLM"></a>2.3 双后端：<code>LiveLLMClient</code> 与离线 <code>DeterministicMockLLM</code></h3><p>为了让项目在没有 API Key 时也能直接运行整套流程、<code>tests/</code> 和前端界面，<code>src/llm_backend.py</code> 设计了一个抽象基类 <code>BaseLLMBackend</code> 和两套具体实现：</p>
+<h3 id="2-3-ASTPolicyInspector-与-IntegrityMonitor"><a href="#2-3-ASTPolicyInspector-与-IntegrityMonitor" class="headerlink" title="2.3 ASTPolicyInspector 与 IntegrityMonitor"></a>2.3 <code>ASTPolicyInspector</code> 与 <code>IntegrityMonitor</code></h3><ul>
+<li><strong>静态 AST 语法与策略守卫</strong>：除了 <code>ast.parse</code> 拦截 <code>SyntaxError</code> 外，在启用 <code>strict_ast=True</code>（内置 4 个算例默认开启）时，<code>ASTPolicyInspector.inspect</code> 会扫描抽象语法树，阻断高危导入（<code>os</code>、<code>subprocess</code>、<code>sys</code>、<code>ctypes</code>、<code>socket</code>、<code>importlib</code>、<code>pickle</code> 等）以及高危内建调用（<code>eval</code>、<code>exec</code>、<code>compile</code>、<code>__import__</code>、<code>open</code>、<code>breakpoint</code>）。任何落盘写入均走 <code>.acs_tmp_&lt;pid&gt;</code> + <code>os.replace</code> 原子替换。</li>
+<li><strong>SHA-256 门禁完整性核验</strong>：<code>IntegrityMonitor</code> 在代理初始化时记录所有受保护测试与 Holdout 文件的 SHA-256 摘要，每次 <code>ToolBox.run_tdd_gate</code> 执行前后均会校验一次；一旦发现外部篡改或文件缺失，立即抛出 <code>IntegrityViolationError</code> 并触发回滚。</li>
+</ul>
+<h3 id="2-4-诚实标注物理隔离边界"><a href="#2-4-诚实标注物理隔离边界" class="headerlink" title="2.4 诚实标注物理隔离边界"></a>2.4 诚实标注物理隔离边界</h3><p>在工程上必须把话说透：<strong>这套沙箱属于用户态应用与子进程级别的防误改&#x2F;防越权隔离，并不包含内核级容器或虚拟机隔离（如 Linux namespaces、seccomp 或 Docker）。</strong> 如果要直接运行完全不可信的第三方恶意仓库，生产部署时仍应把 ACS-Agent 放进容器或独立虚拟机内运行。</p>
+<hr>
+<h2 id="三、-ReAct-多文件协同、双协议降级与防退化闭环"><a href="#三、-ReAct-多文件协同、双协议降级与防退化闭环" class="headerlink" title="三、 ReAct 多文件协同、双协议降级与防退化闭环"></a>三、 ReAct 多文件协同、双协议降级与防退化闭环</h2><h3 id="3-1-Patch-ReAct-双模工具链（src-tools-py-src-agent-py）"><a href="#3-1-Patch-ReAct-双模工具链（src-tools-py-src-agent-py）" class="headerlink" title="3.1 Patch &#x2F; ReAct 双模工具链（src/tools.py &amp; src/agent.py）"></a>3.1 Patch &#x2F; ReAct 双模工具链（<code>src/tools.py</code> &amp; <code>src/agent.py</code>）</h3><p>初版原型只能对单个文件整段覆写，一旦任务涉及跨模块调用（例如 Case 4 需要同时理解并修改 <code>precision.py</code> 和 <code>scheduler.py</code>），单文件提示词就力不从心了。</p>
+<p>新版 <code>CodeIterationAgent</code> 支持 <code>agent_mode</code> 在 <code>&quot;patch&quot;</code>、<code>&quot;react&quot;</code> 与 <code>&quot;auto&quot;</code>（当 <code>len(writable_files) &gt; 1</code> 时自动启用 ReAct）之间切换，在 <code>src/tools.py</code> 中暴露了 6 个严格受控的沙箱工具（<strong>故意不暴露自由 Bash 执行工具</strong>）：</p>
+<table>
+<thead>
+<tr>
+<th align="left">工具名</th>
+<th align="left">作用域与安全约束</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>list_files</code></td>
+<td align="left">列出工作区可见文件，自动跳过内部目录并过滤隐藏 <code>hidden_files</code></td>
+</tr>
+<tr>
+<td align="left"><code>read_file</code></td>
+<td align="left">按行号范围读取允许文件（拒绝越界路径与隐藏 Holdout）</td>
+</tr>
+<tr>
+<td align="left"><code>search_code</code></td>
+<td align="left">在可见文件中按正则或子串搜索上下文（最多返回 40 条命中）</td>
+</tr>
+<tr>
+<td align="left"><code>patch_file</code></td>
+<td align="left">精确查找唯一片段并替换（仅限 <code>writable_files</code>），落盘前校验 AST</td>
+</tr>
+<tr>
+<td align="left"><code>write_file</code></td>
+<td align="left">原子覆写授权的 <code>writable_files</code>（落盘前校验 AST 与策略）</td>
+</tr>
+<tr>
+<td align="left"><code>run_tests</code></td>
+<td align="left">触发 <code>IsolatedTestRunner</code> 在临时只读沙箱中跑门禁并返回结构化统计与切片</td>
+</tr>
+</tbody></table>
+<h3 id="3-2-双协议自动降级与本地算力预设（src-llm-backend-py）"><a href="#3-2-双协议自动降级与本地算力预设（src-llm-backend-py）" class="headerlink" title="3.2 双协议自动降级与本地算力预设（src/llm_backend.py）"></a>3.2 双协议自动降级与本地算力预设（<code>src/llm_backend.py</code>）</h3><p>实战中对接不同推理后端经常踩一个坑：云端 API 支持标准 OpenAI <code>tools</code> 函数调用，但不少本地轻量网关或特定推理服务只要请求体里带了 <code>tools</code> 字段就会直接返回 <code>HTTP 400</code>。</p>
+<p><code>LiveLLMClient.chat_step</code> 为此做了自动协议降级：</p>
+<ol>
+<li>默认优先发送带 <code>tools</code> 与 <code>tool_choice=&quot;auto&quot;</code> 的原生 Function Calling 请求；</li>
+<li>若服务端返回 <code>HTTP 400</code>，自动剥离 <code>tools</code> 参数、将 <code>self.enable_native_tools</code> 置为 <code>False</code> 并重发，后续自动切换为解析文本指令 <code>[TOOL_CALL] &#123;&quot;name&quot;: ..., &quot;arguments&quot;: &#123;...&#125;&#125; [/TOOL_CALL]</code>；同时兼容提取 DeepSeek-R1 等推理模型的 <code>&lt;think&gt;...&lt;/think&gt;</code> 思考段；</li>
+<li>内置 <code>HARDWARE_PRESETS</code>（<code>kunlun-gateway</code>、<code>ollama</code>、<code>vllm</code>、<code>dashscope</code>、<code>deepseek</code>、<code>openai</code>）以及 <code>/v1/models</code> 在线探测函数 <code>probe_llm_endpoint</code>，本地无真实 API Key 时自动以 <code>&quot;EMPTY&quot;</code> 占位访问本地 Token 工厂。</li>
+</ol>
+<h3 id="3-3-评分防退化回滚、停滞熔断与-Holdout-验收"><a href="#3-3-评分防退化回滚、停滞熔断与-Holdout-验收" class="headerlink" title="3.3 评分防退化回滚、停滞熔断与 Holdout 验收"></a>3.3 评分防退化回滚、停滞熔断与 Holdout 验收</h3><p>自主过夜最怕两件事：一是改第 3 个测试时把前 2 个原本通过的测试改挂（Regression）；二是陷入同一种错误无限空转（Stall）。</p>
 <ul>
-<li><strong><code>LiveLLMClient</code>（真实推理后端）</strong>：调用 OpenAI 兼容的 <code>/chat/completions</code> 接口（适配 OpenAI、DeepSeek、阿里百炼 DashScope 或本地 vLLM&#x2F;Ollama；若接入非 OpenAI 协议模型需经过兼容代理），输出 <code>thought</code> 与补丁代码。</li>
-<li><strong><code>DeterministicMockLLM</code>（离线确定性模拟引擎）</strong>：这里需要非常坦诚地说明它的真实机理。<code>DeterministicMockLLM</code> <strong>不是</strong>一个在未知问题上动态推理的本地小模型，而是通过关键词匹配上下文中的 <code>&quot;spmm&quot;</code>、<code>&quot;vector&quot;</code>、<code>&quot;kv&quot;</code> 字符串，命中后返回<strong>预先写好的修复代码与预设 Thought 模板</strong>。</li>
+<li><strong>最佳快照追踪与退化回滚（<code>src/checkpoint.py</code>）</strong>：<code>agent.py</code> 定义了测试评分元组 <code>_score_test_result = (passed_flag, passed_count, -failed_count)</code>。每轮门禁后，<code>FileSnapshotManager</code> 会和历史最高分快照 <code>best_checkpoint</code> 比对；一旦出现分数倒退（例如通过数下降），立刻调用 <code>restore_best()</code> 把授权文件恢复到历史最优状态，记录 <code>rollbacks</code> 次数并在下轮提示词注入警告。</li>
+<li><strong>防停滞熔断（Patch 模式）</strong>：在 <code>_run_patch_loop</code> 中，系统对 <code>(state_hash, error_signature)</code> 做频次统计；同一代码状态与错误指纹连续出现 2 次注入反思警示，累计出现 3 次则直接以 <code>status=&quot;STALLED&quot;</code> 提前退出，把问题留给晨间人类工程师，避免整晚空烧 Token（补充说明：ReAct 模式 <code>_run_react_loop</code> 当前主要通过 <code>max_tool_steps</code>、<code>max_iterations</code>、空轮次上限 <code>empty_turns &gt;= 2</code> 以及 <code>rollback_on_regression</code> 控制收敛边界）。</li>
+<li><strong>隐藏 Holdout 防过拟合门禁</strong>：当且仅当可见测试全绿后，<code>CodeIterationAgent</code> 才会执行 <code>_run_holdout_if_configured()</code>（此时传入 <code>include_hidden=True</code>）；如果出现“背过了可见测试但过不了 Holdout”（如把 <code>double(x)</code> 写死 <code>return 4</code>），直接以 <code>HOLDOUT_FAILED</code> 拦截交付。</li>
 </ul>
+<hr>
+<h2 id="四、-24h「碳硅接力」编排器与零依赖实时工作台"><a href="#四、-24h「碳硅接力」编排器与零依赖实时工作台" class="headerlink" title="四、 24h「碳硅接力」编排器与零依赖实时工作台"></a>四、 24h「碳硅接力」编排器与零依赖实时工作台</h2><h3 id="4-1-跨任务全量回归与晨间交接简报（src-relay-py-run-relay-py）"><a href="#4-1-跨任务全量回归与晨间交接简报（src-relay-py-run-relay-py）" class="headerlink" title="4.1 跨任务全量回归与晨间交接简报（src/relay.py + run_relay.py）"></a>4.1 跨任务全量回归与晨间交接简报（<code>src/relay.py</code> + <code>run_relay.py</code>）</h3><p>单任务闭环之上，<a target="_blank" rel="noopener" href="https://github.com/aarchyyy/autonomous-code-agent/blob/main/src/relay.py"><code>src/relay.py</code></a> 实现了面向多任务工程队列的 <code>RelayOrchestrator</code>：</p>
+<ol>
+<li><strong>预算与连续熔断护栏</strong>：按顺序执行 <code>relay_plan.json</code> 中的 <code>RelayTask</code> 队列，受 <code>max_total_seconds</code> 墙钟预算（超限标记 <code>SKIPPED_BUDGET</code>）与 <code>max_consecutive_failures</code> 连续失败熔断器（超限标记 <code>SKIPPED_CIRCUIT_BREAKER</code>）约束。</li>
+<li><strong>跨任务回归守卫与自动回滚</strong>：每个任务开始前都会保存一份 <code>pre_task</code> 快照；当任务本地门禁与 Holdout 通过后，编排器会遍历<strong>此前所有已通过任务</strong>重跑它们的测试门禁与 Holdout（<code>_run_regression_gates</code>）。哪怕后一个任务修通了自己却把共享模块改崩导致前序任务挂掉，系统也会立刻恢复 <code>pre_task</code> 快照并标记 <code>REGRESSION_ROLLED_BACK</code>。</li>
+<li><strong>隔离分支与三件套交接产物</strong>：若开启 <code>--git-branch</code>，<code>GitRelayManager</code> 会拉出独立的 <code>acs-relay/&lt;run_id&gt;</code> 分支为每个通过任务打上里程碑提交；运行全程写入只追加的 <code>audit_events.jsonl</code> 事件账本，结束时自动产出 <code>handover_summary.json</code> 与可直接给白天工程师接续的 <strong><code>HANDOVER_REPORT.md</code></strong>（含每个任务的收敛状态、SHA-256 完整性、Holdout&#x2F;回归状态、Commit SHA 与待人工介入列表）。</li>
+</ol>
+<h3 id="4-2-零依赖-HTTP-SSE-双模工作台（run-web-py-web-index-html）"><a href="#4-2-零依赖-HTTP-SSE-双模工作台（run-web-py-web-index-html）" class="headerlink" title="4.2 零依赖 HTTP + SSE 双模工作台（run_web.py + web/index.html）"></a>4.2 零依赖 HTTP + SSE 双模工作台（<code>run_web.py</code> + <code>web/index.html</code>）</h3><p>为了在黑客松现场或无外网环境直接拉起面板，我放弃了原来的外部前端框架依赖，直接用 Python 标准库 <code>ThreadingHTTPServer</code> 写了 <a target="_blank" rel="noopener" href="https://github.com/aarchyyy/autonomous-code-agent/blob/main/run_web.py"><code>run_web.py</code></a> 与原生前端 <a target="_blank" rel="noopener" href="https://github.com/aarchyyy/autonomous-code-agent/blob/main/web/index.html"><code>web/index.html</code></a>：</p>
+<ul>
+<li>通过 <code>/api/jobs</code> + <code>/api/jobs/&lt;job_id&gt;/events</code> 提供 <strong>Server-Sent Events (SSE)</strong> 实时流式推送；</li>
+<li>支持 <strong>单任务 ReAct 闭环</strong>（可选内置 Case 1–4 或任意本地自定义工作区&#x2F;可写文件&#x2F;Holdout 路径）与 <strong>24h 夜间接力队列</strong> 双工作台切换；</li>
+<li>顶部集成端点预设下拉与 <code>/api/probe</code> 在线模型列表探测，夜间接力结束后可在界面内直接预览并下载 <code>HANDOVER_REPORT.md</code>。</li>
+</ul>
+<hr>
+<h2 id="五、-基准重构与实测验证（Proof-of-Work）"><a href="#五、-基准重构与实测验证（Proof-of-Work）" class="headerlink" title="五、 基准重构与实测验证（Proof of Work）"></a>五、 基准重构与实测验证（Proof of Work）</h2><p>这次把之前四个“不够硬”的算例全部重写并加严了校验门槛，同时新增了多文件协同算例 Case 4：</p>
+<table>
+<thead>
+<tr>
+<th align="left">算例</th>
+<th align="left">路径与目标文件</th>
+<th align="left">门禁测试的核心工程与数值要求</th>
+<th align="center">测试用例数</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><strong>Case 1</strong></td>
+<td align="left"><code>benchmarks/case1_spmm_boundary</code> (<code>kernel.py</code>)</td>
+<td align="left">校验 <code>row_ptr</code> 长度与单调性、空行跳过、显式拒绝负列索引（防 Python <code>dense_b[-1]</code> 静默回卷）与越界索引、非有限值拦截、<code>math.fsum</code> 抵消相消补偿求和</td>
+<td align="center"><code>test_kernel.py</code> (6 项)</td>
+</tr>
+<tr>
+<td align="left"><strong>Case 2</strong></td>
+<td align="left"><code>benchmarks/case2_vector_scale</code> (<code>kernel.py</code>)</td>
+<td align="left">使用 <code>struct.pack(&quot;!f&quot;, ...)</code> 做真实 IEEE-754 <code>float32</code> 比特级 <code>0-ULP</code> 距离对齐（包含 <code>1e-7</code> 量级测试，直接打死 <code>round(..., 6)</code> 截断投机）、形状校验与 <code>NaN</code>&#x2F;<code>Inf</code> 检查</td>
+<td align="center"><code>test_kernel.py</code> (7 项)</td>
+</tr>
+<tr>
+<td align="left"><strong>Case 3</strong></td>
+<td align="left"><code>benchmarks/case3_kv_cache_broadcast</code> (<code>kernel.py</code>)</td>
+<td align="left"><code>num_query_heads % num_kv_heads == 0</code> 整除校验、多 Batch &#x2F; 多 Seq 形状检查、展开头深拷贝独立缓冲（防下游修改产生引用别名污染）</td>
+<td align="center"><code>test_kernel.py</code> (4 项)</td>
+</tr>
+<tr>
+<td align="left"><strong>Case 4</strong></td>
+<td align="left"><code>benchmarks/case4_relay_scheduler</code> (<code>precision.py</code>, <code>scheduler.py</code>)</td>
+<td align="left"><strong>多文件 ReAct + Holdout</strong>：<code>weighted_score</code> 长度&#x2F;有限性&#x2F;补偿求和；<code>dispatch_batch</code> 优先级降序与 <code>id</code> 字典序平局裁决、Token 预算装箱、浅拷贝防篡改输入</td>
+<td align="center">可见 <code>test_scheduler.py</code> (3 项) + 隐藏 <code>holdout_test_scheduler.py</code> (2 项)</td>
+</tr>
+</tbody></table>
+<h3 id="5-1-23-项单元测试与对抗性自检实测"><a href="#5-1-23-项单元测试与对抗性自检实测" class="headerlink" title="5.1 23 项单元测试与对抗性自检实测"></a>5.1 23 项单元测试与对抗性自检实测</h3><p>在仓库根目录执行 <code>python3 -m unittest discover -s tests -v</code>，<strong>23 项测试在 6.003s 内全部通过（<code>OK</code>）</strong>：</p>
+<ul>
+<li><strong><code>tests/test_sandbox.py</code>（7 项）</strong>：覆盖 <code>../</code> 与绝对路径越界拦截、已存在文件与未创建父目录符号链接逃逸拦截、<code>protected_files</code> 写保护与隐藏 Holdout 隐藏性、严格 AST 禁用 <code>os</code>&#x2F;<code>eval</code>、<code>OPENAI_API_KEY</code> 环境变量脱敏及临时工作区写隔离、外部篡改 SHA-256 捕获、以及 <code>1s</code> 看门狗强杀无限循环进程组（<code>WATCHDOG_TIMEOUT</code> &#x2F; <code>exit_code=124</code>）。</li>
+<li><strong><code>tests/test_tools.py</code>（4 项）</strong>：覆盖文件读写、AST 语法校验、Diff 计算、<code>list_files</code>&#x2F;<code>search_code</code>&#x2F;<code>patch_file</code> 联动与错误语法 patch 回绝保留原文件。</li>
+<li><strong><code>tests/test_agent_loop.py</code>（6 项）</strong>：覆盖 4 个内置算例冒烟收敛、补丁退化自动回滚（<code>_RegressingLLM</code>）、重复失败状态 3 次 <code>STALLED</code> 提前熔断（<code>_StallingLLM</code>）、隐藏 Holdout 拦截硬编码过拟合、以及<strong>起本地 OpenAI HTTP 服务测试未知新题</strong>（验证原生 <code>tool_calls</code> 解决未见过的 <code>TokenBucket</code> 问题，以及服务端对 <code>tools</code> 返回 HTTP 400 时无缝降级至文本 <code>[TOOL_CALL]</code> 解决 <code>clamp</code> 问题）。</li>
+<li><strong><code>tests/test_relay.py</code>（2 项）</strong>：覆盖内置 4 任务夜间接力计划生成报告与账本，以及后置任务改崩共享模块 <code>shared.py</code> 时触发跨任务回归回滚。</li>
+<li><strong><code>tests/test_benchmarks_rigor.py</code>（1 项）</strong>：验证全部 4 个算例的缺陷起点必挂、修复态全绿（含 Holdout），并<strong>实测确认用 <code>round((a + b) * scale, 6)</code> 写 Case 2 会被 IEEE-754 测试门禁打回</strong>。</li>
+<li><strong><code>tests/test_web_server.py</code>（3 项）</strong>：验证 Web 首页、<code>/api/config</code>、单任务 SSE 流与夜间接力 SSE 流接口。</li>
+</ul>
+<h3 id="5-2-CLI-冒烟与-24h-夜间接力实跑输出"><a href="#5-2-CLI-冒烟与-24h-夜间接力实跑输出" class="headerlink" title="5.2 CLI 冒烟与 24h 夜间接力实跑输出"></a>5.2 CLI 冒烟与 24h 夜间接力实跑输出</h3><p>实际在终端执行 <code>python3 run_demo.py --mode mock</code> 与 <code>python3 run_relay.py --mode mock</code> 的核心输出片段如下：</p>
+<figure class="highlight text"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">======================= OVERALL BENCHMARK SUMMARY =======================</span><br><span class="line">  • Case 1: SpMM CSR Operator                        : PASS [MOCK] in 2 iter (0.221s)</span><br><span class="line">  • Case 2: Vector Scale (IEEE-754 f32)              : PASS [MOCK] in 2 iter (0.173s)</span><br><span class="line">  • Case 3: GQA KV-Cache Broadcast                   : PASS [MOCK] in 2 iter (0.181s)</span><br><span class="line">  • Case 4: Multi-File Scheduler (ReAct + Holdout)   : PASS [MOCK] in 2 iter (0.192s)</span><br><span class="line">--------------------------------------------------------------------------------</span><br><span class="line">  Total Wall-Clock Time : 0.78s</span><br><span class="line">  Note: Ran with Offline Deterministic Mock. Use --mode live for real LLM verification.</span><br><span class="line">================================================================================</span><br></pre></td></tr></table></figure>
+
+<p><code>run_relay.py --mode mock</code> 在临时 staging 工作区上顺序跑完 4 个任务（<code>1.005s</code>），每个任务通过后自动对前序任务执行回归复测（<code>PASS (0)</code> &#x2F; <code>PASS (1)</code> &#x2F; <code>PASS (2)</code> &#x2F; <code>PASS (3)</code>），最终产出 <code>HANDOVER_REPORT.md</code>、<code>handover_summary.json</code> 与 <code>audit_events.jsonl</code>。</p>
 <blockquote>
-<p><strong>注意区分“流程演示通过”和“模型真会修 Bug”</strong>：在离线 Mock 模式下看到 100% 收敛，只代表 <strong>Agent 主循环调度、Traceback 回传、AST 预检、覆写和单测状态刷新这条控制流代码没有写错</strong>；它<strong>绝不能</strong>当成真实大语言模型能够独立解决未知工程 Bug 的能力证明。</p>
+<p><strong>关于验证口径的严格声明（避免混淆概念）</strong>：</p>
+<ol>
+<li><strong>Offline Mock 不等同于大模型未知题推理能力</strong>：<code>DeterministicMockLLM</code>（<code>deterministic-pipeline-mock-v2</code>）只对内置 4 个算例返回预设补丁或固定工具调用序列，遇到未知任务会直接返回 <code># Unchanged</code> 并以 <code>MOCK_UNSUPPORTED_TASK</code> 退出。因此 <code>--mode mock</code> 证明的是<strong>控制流、沙箱、回滚、回归校验与交接报告流水线没有 Bug</strong>；真正的自主推理评测必须使用 <code>--mode live</code> 接入真实模型（<code>kunlun-gateway</code> &#x2F; <code>ollama</code> &#x2F; <code>vllm</code> &#x2F; 云端 API）检验。</li>
+<li><strong>Case 2 的 <code>0-ULP</code> 口径范围</strong>：这里的 <code>0-ULP</code> 指的是用 <code>struct.pack(&quot;!f&quot;, ...)</code> 构造的标量&#x2F;列表级 IEEE-754 <code>float32</code> 比特对齐参考检查，用来封杀 <code>round(..., 6)</code> 这类精度作弊，而非 GPU&#x2F;NPU 底层汇编算子吞吐测试。</li>
+</ol>
 </blockquote>
 <hr>
-<h2 id="三、-闭环流程演示与精度自查"><a href="#三、-闭环流程演示与精度自查" class="headerlink" title="三、 闭环流程演示与精度自查"></a>三、 闭环流程演示与精度自查</h2><p>仓库里的 <code>run_demo.py</code> 自带三个小用例（<code>benchmarks/case1_spmm_boundary</code>、<code>case2_vector_scale</code>、<code>case3_kv_cache_broadcast</code>），再加上 <code>tests/</code> 目录下的 4 个单元测试，用来在无外网环境下回归控制流。</p>
-<p>老实说，回头逐行复核代码时，我发现演示用例里之前有一处<strong>描述严重超前于实际代码</strong>的问题，必须在这里直接改口纠偏：</p>
+<h2 id="六、-已知边界与下一步演进"><a href="#六、-已知边界与下一步演进" class="headerlink" title="六、 已知边界与下一步演进"></a>六、 已知边界与下一步演进</h2><p>重构到这一版，这套架子已经可以稳稳撑起一场黑客松或小型仓库的“碳硅接力”演示与现场联调，但仍然有三块清醒的工程边界记在这里：</p>
 <ol>
-<li><strong>Case 1（SpMM CSR 边界处理演示）</strong>：<code>benchmarks/case1_spmm_boundary/kernel.py</code> 默认漏了空行保护和列边界检查，<code>test_kernel.py</code> 测了常规 CSR 矩阵、空行 <code>NNZ=0</code> 以及正方向列越界 <code>col_indices=[0, 999]</code>（需要说明：<code>test_kernel.py</code> <strong>并没有</strong>测负列索引测试用例，早期文案提的负索引门禁在测试里其实没写）。Mock 补丁补上空行早退和有效列界判断后测试通过。</li>
-<li><strong>Case 2（Vector Scale 与数值表述纠偏）</strong>：原先演示脚本横幅里写了 <code>0-ULP Float Precision</code> 的标题，实际打开 <code>benchmarks/case2_vector_scale/test_kernel.py</code> 和 Mock 代码一看，测试数据仅仅是 <code>[1.0, 2.0]</code>、<code>[3.0, 4.0]</code> 配 <code>scale=2.5</code> 对照 <code>[10.0, 15.0]</code>，且 Mock 实现只是顺手在 Python float64 里写了 <code>round(..., 6)</code>。<strong>保留六位小数跟 IEEE 754 float32 逐位一致（0-ULP）完全是两码事</strong>：既没有测 IEEE-754 单精度舍入行为，也没有覆盖极小&#x2F;极大数或正负相消。把这套 <code>round(..., 6)</code> 的玩具测试说成“0-ULP 精度对齐”属于典型的术语滥用，这篇文章里正式收回，只将其视为最基本的标量乘法参数漏传修复演示。</li>
-<li><strong>Case 3（GQA KV Cache 广播展开）</strong>：用 Python 列表和切片构造测试数据，验证 2 头 KV Cache 按分组比例（<code>G = 12 / 2 = 6</code>）做 repeat-interleave 扩展对齐到 12 头 Query 的逻辑能够收敛通过。</li>
+<li><strong>现场真实大模型长程泛化评测待补实据</strong>：目前通过本地模拟 OpenAI HTTP Server 验证了协议栈在未知题目（<code>TokenBucket</code>、<code>clamp</code>）上的闭环调度；后续接入现场真实模型（如白泽全感、Qwen2.5-Coder、DeepSeek 等）跑大型多模块仓库时，上下文窗口裁剪策略、工具调用失败重试以及真实收敛率与 Token 成本还需要实测调优。</li>
+<li><strong>用户态沙箱与操作系统级容器的配合</strong>：<code>PathGuard + 临时只读副本 + 环境变量脱敏 + python -I + rlimit</code> 能够可靠防止大模型自身幻觉误改测试或一般路径越权，但若用于不可信第三方代码执行，仍应配合 Docker &#x2F; Linux namespaces 等内核隔离手段。</li>
+<li><strong>AST 严格策略白名单与多语言扩展</strong>：<code>strict_ast=True</code> 目前会静态禁止 <code>os</code>&#x2F;<code>subprocess</code>&#x2F;<code>open</code>&#x2F;<code>eval</code> 等导入与调用，非常适合纯算法&#x2F;纯逻辑内核；如果工程任务确实需要合法读写磁盘配置文件或运行 C++&#x2F;HIP 编译门禁，需要针对性放开 <code>strict_ast</code> 或扩展对应工具链适配器。</li>
 </ol>
-<p>在实际终端运行 <code>python3 run_demo.py</code>（离线 <code>DeterministicMockLLM</code> 模式）与 <code>python3 -m unittest discover -s tests -v</code> 的观察如下：</p>
-<ul>
-<li><code>tests/</code> 下的 4 项框架自身单测（<code>TestAgentLoop.test_vector_scale_case_convergence</code> 以及 <code>TestToolBox</code> 对读写、语法检查和 Diff 的测试）用时 <strong>0.122s</strong>，全部 <code>OK</code>。</li>
-<li><code>run_demo.py</code> 在离线 Mock 模式下 3 个演示用例都在第 2 轮完成测试转绿，总壁钟时间约 <strong>0.38s</strong>（Case 1 约 0.15s、Case 2 约 0.099s、Case 3 约 0.127s）。同样再强调一遍：这个结果验证的是脚本闭环跑通，不代表真实 LLM 的修复能力。</li>
-</ul>
+<p>写完这轮重构最大的感受依然没变：<strong>把大模型接进终端循环只需几十行代码，真正值钱、也最花精力的，是外围那一层冷酷无情、可审计、可回滚、绝不放水的软件工程契约。</strong> 只有把沙箱、门禁、回滚和交接账本先建牢，人类才敢放心地把电脑留给 AI 跑过一整夜。</p>
 <hr>
-<h2 id="四、-已知限制与后续待完善边界"><a href="#四、-已知限制与后续待完善边界" class="headerlink" title="四、 已知限制与后续待完善边界"></a>四、 已知限制与后续待完善边界</h2><p>既然定位是一个先跑通主逻辑的黑客松前期原型，把短板列出来比写漂亮口号更有意义：</p>
-<ol>
-<li><strong>真实 LLM 端到端评估缺失</strong>：目前公开的仓库记录跑通的是 <code>DeterministicMockLLM</code>；真实使用 <code>LiveLLMClient</code> 时，针对长仓库跨文件依赖、模型改代码越改越散、Token 成本与真实收敛率，还需要建一套不靠关键词命中、有真实随机&#x2F;陌生 Bug 的评测集去实测。</li>
-<li><strong>安全隔离仅停留在应用层约定</strong>：<code>ToolBox</code> 目前没有操作系统级别的测试文件只读锁、工作目录越界路径校验（<code>_resolve_path</code> 应加入 <code>.resolve()</code> 后缀前缀检查拦截 <code>..</code>）、以及轻量容器隔离，因此暂时不适合直接运行不可信代码或开放 Shell 工具权限。</li>
-<li><strong>单文件全量覆写与数值验证深度不足</strong>：现在每次修复是全文件覆写，文件上千行之后成本高也容易改丢上下文；<code>Case 2</code> 若真想服务底层算子开发，需要换成按 <code>struct</code> 解包 FP16&#x2F;FP32 二进制并统计 max-ULP 的专项检测，而不是 <code>round(..., 6)</code>。</li>
-</ol>
-<p>写完这套雏形最大的感受是：把“报错 → 改代码 → 重跑验证”写成一个自动死循环并不难，真正决定这种工具能不能托付整晚的，反而是<strong>权限边界是否写死、验证集够不够硬、以及测试通过时到底有没有偷偷放水</strong>。后面有空也会优先把 <code>ToolBox</code> 的路径边界和真实模型基准评测补上。</p>
+<blockquote>
+<p><strong>项目开源地址</strong>：<a target="_blank" rel="noopener" href="https://github.com/aarchyyy/autonomous-code-agent">https://github.com/aarchyyy/autonomous-code-agent</a><br>所有代码基于 Python 3.9+ 标准库零依赖实现，欢迎 Clone 运行 <code>python3 -m unittest discover -s tests -v</code> 或拉起 <code>python3 run_web.py</code> 体验交流！</p>
+</blockquote>
 
     </div>
 
