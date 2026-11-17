@@ -1273,7 +1273,7 @@ pre code {
     vertical-align: middle;
   }
   .links-of-author a::before {
-    background: #f96be4;
+    background: #792b83;
     display: inline-block;
     margin-right: 3px;
     transform: translateY(-2px);
@@ -2927,6 +2927,8 @@ body.qy-portal-zen {
   transition: opacity 0.46s var(--qy-apple-spring), transform 0.46s var(--qy-apple-spring);
   will-change: opacity, transform;
 }
+html.qy-is-home body:not(.qy-portal-scroll):not(.qy-inner-page) .main,
+html.qy-is-home body:not(.qy-portal-scroll):not(.qy-inner-page) .footer,
 body.qy-portal-zen .main,
 body.qy-portal-zen .footer {
   opacity: 0 !important;
@@ -3641,7 +3643,9 @@ body.qy-paper-mode .qy-scroll-hint {
   transform: translateY(-1px);
 }
 /* 隐藏列表卡片里原本重复的阅读全文按钮 */
+html.qy-is-home .post-button,
 body.qy-is-home .post-button,
+.main-inner.index .post-button,
 .qy-abstract-grid-wrap .post-button {
   display: none !important;
 }

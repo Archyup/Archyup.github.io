@@ -70,26 +70,55 @@
 <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=20261109">
 <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=20261109">
 <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20261109">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <script>
   // 首帧同步判定首页与内页，彻底消除点击右上角功能页时的等待与高度跳变
   (function() {
-    var p = window.location.pathname;
+    var p = window.location.pathname || "/";
     var isHome = (p === "/" || p === "/index.html");
     document.documentElement.classList.add(isHome ? "qy-is-home" : "qy-is-inner");
+
+    window.__qyRenderMath = function() {
+      var run = function() {
+        if (!document.body || typeof window.renderMathInElement !== "function" || typeof window.katex === "undefined") {
+          return;
+        }
+        try {
+          window.renderMathInElement(document.body, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false }
+            ],
+            throwOnError: false,
+            ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option", "svg"],
+            ignoredClasses: ["mermaid", "katex", "qy-topbar", "qy-search-container", "qy-peek-drawer", "qy-dock-inner"]
+          });
+          window.dispatchEvent(new CustomEvent("qy:layout-shift"));
+        } catch (_) {}
+      };
+      if (document.body) {
+        run();
+      } else {
+        document.addEventListener("DOMContentLoaded", run, { once: true });
+      }
+    };
   })();
 </script>
 <!-- 异步非阻塞加载霞鹜文楷与 KaTeX 数学公式，0 阻塞首屏渲染 -->
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" media="print" onload="this.media='all'">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" media="print" onload="this.media='all'">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" media="print" onload="this.media='all';this.onload=null">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" media="print" onload="this.media='all';this.onload=null">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</noscript>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"
-  onload="renderMathInElement(document.body, { delimiters: [{left: '$$', right: '$$', display: true}, {left: '$', right: '$', display: false}] });"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="window.__qyRenderMath && window.__qyRenderMath()"></script>
 
   <noscript>
     <link rel="stylesheet" href="/css/noscript.css">
   </noscript>
 <link rel="alternate" href="/atom.xml" title="Archyのcs之旅" type="application/atom+xml">
-<script>window.__QINGYA_POST_INDEX__ = [{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践","shortTitle":"基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在跟进 世界计算大会..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","算子优化","ROCm/HIP"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇 Qwen2.5-1.5B 推理底座的总结，这篇复盘先导杯（CSCC）第二道赛题——动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, C &#x3D; A × B） 与扩展掩码融合算子 ns_spmm_fused_mask 的 HIP 内核调优过程。 yysy，以前..."},{"title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践","shortTitle":"32K 长上下文 KV 复用与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","大模型推理"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
+<script>window.__QINGYA_POST_INDEX__ = [{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践","shortTitle":"基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在跟进 世界计算大会..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","算子优化"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇 Qwen2.5-1.5B 推理底座的总结，这篇复盘先导杯（CSCC）第二道赛题——动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, C = A × B） 与扩展掩码融合算子 ns_spmm_fused_mask 的 HIP 内核调优过程。 yysy，以前学计算机组..."},{"title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践","shortTitle":"32K 长上下文 KV 复用与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","大模型推理","ROCm/HIP"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["随笔","CS"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["随笔","CS"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["随笔","CS"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
 </head>
 
 <body itemscope itemtype="http://schema.org/WebPage">
@@ -297,6 +326,94 @@
 </noscript>
 <script>
 (function() {
+  if (window.__QINGYA_BOOTSTRAPPED__) return;
+  window.__QINGYA_BOOTSTRAPPED__ = true;
+
+  // 0. 基础安全与容错工具集（Storage 异常隔离、HTML 转义防 XSS、URL 净化、安全解码）
+  function safeGetLocal(key, fallback) {
+    try {
+      const val = window.localStorage.getItem(key);
+      return val !== null ? val : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function safeSetLocal(key, val) {
+    try {
+      window.localStorage.setItem(key, String(val));
+    } catch (_) {}
+  }
+
+  function safeGetSession(key, fallback) {
+    try {
+      const val = window.sessionStorage.getItem(key);
+      return val !== null ? val : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function safeSetSession(key, val) {
+    try {
+      window.sessionStorage.setItem(key, String(val));
+    } catch (_) {}
+  }
+
+  function safeRemoveSession(key) {
+    try {
+      window.sessionStorage.removeItem(key);
+    } catch (_) {}
+  }
+
+  function safeReplaceState(url) {
+    try {
+      window.history.replaceState(null, document.title, url);
+    } catch (_) {}
+  }
+
+  function safeDecodeURIComponent(raw) {
+    try {
+      return decodeURIComponent(raw);
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  const HTML_ESCAPE_MAP = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  };
+
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str).replace(/[&<>"']/g, ch => HTML_ESCAPE_MAP[ch]);
+  }
+
+  function sanitizeHref(rawUrl) {
+    const u = String(rawUrl || "").trim();
+    if (!u) return "#";
+    if (u.startsWith("/") || u.startsWith("#") || /^https?:\/\//i.test(u)) {
+      return escapeHtml(u);
+    }
+    return "#";
+  }
+
+  function sanitizeCssUrl(rawUrl) {
+    const u = String(rawUrl || "").trim();
+    if (!/^https?:\/\//i.test(u) && !u.startsWith("/")) return "";
+    return u.replace(/["\\()\r\n]/g, "");
+  }
+
+  function getEventTargetElement(e) {
+    if (!e || !e.target) return null;
+    if (e.target.nodeType === 1) return e.target;
+    return e.target.parentElement || null;
+  }
+
   // 1. 实时壁纸抓取引擎：结合必应实时源 + 随机风景 API + 精选东方自然意境底座
   const SEED_WALLPAPERS = [
     "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
@@ -314,10 +431,12 @@
   ];
 
   // 生成实时动态壁纸 URL（每次调用生成全新的随机壁纸流地址）
-  let liveCounter = parseInt(localStorage.getItem("qy_wp_seq") || "0", 10);
+  const parsedSeq = parseInt(safeGetLocal("qy_wp_seq", "0"), 10);
+  let liveCounter = (Number.isFinite(parsedSeq) && parsedSeq >= 0) ? (parsedSeq % 1000000) : 0;
+
   function generateLiveWallpaperUrl() {
-    liveCounter += 1;
-    localStorage.setItem("qy_wp_seq", String(liveCounter));
+    liveCounter = (liveCounter + 1) % 1000000;
+    safeSetLocal("qy_wp_seq", liveCounter);
     const uniqueToken = `${Date.now()}_${liveCounter}_${Math.floor(Math.random() * 100000)}`;
     const mode = liveCounter % 3;
     if (mode === 0) {
@@ -334,37 +453,37 @@
   }
 
   // 2. 站点核心文章索引（优先读取 scripts/hexo-qingya-plugin.js 自动扫描生成的全站文章索引，发文零配置）
-  const POST_INDEX = (window.__QINGYA_POST_INDEX__ && window.__QINGYA_POST_INDEX__.length > 0) ? window.__QINGYA_POST_INDEX__ : [
+  const FALLBACK_POST_INDEX = [
     {
-      title: "从 Copilot 单次补全到夜间自主接力：基于 TDD 测试门禁的代码自迭代智能体实践",
-      shortTitle: "基于 TDD 测试门禁的代码自迭代智能体实践",
+      title: "从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践",
+      shortTitle: "基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践",
       date: "2026-11-09",
       cat: "技术实践",
       tags: ["CS", "AI Agent", "软件工程", "TDD", "自动化测试"],
       url: "/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/",
-      summary: "面向黑客松“碳硅接力 / 夜间自主研发”赛制，开源自研 ACS-Agent：通过 TDD 测试套件只读隔离、落盘前 AST 语法预检看门狗与 15s 超时守卫，在 SpMM CSR、0-ULP 向量与 GQA 广播三大算子基准上实现 2 轮 100% 闭环自愈。"
+      summary: "面向黑客松“24h 碳硅接力 / 夜间自主研发”赛制重构 ACS-Agent：补齐 PathGuard 路径与软链拦截、临时只读副本 + 密钥脱敏 + python -I + RLIMIT 沙箱、SHA-256 门禁完整性核验、多文件 ReAct 与双协议降级。"
     },
     {
-      title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与 100% Occupancy 极限调优",
-      shortTitle: "动态稀疏矩阵乘 (SpMM) Wave64 标量化与满占用调优",
+      title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优",
+      shortTitle: "动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优",
       date: "2026-11-09",
       cat: "技术实践",
-      tags: ["高性能计算", "算子优化", "ROCm/HIP"],
+      tags: ["CS", "高性能计算", "算子优化", "ROCm/HIP"],
       url: "/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/",
-      summary: "先导杯第二题核心复盘：通过 __builtin_amdgcn_readfirstlane 标量提权、4×4 Burst Unroll-16 突发加载流水线、N=512 零分支 24-VGPR 100% 满占用特化内核与 Non-Temporal Store，实现 7.24x 综合加速与 370 项门禁全通过。"
+      summary: "先导杯第二题核心复盘：通过 __builtin_amdgcn_readfirstlane 标量提权、use_strided 4-Wave 协同拆行、块稀疏双行合并与 FP64 误差边界回退路径完成 BW 实机验证。"
     },
     {
-      title: "面向端侧硬件的 Qwen2.5-1.5B 极速推理优化：32K 超长上下文显存极限压缩与静态图调度实践",
-      shortTitle: "Qwen2.5-1.5B 端侧 32K 极速推理底座与静态图实践",
+      title: "面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践",
+      shortTitle: "32K 长上下文 KV 复用与静态图调度实践",
       date: "2026-11-09",
       cat: "技术实践",
-      tags: ["高性能计算", "大模型推理", "ROCm/HIP"],
+      tags: ["CS", "高性能计算", "大模型推理", "ROCm/HIP"],
       url: "/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/",
-      summary: "先导杯第一题核心复盘：在 16GB 显存红线下，通过原生 12-Head KV 广播融合、前 31 块 lm_head 旁路、Decode 0-VRAM 视图重绑与 4 路 Capacity=300 静态 HIP Graph，将 32.5K 显存压降 94.2%，Decode 吞吐提升 4.07x。"
+      summary: "先导杯第一题核心复盘：围绕 Qwen2.5-1.5B 实现 1024 分块 Prefill、4 路常驻静态 HIP Graph 池、12 头 KV 预展开以及融合 GEMV 算子优化。"
     },
     {
-      title: "第一次参加 Hackathon · 岳麓黑客松初体验",
-      shortTitle: "岳麓黑客松初体验 · 初识工程化",
+      title: "黑客松初体验",
+      shortTitle: "黑客松初体验",
       date: "2025-12-20",
       cat: "学习历程",
       tags: ["随笔", "CS"],
@@ -372,8 +491,8 @@
       summary: "大一刚入学码龄两个月时的第一次黑客松之旅。记录与学长组队开发可视化预测项目的过程，以及对“将 AI 工程化、落地化”的最初思考。"
     },
     {
-      title: "我的 CS 学习之路 · 序章",
-      shortTitle: "我的 CS 学习之路 · 序章",
+      title: "我的CS学习之路-序章",
+      shortTitle: "我的CS学习之路-序章",
       date: "2025-11-11",
       cat: "学习历程",
       tags: ["随笔", "CS"],
@@ -382,7 +501,25 @@
     }
   ];
 
-  const isHomePage = window.location.pathname === "/" || window.location.pathname === "/index.html";
+  const rawIndexSource = (Array.isArray(window.__QINGYA_POST_INDEX__) && window.__QINGYA_POST_INDEX__.length > 0)
+    ? window.__QINGYA_POST_INDEX__
+    : FALLBACK_POST_INDEX;
+
+  const POST_INDEX = rawIndexSource
+    .filter(item => item && typeof item === "object")
+    .map(item => ({
+      title: String(item.title || "无题文卷"),
+      shortTitle: String(item.shortTitle || item.title || "无题文卷"),
+      date: String(item.date || ""),
+      cat: String(item.cat || "技术实践"),
+      tags: Array.isArray(item.tags) ? item.tags.map(t => String(t)).filter(Boolean) : [],
+      url: String(item.url || "#"),
+      summary: String(item.summary || "")
+    }));
+
+  const currentPathname = window.location.pathname || "/";
+  const isHomePage = currentPathname === "/" || currentPathname === "/index.html";
+  const isIndexListPage = isHomePage || Boolean(document.querySelector(".main-inner.index"));
 
   // 3. 创建背景画布层
   const bgContainer = document.createElement("div");
@@ -507,6 +644,21 @@
       return;
     }
 
+    const headingItems = tocLinks.map(link => {
+      const href = link.getAttribute("href") || "";
+      if (!href.startsWith("#") || href.length <= 1) return null;
+      const encodedId = href.slice(1);
+      const rawId = safeDecodeURIComponent(encodedId);
+      const targetEl = document.getElementById(rawId) || document.getElementById(encodedId);
+      const navItem = link.closest(".nav-item");
+      return targetEl ? { link, navItem, targetEl } : null;
+    }).filter(Boolean);
+
+    if (headingItems.length === 0) {
+      sidebar.style.display = "none";
+      return;
+    }
+
     document.body.classList.add("qy-has-toc");
     if (!tocWrap.querySelector(".qy-toc-header")) {
       const tocHeader = document.createElement("div");
@@ -515,36 +667,28 @@
       tocWrap.prepend(tocHeader);
     }
 
-    // 建立目录链接与正文标题元素的精确映射，并接管 NexT 默认存在缺陷的 updateActiveNav
-    if (window.NexT && window.NexT.utils) {
-      window.NexT.utils.updateActiveNav = function() {};
-      window.NexT.utils.activateNavByIndex = function() {};
+    // 接管 NexT 延迟加载 (defer) 脚本中的默认目录激活与内联高度截断逻辑
+    function neutralizeNexTToc() {
+      if (window.NexT && window.NexT.utils) {
+        window.NexT.utils.updateActiveNav = function() {};
+        window.NexT.utils.activateNavByIndex = function() {};
+        window.NexT.utils.registerSidebarTOC = function() {};
+      }
+      sidebar.querySelectorAll(".nav-child").forEach(child => {
+        child.style.removeProperty("--height");
+        child.style.height = "auto";
+      });
     }
 
-    const headingItems = tocLinks.map(link => {
-      const href = link.getAttribute("href") || "";
-      if (!href.startsWith("#")) return null;
-      const rawId = decodeURIComponent(href.slice(1));
-      const targetEl = document.getElementById(rawId) || document.getElementById(href.slice(1));
-      const navItem = link.closest(".nav-item");
-      const parentLevel2 = navItem ? navItem.closest(".nav-level-2") : null;
-      return targetEl ? { link, navItem, parentLevel2, targetEl } : null;
-    }).filter(Boolean);
-
-    if (headingItems.length === 0) return;
-
-    // 清除 NexT 内联写入的错误 --height 限制，防止多行子标题 (如 3.2, 3.3) 被截断隐藏
-    sidebar.querySelectorAll(".nav-child").forEach(child => {
-      child.style.removeProperty("--height");
-      child.style.height = "auto";
-    });
+    neutralizeNexTToc();
+    document.addEventListener("DOMContentLoaded", neutralizeNexTToc);
+    document.addEventListener("page:loaded", neutralizeNexTToc);
 
     let clickLockedIdx = -1;
     let clickLockTimer = null;
 
     function highlightTocIndex(activeIndex) {
       const activeEntry = headingItems[activeIndex];
-      const activeParent = activeEntry ? activeEntry.parentLevel2 : null;
 
       sidebar.querySelectorAll(".nav-item").forEach(el => {
         el.classList.remove("active", "active-current", "qy-toc-current", "qy-toc-parent-active");
@@ -558,8 +702,15 @@
         }
       });
 
-      if (activeParent) {
-        activeParent.classList.add("qy-toc-parent-active", "active");
+      // 沿当前条目向上回溯全部父级 .nav-item，自动展开对应大块下的子章节
+      if (activeEntry && activeEntry.navItem) {
+        let cur = activeEntry.navItem;
+        while (cur && sidebar.contains(cur)) {
+          if (cur.classList && cur.classList.contains("nav-item")) {
+            cur.classList.add("qy-toc-parent-active", "active");
+          }
+          cur = cur.parentElement;
+        }
       }
 
       // 确保当前高亮的目录项在左侧导读框可视区域内
@@ -631,6 +782,16 @@
       highlightTocIndex(activeIdx);
     }
 
+    let tocRafPending = false;
+    function scheduleTocUpdate() {
+      if (tocRafPending) return;
+      tocRafPending = true;
+      window.requestAnimationFrame(function() {
+        tocRafPending = false;
+        updateTocOnScroll();
+      });
+    }
+
     // 使用捕获阶段拦截目录点击，覆盖 NexT 默认滚动，精准对齐标题并高亮对应子章节
     headingItems.forEach((item, idx) => {
       item.link.addEventListener("click", function(e) {
@@ -641,7 +802,7 @@
         if (clickLockTimer) clearTimeout(clickLockTimer);
         const topPos = item.targetEl.getBoundingClientRect().top + window.scrollY - 64;
         window.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
-        history.replaceState(null, document.title, item.link.getAttribute("href"));
+        safeReplaceState(item.link.getAttribute("href") || window.location.hash);
         clickLockTimer = setTimeout(() => {
           clickLockedIdx = -1;
           updateTocOnScroll();
@@ -649,12 +810,20 @@
       }, true);
     });
 
-    window.addEventListener("scroll", function() {
-      window.requestAnimationFrame(updateTocOnScroll);
-    }, { passive: true });
-    window.addEventListener("resize", function() {
-      window.requestAnimationFrame(syncSidebarStickyPin);
-    }, { passive: true });
+    window.addEventListener("scroll", scheduleTocUpdate, { passive: true });
+    window.addEventListener("resize", scheduleTocUpdate, { passive: true });
+    window.addEventListener("load", scheduleTocUpdate, { once: true });
+    window.addEventListener("qy:layout-shift", scheduleTocUpdate);
+
+    // 监听正文区域异步排版变化（如 Mermaid 流程图渲染、KaTeX 公式撑开、懒加载图片完成）自动校准坐标
+    const postBodyEl = document.querySelector(".post-body");
+    if (postBodyEl && typeof window.ResizeObserver === "function") {
+      try {
+        const ro = new ResizeObserver(scheduleTocUpdate);
+        ro.observe(postBodyEl);
+      } catch (_) {}
+    }
+
     updateTocOnScroll();
   }
   setupArticleTOC();
@@ -664,22 +833,23 @@
   let activePeekIdx = -1;
 
   function renderPeekList() {
+    if (!peekListEl) return;
     peekListEl.innerHTML = POST_INDEX.map((post, idx) => `
       <div class="qy-peek-item ${activePeekIdx === idx ? 'expanded' : ''}" data-idx="${idx}">
         <div class="qy-peek-row">
-          <span class="qy-peek-cat">${post.cat}</span>
-          <span class="qy-peek-title">${post.shortTitle}</span>
-          <span class="qy-peek-date">${post.date}</span>
+          <span class="qy-peek-cat">${escapeHtml(post.cat)}</span>
+          <span class="qy-peek-title">${escapeHtml(post.shortTitle)}</span>
+          <span class="qy-peek-date">${escapeHtml(post.date)}</span>
           <span class="qy-peek-action">${activePeekIdx === idx ? '收起 ▴' : '摘要 ▾'}</span>
         </div>
         <div class="qy-peek-detail-wrap">
           <div class="qy-peek-detail">
-            <p class="qy-peek-summary">${post.summary}</p>
+            <p class="qy-peek-summary">${escapeHtml(post.summary)}</p>
             <div class="qy-peek-footer">
               <div class="qy-peek-tags">
-                ${post.tags.map(t => `<span class="qy-mini-tag"># ${t}</span>`).join('')}
+                ${post.tags.map(t => `<span class="qy-mini-tag"># ${escapeHtml(t)}</span>`).join('')}
               </div>
-              <a href="${post.url}" class="qy-peek-readmore">深读 →</a>
+              <a href="${sanitizeHref(post.url)}" class="qy-peek-readmore">深读 →</a>
             </div>
           </div>
         </div>
@@ -690,6 +860,7 @@
       row.addEventListener("click", function() {
         const item = this.parentElement;
         const idx = parseInt(item.getAttribute("data-idx"), 10);
+        if (Number.isNaN(idx)) return;
         activePeekIdx = (activePeekIdx === idx) ? -1 : idx;
         renderPeekList();
       });
@@ -697,9 +868,9 @@
   }
   renderPeekList();
 
-  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮
+  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮（覆盖首页与后续分页列表）
   function enhanceArticleCards() {
-    if (!isHomePage) return;
+    if (!isIndexListPage) return;
     const postBlocks = document.querySelectorAll(".main-inner .post-block");
     postBlocks.forEach((block) => {
       const postBody = block.querySelector(".post-body");
@@ -723,7 +894,7 @@
 
       toggleBar.innerHTML = `
         <button type="button" class="qy-btn-toggle-abstract">摘要</button>
-        <a href="${postUrl}" class="qy-btn-enter-article">深读</a>
+        <a href="${sanitizeHref(postUrl)}" class="qy-btn-enter-article">深读</a>
       `;
 
       header.after(toggleBar);
@@ -737,13 +908,14 @@
   }
   enhanceArticleCards();
 
-  // 9. 实时壁纸抓取 + 后台预加载双缓冲引擎（每次切换均实时拉取新壁纸且0等待）
+  // 9. 实时壁纸抓取 + 后台预加载双缓冲引擎（带超时防挂死守卫与过期缓存自愈）
   let activeLayerIsA = true;
   let autoRotateTimer = null;
-  let isAutoRotate = localStorage.getItem("qy_auto_wp") === "true";
-  let isPaperMode = localStorage.getItem("qy_paper_mode") === "true";
+  let isAutoRotate = safeGetLocal("qy_auto_wp", "false") === "true";
+  let isPaperMode = safeGetLocal("qy_paper_mode", "false") === "true";
   let nextPreloadedUrl = null;
   let isFetchingWp = false;
+  let isPreloadingWp = false;
 
   const layerA = bgContainer.querySelector(".qy-bg-a");
   const layerB = bgContainer.querySelector(".qy-bg-b");
@@ -751,34 +923,85 @@
   const btnPaperMode = document.getElementById("qy-dock-paper-mode");
   const wpIconEl = document.getElementById("qy-wp-icon");
 
-  function preloadNextLiveWallpaper() {
-    const candidateUrl = generateLiveWallpaperUrl();
+  function loadImageWithTimeout(url, timeoutMs, onSuccess, onFailure) {
+    let settled = false;
     const img = new Image();
+    const timer = setTimeout(function() {
+      if (settled) return;
+      settled = true;
+      img.onload = null;
+      img.onerror = null;
+      onFailure();
+    }, timeoutMs);
+
     img.onload = function() {
-      nextPreloadedUrl = img.currentSrc || candidateUrl;
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      onSuccess(img.currentSrc || url);
     };
+
     img.onerror = function() {
-      // 若某个实时随机源偶发超时，自动回退到保底高清画卷池
-      const fallback = SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
-      nextPreloadedUrl = fallback;
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      onFailure();
     };
-    img.src = candidateUrl;
+
+    img.src = url;
   }
 
-  function crossfadeToUrl(url) {
+  function pickRandomSeedWallpaper() {
+    return SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
+  }
+
+  function preloadNextLiveWallpaper() {
+    if (isPreloadingWp) return;
+    isPreloadingWp = true;
+    const candidateUrl = generateLiveWallpaperUrl();
+    loadImageWithTimeout(
+      candidateUrl,
+      10000,
+      function(resolvedUrl) {
+        isPreloadingWp = false;
+        nextPreloadedUrl = sanitizeCssUrl(resolvedUrl) || pickRandomSeedWallpaper();
+      },
+      function() {
+        isPreloadingWp = false;
+        nextPreloadedUrl = pickRandomSeedWallpaper();
+      }
+    );
+  }
+
+  function crossfadeToUrl(rawUrl) {
+    const cleanUrl = sanitizeCssUrl(rawUrl) || SEED_WALLPAPERS[0];
     const targetLayer = activeLayerIsA ? layerA : layerB;
     const otherLayer = activeLayerIsA ? layerB : layerA;
-    targetLayer.style.backgroundImage = `url("${url}")`;
+    targetLayer.style.backgroundImage = `url("${cleanUrl}")`;
     targetLayer.classList.add("active");
     otherLayer.classList.remove("active");
     activeLayerIsA = !activeLayerIsA;
-    localStorage.setItem("qy_last_wp_url", url);
+    safeSetLocal("qy_last_wp_url", cleanUrl);
   }
 
-  // 初始壁纸展示并立即在后台预抓取下一张实时新图
-  const savedLastUrl = localStorage.getItem("qy_last_wp_url") || SEED_WALLPAPERS[0];
-  layerA.style.backgroundImage = `url("${savedLastUrl}")`;
+  // 初始壁纸首帧直出，同时静默探活缓存地址（若历史临时 CDN 链接失效则平滑自愈回退）
+  const rawSavedUrl = safeGetLocal("qy_last_wp_url", "");
+  const initialWpUrl = sanitizeCssUrl(rawSavedUrl) || SEED_WALLPAPERS[0];
+  layerA.style.backgroundImage = `url("${initialWpUrl}")`;
   activeLayerIsA = false;
+
+  if (initialWpUrl !== SEED_WALLPAPERS[0]) {
+    loadImageWithTimeout(
+      initialWpUrl,
+      9000,
+      function() {},
+      function() {
+        if (!isPaperMode) {
+          crossfadeToUrl(SEED_WALLPAPERS[0]);
+        }
+      }
+    );
+  }
   preloadNextLiveWallpaper();
 
   function nextWallpaper() {
@@ -795,28 +1018,35 @@
     if (wpIconEl) wpIconEl.classList.add("fa-spin");
 
     const liveUrl = generateLiveWallpaperUrl();
-    const img = new Image();
-    img.onload = function() {
-      isFetchingWp = false;
-      if (wpIconEl) wpIconEl.classList.remove("fa-spin");
-      crossfadeToUrl(img.currentSrc || liveUrl);
-      preloadNextLiveWallpaper();
-    };
-    img.onerror = function() {
-      isFetchingWp = false;
-      if (wpIconEl) wpIconEl.classList.remove("fa-spin");
-      const fallback = SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
-      crossfadeToUrl(fallback);
-      preloadNextLiveWallpaper();
-    };
-    img.src = liveUrl;
+    loadImageWithTimeout(
+      liveUrl,
+      8000,
+      function(resolvedUrl) {
+        isFetchingWp = false;
+        if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+        crossfadeToUrl(resolvedUrl);
+        preloadNextLiveWallpaper();
+      },
+      function() {
+        isFetchingWp = false;
+        if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+        crossfadeToUrl(pickRandomSeedWallpaper());
+        preloadNextLiveWallpaper();
+      }
+    );
   }
 
   function updateAutoRotateState() {
-    if (autoRotateTimer) clearInterval(autoRotateTimer);
+    if (autoRotateTimer) {
+      clearInterval(autoRotateTimer);
+      autoRotateTimer = null;
+    }
     if (isAutoRotate && !isPaperMode) {
       btnAutoWp.classList.add("active");
-      autoRotateTimer = setInterval(nextWallpaper, 35000); // 每 35 秒实时抓取新壁纸
+      autoRotateTimer = setInterval(function() {
+        if (document.hidden) return; // 标签页后台隐藏时暂停拉取，零浪费带宽与电量
+        nextWallpaper();
+      }, 35000);
     } else {
       btnAutoWp.classList.remove("active");
     }
@@ -824,7 +1054,7 @@
 
   function togglePaperMode(forceState) {
     isPaperMode = typeof forceState === "boolean" ? forceState : !isPaperMode;
-    localStorage.setItem("qy_paper_mode", String(isPaperMode));
+    safeSetLocal("qy_paper_mode", isPaperMode);
     document.body.classList.toggle("qy-paper-mode", isPaperMode);
     btnPaperMode.classList.toggle("active", isPaperMode);
     updateAutoRotateState();
@@ -860,7 +1090,9 @@
 
   if (isHomePage) {
     window.addEventListener("wheel", function(e) {
-      if (e.target.closest(".qy-peek-drawer") || e.target.closest(".qy-search-dropdown")) return;
+      if (e.ctrlKey || e.metaKey) return; // 排除触控板双指缩放手势误触发
+      const targetEl = getEventTargetElement(e);
+      if (targetEl && (targetEl.closest(".qy-peek-drawer") || targetEl.closest(".qy-search-dropdown"))) return;
       const isZen = document.body.classList.contains("qy-portal-zen");
       if (isZen && e.deltaY > 12) {
         setPortalMode(false);
@@ -870,17 +1102,24 @@
     }, { passive: true });
 
     let touchStartY = 0;
+    let touchIgnoreDrawer = false;
+    let touchStartedAtTop = false;
+
     window.addEventListener("touchstart", function(e) {
-      if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
+      if (e.touches.length !== 1) return;
+      const targetEl = getEventTargetElement(e);
+      touchIgnoreDrawer = Boolean(targetEl && (targetEl.closest(".qy-peek-drawer") || targetEl.closest(".qy-search-dropdown")));
+      touchStartedAtTop = (window.scrollY || document.documentElement.scrollTop) <= 4;
+      touchStartY = e.touches[0].clientY;
     }, { passive: true });
 
     window.addEventListener("touchmove", function(e) {
-      if (e.touches.length !== 1) return;
+      if (e.touches.length !== 1 || touchIgnoreDrawer) return;
       const dy = touchStartY - e.touches[0].clientY;
       const isZen = document.body.classList.contains("qy-portal-zen");
       if (isZen && dy > 28) {
         setPortalMode(false);
-      } else if (!isZen && (window.scrollY || document.documentElement.scrollTop) <= 4 && dy < -35) {
+      } else if (!isZen && touchStartedAtTop && (window.scrollY || document.documentElement.scrollTop) <= 4 && dy < -35) {
         setPortalMode(true);
       }
     }, { passive: true });
@@ -893,14 +1132,14 @@
   // 11. 监听滚动：下滑阅读时，控制坞平滑移至左下角并收缩为「归顶 ↑」单按钮
   let isScrollingToTop = false;
   function handleScroll() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
     if (isScrollingToTop) {
-      if (window.scrollY <= 10) {
+      if (scrollY <= 10) {
         isScrollingToTop = false;
         dock.classList.remove("qy-dock-scrolled");
       }
       return;
     }
-    const scrollY = window.scrollY || document.documentElement.scrollTop;
     if (scrollY > 75 || (isHomePage && document.body.classList.contains("qy-portal-scroll") && scrollY > 30)) {
       dock.classList.add("qy-dock-scrolled");
     } else {
@@ -916,10 +1155,13 @@
 
   // 支持从内页点击「新篇速览」自动切回首屏视界并直接展开速览抽屉
   const urlParams = new URLSearchParams(window.location.search);
-  if (isHomePage && (urlParams.get("peek") === "1" || sessionStorage.getItem("qy_open_peek") === "1")) {
-    sessionStorage.removeItem("qy_open_peek");
+  if (isHomePage && (urlParams.get("peek") === "1" || safeGetSession("qy_open_peek", "") === "1")) {
+    safeRemoveSession("qy_open_peek");
     if (urlParams.get("peek") === "1") {
-      history.replaceState(null, document.title, "/");
+      urlParams.delete("peek");
+      const remainingQuery = urlParams.toString();
+      const cleanUrl = currentPathname + (remainingQuery ? `?${remainingQuery}` : "") + (window.location.hash || "");
+      safeReplaceState(cleanUrl);
     }
     setPortalMode(true);
     peekDrawer.classList.add("open");
@@ -928,7 +1170,7 @@
 
   quickPeekBtn.addEventListener("click", function() {
     if (!isHomePage) {
-      sessionStorage.setItem("qy_open_peek", "1");
+      safeSetSession("qy_open_peek", "1");
       window.location.href = "/?peek=1";
       return;
     }
@@ -976,7 +1218,7 @@
 
   btnAutoWp.addEventListener("click", function() {
     isAutoRotate = !isAutoRotate;
-    localStorage.setItem("qy_auto_wp", String(isAutoRotate));
+    safeSetLocal("qy_auto_wp", isAutoRotate);
     updateAutoRotateState();
   });
 
@@ -1014,7 +1256,8 @@
   }
 
   function performSearch() {
-    const q = searchInput.value.trim().toLowerCase();
+    const rawTrimmed = searchInput.value.trim();
+    const q = rawTrimmed.toLowerCase();
     if (!q) {
       currentMatches = [];
       selectedIdx = -1;
@@ -1035,13 +1278,13 @@
 
     if (currentMatches.length > 0) {
       searchDropdown.innerHTML = currentMatches.map((m, idx) => `
-        <a href="${m.url}" class="qy-search-item ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
+        <a href="${sanitizeHref(m.url)}" class="qy-search-item ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
           <div class="qy-search-item-top">
-            <span class="qy-search-item-cat">${m.cat}</span>
-            <span class="qy-search-item-title">${m.shortTitle}</span>
-            <span class="qy-search-item-date">${m.date}</span>
+            <span class="qy-search-item-cat">${escapeHtml(m.cat)}</span>
+            <span class="qy-search-item-title">${escapeHtml(m.shortTitle)}</span>
+            <span class="qy-search-item-date">${escapeHtml(m.date)}</span>
           </div>
-          <div class="qy-search-item-desc">${m.summary}</div>
+          <div class="qy-search-item-desc">${escapeHtml(m.summary)}</div>
         </a>
       `).join("");
 
@@ -1049,7 +1292,7 @@
       searchDropdown.querySelectorAll(".qy-search-item").forEach(item => {
         item.addEventListener("mouseenter", function() {
           const idx = parseInt(this.getAttribute("data-idx"), 10);
-          if (!isNaN(idx)) {
+          if (!Number.isNaN(idx)) {
             selectedIdx = idx;
             updateActiveSearchItem();
           }
@@ -1058,8 +1301,8 @@
     } else {
       searchDropdown.innerHTML = `
         <div class="qy-search-empty">未在站内寻得匹配文卷</div>
-        <a href="https://cn.bing.com/search?q=${encodeURIComponent(searchInput.value.trim())}" target="_blank" class="qy-search-external-hint" id="qy-search-ext-link">
-          <i class="fa-solid fa-arrow-up-right-from-square"></i> 尝试全网检索「${searchInput.value.trim()}」
+        <a href="https://cn.bing.com/search?q=${encodeURIComponent(rawTrimmed)}" target="_blank" rel="noopener noreferrer" class="qy-search-external-hint" id="qy-search-ext-link">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> 尝试全网检索「${escapeHtml(rawTrimmed)}」
         </a>
       `;
     }
@@ -1114,7 +1357,7 @@
           if (!extLink.classList.contains("active")) {
             extLink.classList.add("active");
           } else {
-            window.open(extLink.href, "_blank");
+            window.open(extLink.href, "_blank", "noopener,noreferrer");
           }
         }
       }
@@ -1125,14 +1368,19 @@
   });
 
   document.addEventListener("keydown", function(e) {
-    if (e.key === "/" && document.activeElement !== searchInput && !["INPUT", "TEXTAREA"].includes(document.activeElement.tagName)) {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    const activeEl = document.activeElement;
+    const activeTag = activeEl && activeEl.tagName ? activeEl.tagName.toUpperCase() : "";
+    const isEditable = Boolean(activeEl && (activeEl.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(activeTag)));
+    if (e.key === "/" && activeEl !== searchInput && !isEditable) {
       e.preventDefault();
       searchInput.focus();
     }
   });
 
   document.addEventListener("click", function(e) {
-    if (!e.target.closest(".qy-search-container")) {
+    const targetEl = getEventTargetElement(e);
+    if (!targetEl || !targetEl.closest(".qy-search-container")) {
       searchDropdown.classList.remove("show");
     }
   });
