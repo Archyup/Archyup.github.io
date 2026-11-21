@@ -1,0 +1,1608 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width">
+<meta name="theme-color" content="#222"><meta name="generator" content="Hexo 8.1.1">
+
+  <link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20261109">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=20261109">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=20261109">
+  <link rel="mask-icon" href="/images/apple-touch-icon.png?v=20261109" color="#222">
+
+<link rel="stylesheet" href="/css/main.css">
+
+
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/7.0.0/css/all.min.css" integrity="sha256-VHqXKFhhMxcpubYf9xiWdCiojEbY9NexQ4jh8AxbvcM=" crossorigin="anonymous">
+
+<script class="next-config" data-name="main" type="application/json">{"hostname":"archyup.github.io","root":"/","images":"/images","scheme":"Gemini","darkmode":false,"version":"8.26.0","exturl":false,"sidebar":{"position":"left","width_expanded":320,"width_dual_column":240,"display":"post","padding":18,"offset":12},"hljswrap":true,"codeblock":{"theme":{"light":"default","dark":"stackoverflow-dark"},"prism":{"light":"prism","dark":"prism-dark"},"copy_button":{"enable":true,"style":"mac"},"fold":{"enable":false,"height":500},"language":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"stickytabs":false,"motion":{"enable":false,"async":false,"duration":200,"transition":{"menu_item":"fadeInDown","post_block":"fadeIn","post_header":"fadeInDown","post_body":"fadeInDown","coll_header":"fadeInLeft","sidebar":"fadeInUp"}},"i18n":{"placeholder":"搜索...","empty":"没有找到任何搜索结果：${query}","hits_time":"找到 ${hits} 个搜索结果（用时 ${time} 毫秒）","hits":"找到 ${hits} 个搜索结果"}}</script><script src="/js/config.js" defer></script>
+
+    <meta name="description" content="在上一篇赛前备战文《从 Copilot 单次补全到夜间自主接力》之后，11 月 19 日至 20 日，我正式带着这套工作流思路走进长沙国际会议中心，参加了 2026 世界计算大会 · Central Park 开源智算青年训练营（昆仑元 × AMD）。在 24 小时三段式“现场搭骨架 → Agent 夜间自主开发 → 返场收口封板” 赛制下，基于赛事指定的 GPT-Station 工作站与 KCo">
+<meta property="og:type" content="article">
+<meta property="og:title" content="24 小时碳硅接力实战复盘：在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》">
+<meta property="og:url" content="https://archyup.github.io/2026/11/21/%E4%B8%96%E7%95%8C%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9ACentralPark%E9%BB%91%E5%AE%A2%E6%9D%BE24%E5%B0%8F%E6%97%B6%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%E4%B8%8E%E4%B8%8D%E5%9C%A8%E5%9C%BA%E8%AF%81%E6%98%8E%E5%AE%9E%E8%B7%B5%E5%A4%8D%E7%9B%98/index.html">
+<meta property="og:site_name" content="Archyのcs之旅">
+<meta property="og:description" content="在上一篇赛前备战文《从 Copilot 单次补全到夜间自主接力》之后，11 月 19 日至 20 日，我正式带着这套工作流思路走进长沙国际会议中心，参加了 2026 世界计算大会 · Central Park 开源智算青年训练营（昆仑元 × AMD）。在 24 小时三段式“现场搭骨架 → Agent 夜间自主开发 → 返场收口封板” 赛制下，基于赛事指定的 GPT-Station 工作站与 KCo">
+<meta property="og:locale" content="zh_CN">
+<meta property="og:image" content="https://archyup.github.io/images/centralpark2026-01-venue.jpg">
+<meta property="og:image" content="https://archyup.github.io/images/centralpark2026-02-workstations.jpg">
+<meta property="og:image" content="https://archyup.github.io/images/centralpark2026-03-coding-live.jpg">
+<meta property="og:image" content="https://archyup.github.io/images/centralpark2026-04-award.jpg">
+<meta property="og:image" content="https://archyup.github.io/images/centralpark2026-05-sunset-aftermath.jpg">
+<meta property="article:published_time" content="2026-11-21T14:30:00.000Z">
+<meta property="article:modified_time" content="2026-11-21T14:40:24.645Z">
+<meta property="article:author" content="Archy">
+<meta property="article:tag" content="AI Agent">
+<meta property="article:tag" content="CS">
+<meta property="article:tag" content="Neuro-Symbolic">
+<meta property="article:tag" content="软件工程">
+<meta property="article:tag" content="黑客松">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:image" content="https://archyup.github.io/images/centralpark2026-01-venue.jpg">
+
+
+<link rel="canonical" href="https://archyup.github.io/2026/11/21/%E4%B8%96%E7%95%8C%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9ACentralPark%E9%BB%91%E5%AE%A2%E6%9D%BE24%E5%B0%8F%E6%97%B6%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%E4%B8%8E%E4%B8%8D%E5%9C%A8%E5%9C%BA%E8%AF%81%E6%98%8E%E5%AE%9E%E8%B7%B5%E5%A4%8D%E7%9B%98/">
+
+
+<script class="next-config" data-name="page" type="application/json">{"sidebar":"","isHome":false,"isPost":true,"lang":"zh-CN","comments":true,"permalink":"https://archyup.github.io/2026/11/21/%E4%B8%96%E7%95%8C%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9ACentralPark%E9%BB%91%E5%AE%A2%E6%9D%BE24%E5%B0%8F%E6%97%B6%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%E4%B8%8E%E4%B8%8D%E5%9C%A8%E5%9C%BA%E8%AF%81%E6%98%8E%E5%AE%9E%E8%B7%B5%E5%A4%8D%E7%9B%98/","path":"2026/11/21/世界计算大会CentralPark黑客松24小时碳硅接力与不在场证明实践复盘/","title":"24 小时碳硅接力实战复盘：在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》"}</script>
+
+<script class="next-config" data-name="calendar" type="application/json">""</script>
+<title>24 小时碳硅接力实战复盘：在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》 | Archyのcs之旅</title>
+  
+
+
+
+
+
+
+
+
+  
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js" integrity="sha256-XL2inqUJaslATFnHdJOi9GfQ60on8Wx1C2H8DYiN1xY=" crossorigin="anonymous" defer></script>
+<script src="/js/utils.js" defer></script><script src="/js/sidebar.js" defer></script><script src="/js/next-boot.js" defer></script>
+
+  
+
+  <script class="next-config" data-name="mermaid" type="application/json">{"enable":true,"theme":{"light":"neutral","dark":"dark"},"js":{"url":"https://cdnjs.cloudflare.com/ajax/libs/mermaid/11.10.1/mermaid.min.js","integrity":"sha256-BmQmdWDS8X2OTbrwELWK366LV6escyWhHHe0XCTU/Hk="}}</script>
+  <script src="/js/third-party/tags/mermaid.js" defer></script>
+
+
+
+
+
+  
+
+
+
+
+<link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=20261109">
+<link rel="icon" type="image/png" sizes="32x32" href="/images/favicon-32x32.png?v=20261109">
+<link rel="icon" type="image/png" sizes="16x16" href="/images/favicon-16x16.png?v=20261109">
+<link rel="apple-touch-icon" sizes="180x180" href="/images/apple-touch-icon.png?v=20261109">
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script>
+  // 首帧同步判定首页与内页，彻底消除点击右上角功能页时的等待与高度跳变
+  (function() {
+    var p = window.location.pathname || "/";
+    var isHome = (p === "/" || p === "/index.html");
+    document.documentElement.classList.add(isHome ? "qy-is-home" : "qy-is-inner");
+
+    window.__qyRenderMath = function() {
+      var run = function() {
+        if (!document.body || typeof window.renderMathInElement !== "function" || typeof window.katex === "undefined") {
+          return;
+        }
+        try {
+          window.renderMathInElement(document.body, {
+            delimiters: [
+              { left: "$$", right: "$$", display: true },
+              { left: "$", right: "$", display: false }
+            ],
+            throwOnError: false,
+            ignoredTags: ["script", "noscript", "style", "textarea", "pre", "code", "option", "svg"],
+            ignoredClasses: ["mermaid", "katex", "qy-topbar", "qy-search-container", "qy-peek-drawer", "qy-dock-inner"]
+          });
+          window.dispatchEvent(new CustomEvent("qy:layout-shift"));
+        } catch (_) {}
+      };
+      if (document.body) {
+        run();
+      } else {
+        document.addEventListener("DOMContentLoaded", run, { once: true });
+      }
+    };
+  })();
+</script>
+<!-- 异步非阻塞加载霞鹜文楷与 KaTeX 数学公式，0 阻塞首屏渲染 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css" media="print" onload="this.media='all';this.onload=null">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" media="print" onload="this.media='all';this.onload=null">
+<noscript>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-screen-webfont@1.1.0/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+</noscript>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" onload="window.__qyRenderMath && window.__qyRenderMath()"></script>
+
+  <noscript>
+    <link rel="stylesheet" href="/css/noscript.css">
+  </noscript>
+<link rel="alternate" href="/atom.xml" title="Archyのcs之旅" type="application/atom+xml">
+<script>window.__QINGYA_POST_INDEX__ = [{"title":"24 小时碳硅接力实战复盘：在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》","shortTitle":"在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》","date":"2026-11-21","cat":"学习历程","tags":["CS","AI Agent","黑客松","Neuro-Symbolic","软件工程"],"url":"/2026/11/21/世界计算大会CentralPark黑客松24小时碳硅接力与不在场证明实践复盘/","summary":"在上一篇赛前备战文《从 Copilot 单次补全到夜间自主接力》之后，11 月 19 日至 20 日，我正式带着这套工作流思路走进长沙国际会议中心，参加了 2026 世界计算大会 · Central Park 开源智算青年训练营（昆仑元 × AMD）。在 24 小时三段..."},{"title":"从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与双层沙箱的代码自迭代智能体实践","shortTitle":"基于 TDD 门禁与双层沙箱的代码自迭代智能体实践","date":"2026-11-09","cat":"技术实践","tags":["CS","AI Agent","软件工程","TDD","自动化测试"],"url":"/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/","summary":"大一刚入学参加岳麓黑客松时，我还只写过两个月代码，连调外部 API 都得跟着学长一步步摸索；当时我在随笔里写过一句偏感想的话，觉得做应用只要学会把现成 AI 能力串起来就行。 转到大二上学期，刚在先导杯里啃完海光 DCU 上的算子与推理优化，这几天又在全力备战 世界计算..."},{"title":"深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","shortTitle":"动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","算子优化","ROCm/HIP"],"url":"/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/","summary":"接上一篇 Qwen2.5-1.5B 推理底座的总结，这篇复盘先导杯（CSCC）第二道赛题——动态 CSR 稀疏矩阵乘稠密矩阵（SpMM, C = A × B） 与扩展掩码融合算子 ns_spmm_fused_mask 的 HIP 内核调优过程。 yysy，以前学计算机组..."},{"title":"面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践","shortTitle":"32K 长上下文 KV 复用与静态图调度实践","date":"2026-11-09","cat":"技术实践","tags":["CS","高性能计算","ROCm/HIP","大模型推理"],"url":"/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/","summary":"好久没更新博客了。从大一刚入学参加岳麓黑客松时跟着学长学怎么调 API，到现在大二上学期扎进先导杯（CSCC）调海光 DCU 上的大模型推理，这一年的跨度比我预想得大一些。 yysy，放在以前，让一个刚上大二的本科生去读 transformers 底层注意力源码、改 H..."},{"title":"ACM初体验","shortTitle":"ACM初体验","date":"2026-01-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2026/01/11/assets/ACM初体验/","summary":"欢迎来到我的博客！ 如题所说，这是我第一次参加像模像样的ACM形式的比赛。 湖南大学ACM新生杯"},{"title":"黑客松初体验","shortTitle":"黑客松初体验","date":"2025-12-20","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/12/20/黑客松初体验/","summary":"欢迎来到我的博客 第一次参加Hackathon-岳麓黑客松在学长lluyun的推荐下，报名了HFT主办的岳麓黑客松，不得不说，真的是很神奇的体验。yysy本来下午还有一个什么“马力全开”湖大信科院举办的程序设计大赛。深思熟虑之下觉得拿周末的时间去刷题也太low了，不如去..."},{"title":"我的CS学习之路-序章","shortTitle":"我的CS学习之路-序章","date":"2025-11-11","cat":"学习历程","tags":["CS","随笔"],"url":"/2025/11/11/我的CS学习之路-序章/","summary":"欢迎来到我的博客！ 为什么选择 CS？经过三年高中的刻苦(bushi)练习，我想要选择一个不那么苦不那么累的专业。 在我高考的那一年，正好是AI大爆发的时代，作为一个有志青年，我毅然决然地选择了cs。 （当然有考虑到爆火的电气会很卷并且课程难度很大） 我报考了华科，武大..."}];</script>
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage">
+  <div class="headband"></div>
+
+  <main class="main">
+    <div class="column">
+      <header class="header" itemscope itemtype="http://schema.org/WPHeader"><div class="site-brand-container">
+  <div class="site-nav-toggle">
+    <div class="toggle" aria-label="切换导航栏" role="button">
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+        <span class="toggle-line"></span>
+    </div>
+  </div>
+
+  <div class="site-meta">
+
+    <a href="/" class="brand" rel="start">
+      <i class="logo-line"></i>
+      <p class="site-title">Archyのcs之旅</p>
+      <i class="logo-line"></i>
+    </a>
+      <p class="site-subtitle" itemprop="description">相信未来,热爱生命</p>
+  </div>
+
+  <div class="site-nav-right">
+    <div class="toggle popup-trigger" aria-label="搜索" role="button">
+    </div>
+  </div>
+</div>
+
+
+
+<nav class="site-nav">
+  <ul class="main-menu menu"><li class="menu-item menu-item-home"><a href="/" rel="section"><i class="fa-solid fa-compass fa-fw"></i>首页</a></li><li class="menu-item menu-item-archives"><a href="/archives/" rel="section"><i class="fa-solid fa-scroll fa-fw"></i>归档</a></li><li class="menu-item menu-item-categories"><a href="/categories/" rel="section"><i class="fa-solid fa-folder-tree fa-fw"></i>分类</a></li><li class="menu-item menu-item-tags"><a href="/tags/" rel="section"><i class="fa-solid fa-tags fa-fw"></i>标签</a></li><li class="menu-item menu-item-about"><a href="/about/" rel="section"><i class="fa-solid fa-user-graduate fa-fw"></i>关于</a></li>
+  </ul>
+</nav>
+
+
+
+
+</header>
+        
+  
+  <aside class="sidebar">
+
+    <div class="sidebar-inner sidebar-nav-active sidebar-toc-active">
+      <ul class="sidebar-nav">
+        <li class="sidebar-nav-toc">
+          文章目录
+        </li>
+        <li class="sidebar-nav-overview">
+          站点概览
+        </li>
+      </ul>
+
+      <div class="sidebar-panel-container">
+        <!--noindex-->
+        <div class="post-toc-wrap sidebar-panel">
+            <div class="post-toc animated"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%80%E3%80%81-%E8%B5%9B%E5%89%8D%E7%A0%B4%E5%B1%80%EF%BC%8811-08-%E2%80%93-11-18%EF%BC%89%EF%BC%9A%E4%BB%8E%E2%80%9C%E4%B8%8D%E6%95%A2%E7%A2%B0-Agent%E2%80%9D%E5%88%B0%E5%AE%9A%E8%B0%83%E3%80%8A%E4%B8%8D%E5%9C%A8%E5%9C%BA%E8%AF%81%E6%98%8E%E3%80%8B"><span class="nav-text">一、 赛前破局（11.08 – 11.18）：从“不敢碰 Agent”到定调《不在场证明》</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#1-1-%E8%B5%9B%E5%88%B6%E6%8B%86%E8%A7%A3%E4%B8%8E%E5%85%88%E9%80%A0%E8%BD%AE%E5%AD%90%E7%BB%83%E6%89%8B"><span class="nav-text">1.1 赛制拆解与先造轮子练手</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#1-2-%E4%B8%BA%E4%BB%80%E4%B9%88%E9%80%89%E5%A4%9A%E8%A7%92%E8%89%B2%E5%AE%A1%E8%AE%AF%E6%8E%A8%E7%90%86%EF%BC%8C%E8%80%8C%E4%B8%8D%E6%98%AF%E5%A5%97%E5%A3%B3%E8%81%8A%E5%A4%A9%E6%A1%86"><span class="nav-text">1.2 为什么选多角色审讯推理，而不是套壳聊天框</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%8C%E3%80%81-%E7%AC%AC%E4%B8%80%E9%98%B6%E6%AE%B5-%C2%B7-%E7%8E%B0%E5%9C%BA%E5%BC%80%E5%B1%80%EF%BC%8811-19-12-00-%E2%80%93-17-30%EF%BC%89%EF%BC%9A%E5%A5%91%E7%BA%A6%E5%85%88%E8%A1%8C%E4%B8%8E%E6%B7%B7%E5%90%88%E6%8E%A8%E7%90%86%E5%BC%95%E6%93%8E%E8%90%BD%E5%9C%B0"><span class="nav-text">二、 第一阶段 · 现场开局（11.19 12:00 – 17:30）：契约先行与混合推理引擎落地</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#2-1-%E4%B8%89%E5%B0%8F%E6%97%B6%E6%9E%81%E9%80%9F%E8%90%BD%E5%9C%B0%EF%BC%9A%E5%85%88%E5%86%99-CONTRACT-md-%E5%86%8D%E5%86%99%E4%B8%9A%E5%8A%A1%E4%BB%A3%E7%A0%81"><span class="nav-text">2.1 三小时极速落地：先写 CONTRACT.md 再写业务代码</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#2-2-Neuro-Symbolic-%E6%B7%B7%E5%90%88%E6%8E%A8%E7%90%86%E4%B8%8E%E5%A4%9A%E8%A7%92%E8%89%B2-Agent-%E7%8A%B6%E6%80%81%E5%8D%8F%E4%BD%9C"><span class="nav-text">2.2 Neuro-Symbolic 混合推理与多角色 Agent 状态协作</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%B8%89%E3%80%81-%E7%AC%AC%E4%BA%8C%E9%98%B6%E6%AE%B5-%C2%B7-%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%EF%BC%8811-19-17-30-%E2%80%93-11-20-09-00%EF%BC%89%EF%BC%9AGit-%E6%8A%A2%E9%99%A9%E3%80%81%E8%B7%A8%E7%AB%AF%E4%BA%A4%E6%8E%A5%E4%B8%8E%E5%87%8C%E6%99%A8%E8%B0%83%E6%95%99%E7%99%BD%E6%B3%BD"><span class="nav-text">三、 第二阶段 · 碳硅接力（11.19 17:30 – 11.20 09:00）：Git 抢险、跨端交接与凌晨调教白泽</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#3-1-%E5%82%8D%E6%99%9A%E6%83%8A%E9%AD%82%EF%BC%9A1-860-%E8%A1%8C%E5%89%8D%E7%AB%AF%E8%AF%AF%E5%88%A0%E6%8A%A2%E4%BF%AE%E4%B8%8E%E4%B8%A4%E4%B8%AA-Windows-%E5%B7%A5%E7%A8%8B%E5%9D%91"><span class="nav-text">3.1 傍晚惊魂：1,860 行前端误删抢修与两个 Windows 工程坑</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-2-%E4%BA%A4%E6%8E%A5%E9%98%B2%E7%BA%BF%E4%B8%8E%E5%90%88%E8%A7%84%E5%A4%9C%E9%97%B4%E6%8E%A8%E8%BF%9B"><span class="nav-text">3.2 交接防线与合规夜间推进</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#3-3-%E6%B8%85%E6%99%A8-07-02-%E7%9A%84%E4%BA%A4%E4%BB%98%E6%83%8A%E5%96%9C"><span class="nav-text">3.3 清晨 07:02 的交付惊喜</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E5%9B%9B%E3%80%81-%E7%AC%AC%E4%B8%89%E9%98%B6%E6%AE%B5-%C2%B7-%E8%BF%94%E5%9C%BA%E9%AA%8C%E6%94%B6%E4%B8%8E%E4%BA%A4%E4%BB%98%E5%AE%A1%E8%AE%A1%EF%BC%8811-20-09-00-%E2%80%93-12-00%EF%BC%89%EF%BC%9A%E4%B8%BA%E4%BB%80%E4%B9%88%E5%B0%81%E6%9D%BF%E5%89%8D%E5%85%88%E5%86%99%E4%BA%86%E4%B8%80%E4%BB%BD%E2%80%9C%E9%97%AE%E9%A2%98%E6%8A%A5%E5%91%8A%E2%80%9D%EF%BC%9F"><span class="nav-text">四、 第三阶段 · 返场验收与交付审计（11.20 09:00 – 12:00）：为什么封板前先写了一份“问题报告”？</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#4-1-%E4%B8%89%E6%9D%A1%E5%8F%AF%E7%8B%AC%E7%AB%8B%E5%A4%8D%E7%8E%B0%E7%9A%84%E9%AA%8C%E6%94%B6%E5%85%A5%E5%8F%A3"><span class="nav-text">4.1 三条可独立复现的验收入口</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-2-%E5%B0%81%E6%9D%BF%E5%89%8D%E7%9A%84%E2%80%9C%E5%8F%8D%E5%90%B9%E7%89%9B%E2%80%9D%E5%AF%B9%E6%8A%97%E5%BC%8F%E8%87%AA%E5%AE%A1"><span class="nav-text">4.2 封板前的“反吹牛”对抗式自审</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#4-3-%E5%B0%98%E5%9F%83%E8%90%BD%E5%AE%9A"><span class="nav-text">4.3 尘埃落定</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#%E4%BA%94%E3%80%81-%E6%95%A3%E5%9C%BA%E4%B8%8E%E5%9B%9E%E5%93%8D%EF%BC%8811-20-%E5%82%8D%E6%99%9A%EF%BC%89%EF%BC%9A%E4%B8%80%E5%B9%B4%E6%97%B6%E9%97%B4%EF%BC%8C%E4%BB%8E%E2%80%9C%E7%A9%BF%E7%9D%80%E5%A4%A7%E4%BA%BA%E8%A1%A3%E6%9C%8D%E7%9A%84%E7%9C%8B%E5%AE%A2%E2%80%9D%E5%88%B0%E2%80%9C%E7%B3%BB%E7%BB%9F%E6%93%8D%E7%9B%98%E6%89%8B%E2%80%9D"><span class="nav-text">五、 散场与回响（11.20 傍晚）：一年时间，从“穿着大人衣服的看客”到“系统操盘手”</span></a></li></ol></div>
+        </div>
+        <!--/noindex-->
+
+        <div class="site-overview-wrap sidebar-panel">
+          <div class="site-author animated" itemprop="author" itemscope itemtype="http://schema.org/Person">
+    <img class="site-author-image" itemprop="image" alt="Archy"
+      src="/images/avatar.JPG">
+  <p class="site-author-name" itemprop="name">Archy</p>
+  <div class="site-description" itemprop="description">记录我的 C++ / Python 学习与大学四年的成长</div>
+</div>
+<div class="site-state-wrap animated">
+  <nav class="site-state">
+      <div class="site-state-item site-state-posts">
+        <a href="/archives/">
+          <span class="site-state-item-count">7</span>
+          <span class="site-state-item-name">日志</span>
+        </a>
+      </div>
+      <div class="site-state-item site-state-categories">
+          <a href="/categories/">
+        <span class="site-state-item-count">2</span>
+        <span class="site-state-item-name">分类</span></a>
+      </div>
+      <div class="site-state-item site-state-tags">
+          <a href="/tags/">
+        <span class="site-state-item-count">12</span>
+        <span class="site-state-item-name">标签</span></a>
+      </div>
+  </nav>
+</div>
+  <div class="links-of-author animated">
+      <span class="links-of-author-item">
+        <a href="https://github.com/aarchyyy" title="GitHub → https:&#x2F;&#x2F;github.com&#x2F;aarchyyy" rel="noopener me" target="_blank"><i class="fab fa-github fa-fw"></i>GitHub</a>
+      </span>
+      <span class="links-of-author-item">
+        <a href="mailto:1469129906@qq.com" title="E-Mail → mailto:1469129906@qq.com" rel="noopener me" target="_blank"><i class="fa fa-envelope fa-fw"></i>E-Mail</a>
+      </span>
+  </div>
+
+        </div>
+      </div>
+    </div>
+
+    
+  </aside>
+
+
+    </div>
+
+    <div class="main-inner post posts-expand">
+
+
+  
+
+
+<div class="post-block">
+  
+  
+
+  <article itemscope itemtype="http://schema.org/Article" class="post-content" lang="zh-CN">
+    <link itemprop="mainEntityOfPage" href="https://archyup.github.io/2026/11/21/%E4%B8%96%E7%95%8C%E8%AE%A1%E7%AE%97%E5%A4%A7%E4%BC%9ACentralPark%E9%BB%91%E5%AE%A2%E6%9D%BE24%E5%B0%8F%E6%97%B6%E7%A2%B3%E7%A1%85%E6%8E%A5%E5%8A%9B%E4%B8%8E%E4%B8%8D%E5%9C%A8%E5%9C%BA%E8%AF%81%E6%98%8E%E5%AE%9E%E8%B7%B5%E5%A4%8D%E7%9B%98/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="image" content="/images/avatar.JPG">
+      <meta itemprop="name" content="Archy">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="Archyのcs之旅">
+      <meta itemprop="description" content="记录我的 C++ / Python 学习与大学四年的成长">
+    </span>
+
+    <span hidden itemprop="post" itemscope itemtype="http://schema.org/CreativeWork">
+      <meta itemprop="name" content="24 小时碳硅接力实战复盘：在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》 | Archyのcs之旅">
+      <meta itemprop="description" content="">
+    </span>
+      <header class="post-header">
+        <h1 class="post-title" itemprop="name headline">
+          24 小时碳硅接力实战复盘：在世界计算大会用 Neuro-Symbolic 架构打造多 Agent 推理游戏《不在场证明》
+        </h1>
+
+        <div class="post-meta-container">
+          <div class="post-meta">
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-calendar"></i>
+      </span>
+      <span class="post-meta-item-text">发表于</span>
+      
+
+      <time title="创建时间：2026-11-21 22:30:00 / 修改时间：22:40:24" itemprop="dateCreated datePublished" datetime="2026-11-21T22:30:00+08:00">2026-11-21</time>
+    </span>
+    <span class="post-meta-item">
+      <span class="post-meta-item-icon">
+        <i class="far fa-folder"></i>
+      </span>
+      <span class="post-meta-item-text">分类于</span>
+        <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+          <a href="/categories/%E5%AD%A6%E4%B9%A0%E5%8E%86%E7%A8%8B/" itemprop="url" rel="index"><span itemprop="name">学习历程</span></a>
+        </span>
+    </span>
+
+  
+</div>
+
+        </div>
+      </header>
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody"><p>在上一篇赛前备战文<a href="/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/">《从 Copilot 单次补全到夜间自主接力》</a>之后，11 月 19 日至 20 日，我正式带着这套工作流思路走进长沙国际会议中心，参加了 <strong>2026 世界计算大会 · Central Park 开源智算青年训练营</strong>（昆仑元 × AMD）。在 <strong>24 小时三段式“现场搭骨架 → Agent 夜间自主开发 → 返场收口封板”</strong> 赛制下，基于赛事指定的 <code>GPT-Station</code> 工作站与 <code>KCoder + Baize omni</code> 平台，我和现场组队的队友一起完成了多角色 Agent 审讯推理网页游戏 <strong>《不在场证明》（首案《蓝钻庄园：午夜巨响》）</strong>。</p>
+<p><i>yysy，半个月前刚看到训练营通知时我心里直打鼓——之前连正经的多 Agent 系统都没完整写过，真怕进场之后当个“气氛组”。等到真坐进赛场，面对 Windows 假 <code>python</code> 别名踩坑、Git Rebase 一把误删 1,860 行前端代码、白泽模型偶发陷入超长思考空转，以及封板前 50 分钟的极限排雷，我才切实体会到：24 小时黑客松真正拼的从来不是把 Prompt 写得多玄乎，而是能不能用接口契约（Contract）、确定性规则边界和自动化回归测试网，把大模型的不确定性牢牢框进工程底座里。</i></p>
+<p>最终交付的《不在场证明》全栈仅依赖 <strong>Python 3.9+ 标准库与原生 HTML5 &#x2F; CSS3 &#x2F; ES6（零第三方 Python&#x2F;npm 依赖、零外部 CDN）</strong>，支持双击一键启动；全套工程通过 <strong>120 项离线回归测试（<code>ALL CHECKS PASSED</code>，基线实测 <code>13.151s</code>）</strong>，并打通了独立剧本审稿器 CLI 与 N2 双分支实机策略验收入口，最终在训练营中斩获 <strong>专项奖 · AI 开发者创想奖（¥1,000）</strong>。</p>
+<span id="more"></span>
+
+<hr>
+<h2 id="一、-赛前破局（11-08-–-11-18）：从“不敢碰-Agent”到定调《不在场证明》"><a href="#一、-赛前破局（11-08-–-11-18）：从“不敢碰-Agent”到定调《不在场证明》" class="headerlink" title="一、 赛前破局（11.08 – 11.18）：从“不敢碰 Agent”到定调《不在场证明》"></a>一、 赛前破局（11.08 – 11.18）：从“不敢碰 Agent”到定调《不在场证明》</h2><h3 id="1-1-赛制拆解与先造轮子练手"><a href="#1-1-赛制拆解与先造轮子练手" class="headerlink" title="1.1 赛制拆解与先造轮子练手"></a>1.1 赛制拆解与先造轮子练手</h3><p>11 月 8 日刚接触到这次黑客松信息时，我一度觉得自己对 Agent 编排和夜间自动接管几乎一无所知。与其干焦虑，不如先把赛前十天当成实战预演：先借着研究“无人值守测试门禁”的契机写出 <code>ACS-Agent</code> 把沙箱隔离、契约约束和自动回归走顺；到了 11 月 17 日，又把官方比赛规则按时间轴和合规红线彻底拆了一遍：</p>
+<ul>
+<li><strong>24 小时三段式节拍</strong>：<code>11/19 12:00 – 17:30</code>（5.5 小时现场搭框架与配任务）→ <code>11/19 18:00 – 11/20 09:00</code>（选手离场，Agent 在 <code>GPT-Station</code> 上持续执行，只能通过 <strong>KCoder 连接器</strong> 远程下发指令与查看反馈）→ <code>11/20 09:00 – 12:00</code>（3 小时返场检查、修 Bug 与提交封板）。</li>
+<li><strong>四维自动评分口径</strong>：<strong>功能完成度、代码质量、Agent 运行效率、创新度</strong>；同时提交件要求“四件套”（完整源码、运行入口、项目说明、演示材料），严禁任何第三方远控软件或绕过连接器的远程操作。</li>
+</ul>
+<h3 id="1-2-为什么选多角色审讯推理，而不是套壳聊天框"><a href="#1-2-为什么选多角色审讯推理，而不是套壳聊天框" class="headerlink" title="1.2 为什么选多角色审讯推理，而不是套壳聊天框"></a>1.2 为什么选多角色审讯推理，而不是套壳聊天框</h3><p>如果只做一个“大模型套壳聊天问答”，技术上很容易写完，但在评委和玩家眼里毫无记忆点，而且纯自由对话在推理场景下极易“剧透”或“被玩家三句话套出真凶”。</p>
+<p>11 月 18 日凌晨，我们定下了 <strong>《不在场证明》（首案《蓝钻庄园：午夜巨响》）</strong>：玩家以受邀客人身份审讯三位各有隐情、甚至可能互相串供的嫌疑人——寄住庄园的表少爷 <code>S1 陆子昂</code>、掌管钥匙十七年的管家 <code>S2 程曼云</code>、以及策划诡计的远亲 <code>S3 顾言</code>。整个剧本围绕 <strong>5 件物证、7 份口供、N1–N5 五个剧情节点</strong> 与 <strong>两个互相独立的结案证据槽</strong> 展开。赛前一天我提前敲定了规格书、跑通了一版原型，并整理了《现场 KCoder 极速复刻手册》，只等进场后在工作站上从零按照契约正式落地。</p>
+<hr>
+<h2 id="二、-第一阶段-·-现场开局（11-19-12-00-–-17-30）：契约先行与混合推理引擎落地"><a href="#二、-第一阶段-·-现场开局（11-19-12-00-–-17-30）：契约先行与混合推理引擎落地" class="headerlink" title="二、 第一阶段 · 现场开局（11.19 12:00 – 17:30）：契约先行与混合推理引擎落地"></a>二、 第一阶段 · 现场开局（11.19 12:00 – 17:30）：契约先行与混合推理引擎落地</h2><p><img src="/images/centralpark2026-01-venue.jpg" alt="2026 世界计算大会 Central Park 开源社区展区入口"></p>
+<p>11 月 19 日上午来到长沙国际会议中心签到，场馆里一排排 KunlunMeta <code>GPT-Station</code> 工作站已经架好。现场按双人组队机制配对（我们被分到 <strong>8 队 · 15 号终端</strong>），12:00 哨响后正式开干。</p>
+<p><img src="/images/centralpark2026-02-workstations.jpg" alt="赛场 GPT-Station 工位矩阵"></p>
+<h3 id="2-1-三小时极速落地：先写-CONTRACT-md-再写业务代码"><a href="#2-1-三小时极速落地：先写-CONTRACT-md-再写业务代码" class="headerlink" title="2.1 三小时极速落地：先写 CONTRACT.md 再写业务代码"></a>2.1 三小时极速落地：先写 <code>CONTRACT.md</code> 再写业务代码</h3><p>为了让 KCoder 调度白泽模型时不至于“前后端各写各的、改一处崩三处”，我们在 <code>12:51</code> 初始化仓库后没有直接堆业务界面，而是先把全部接口协议、错误码、状态字段和信息公开边界写进了 <code>CONTRACT.md</code>：</p>
+<ol>
+<li><strong><code>15:25</code>（提交 <code>7dbe419</code>，+4,330 行）</strong>：一次性落地案件核心引擎与全套离线单测——包括进程入口 <code>app.py</code>、剧本 <code>cases/case_01_manor.json</code>、服务端五大模块 <code>server/&#123;engine,role_policy,llm_client,config,collusion&#125;.py</code> 以及 <code>tests/test_&#123;case,engine,gateway,http_verify&#125;.py</code> 四组测试套件。</li>
+<li><strong><code>16:53</code>（提交 <code>161b22e</code>，+2,075 行）</strong>：接通三栏式原生 HTML&#x2F;CSS&#x2F;JS 前端界面、进程内存热更新网关配置接口（<code>/api/config/llm</code>），以及带明文密钥扫描的提交包脚本 <code>scripts/package_submission.py</code>。</li>
+</ol>
+<p><img src="/images/centralpark2026-03-coding-live.jpg" alt="11 月 19 日 15:18 比赛现场桌面实拍"></p>
+<p>看一眼 <code>15:18</code> 拍下的赛场显示器：<code>RACE PLAYER</code> 计时器刚走到 <code>03:19:00</code>（距封板还剩 <code>20:40:59</code>），本地 <code>LLM API</code> 网关已经实打实跑出了 <strong>15.57M Token（输入 <code>14.15M</code> &#x2F; 输出 <code>1.42M</code>）、180 次模型请求、181 次工具调用</strong>。左边开着 <code>KCoder Studio</code> 与 <code>tests/</code> 目录逐条盯测试，这种高密度人机协同的压迫感和爽感，比平时写作业拉满好几个量级。</p>
+<h3 id="2-2-Neuro-Symbolic-混合推理与多角色-Agent-状态协作"><a href="#2-2-Neuro-Symbolic-混合推理与多角色-Agent-状态协作" class="headerlink" title="2.2 Neuro-Symbolic 混合推理与多角色 Agent 状态协作"></a>2.2 Neuro-Symbolic 混合推理与多角色 Agent 状态协作</h3><p>为了兼顾“自由审讯的临场感”与“推理定罪的绝对严谨”，整个系统采用 <strong>Neuro-Symbolic（神经符号）混合推理架构</strong>——<strong>模型负责表演与受限策略选择（Neural），规则引擎负责状态机流转、物证校验与结案裁决（Symbolic）</strong>：</p>
+<pre>
+<code class="mermaid">
+
+flowchart TD
+    UI[&quot;浏览器三栏前端 (web&#x2F;index.html + main.js)&quot;] --&gt; HTTP[&quot;HTTP 接口与静态服务 (app.py)&quot;]
+    HTTP --&gt; ENG[&quot;案件引擎 (server&#x2F;engine.py): 行动点 &#x2F; 节点解锁 &#x2F; 角色调度&quot;]
+    ENG --&gt; MEM[&quot;独立角色问答记录 (按嫌疑人 ID 隔离)&quot;]
+    ENG --&gt; STATE[&quot;共享会话状态 (已获证物 &#x2F; 公开口供 &#x2F; 已触发节点)&quot;]
+    STATE --&gt; JUDGE[&quot;双槽规则裁决 (time + culprit 独立校验)&quot;]
+    ENG -- &quot;对白生成 &#x2F; 触发 N2 策略节点&quot; --&gt; POL[&quot;受限角色策略 (server&#x2F;role_policy.py)&quot;]
+    POL --&gt; GW[&quot;白泽模型网关 (server&#x2F;llm_client.py)&quot;]
+    GW -- &quot;未配置 &#x2F; 超时 &#x2F; 非合约 JSON&quot; --&gt; FB[&quot;离线对白库与默认动作 (source&#x3D;fallback)&quot;]
+    GW -- &quot;合法 JSON 白名单动作&quot; --&gt; ENG
+</code>
+</pre>
+
+<p>这套底座在实际跑起来时，靠三道硬约束守住了逻辑闭环：</p>
+<ol>
+<li><strong>模型只选白名单策略，自由文本绝不定案</strong>：整局游戏把大模型的核心策略决策收束在 <code>S2</code> 程曼云的 <code>N2</code> 节点。触发时，<code>server/role_policy.py</code> 只传四类信息（本轮出示条目、她已公开的说法、玩家原问题、两种合法动作说明），并强制要求返回精确到键名的单字段 JSON <code>&#123;&quot;action_id&quot;: &quot;...&quot;&#125;</code>：</li>
+</ol>
+<table>
+<thead>
+<tr>
+<th align="left">白名单动作</th>
+<th align="left">触发语境特征</th>
+<th align="left">引擎落盘执行的正式结果</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>maintain_alibi</code></td>
+<td align="left">玩家默认其时间判断，仅核对目击对象</td>
+<td align="left">授予 <code>T_S2_MAINTAIN</code>（维持顾言在场互证），后续追问聚焦“能否一直看见顾言”</td>
+</tr>
+<tr>
+<td align="left"><code>narrow_claim</code></td>
+<td align="left">玩家锐利拆穿“闻声时刻 ≠ 案发时刻”</td>
+<td align="left">授予 <code>T_S2_NARROW</code>（收窄为只确认闻声时在场），后续追问转向“响声为何能代表案发时间”</td>
+</tr>
+</tbody></table>
+<p>   一旦出现超时、非 JSON、未知动作或携带多余字段，引擎立刻拦截并统一回落到 <code>maintain_alibi</code>（同时把 <code>role_action.source</code> 严格标记为 <code>fallback</code>，绝不允许模型自报 <code>live</code> 状态）。</p>
+<ol start="2">
+<li><p><strong>多角色 Agent 独立上下文 + 共享案件状态</strong>：三位嫌疑人共用模型网关，但服务端按 <code>suspect_id</code> 严格隔离各自的问答记忆与已公开说法；完整案件真相、真凶身份和未解锁线索永远留在服务端，绝不塞进常规对白 Prompt。角色之间的跨角色信息传递，全部通过<strong>带固定 ID 的正式口供</strong>经引擎验持流转——例如 <code>S1 陆子昂</code> 在 <code>N1</code> 公开证词 <code>T_S1_01</code> 后进入共享会话状态，玩家只有把它实际出示给 <code>S2 程曼云</code>，才能触发 <code>N2</code> 策略与串供告警（<code>server/collusion.py</code>）。</p>
+</li>
+<li><p><strong>双证据槽确定性结案与反秒猜机制</strong>：为了防止玩家靠数值猜凶手，我们在剧本里刻意设计了生理烟雾弹——无辜偷酒的 <code>S1 陆子昂</code> 起始心率极高，反而策划诡计的真凶 <code>S3 顾言</code> 起始心率最稳。结案时固定校验两个互相独立的证据槽：</p>
+<ul>
+<li><strong>作案时间证据槽（<code>time</code>）</strong>：需提交 <code>E3</code>（停在 <code>00:05</code> 的发条闹钟），且前置节点 <code>N4</code> 已解锁；</li>
+<li><strong>指认证据槽（<code>culprit</code>）</strong>：需提交 <code>T_S2_FLIP</code>（程曼云改口口供），且前置节点 <code>N3</code>、<code>N5</code> 已解锁，同时指认对象为 <code>S3</code>。<br>同一条目禁止同时填入两槽（直接返回 <code>400 duplicate_evidence</code>），结案后会话立即锁定（后续请求返回 <code>409 session_closed</code>），确保复盘结果 100% 可独立复验。</li>
+</ul>
+</li>
+</ol>
+<hr>
+<h2 id="三、-第二阶段-·-碳硅接力（11-19-17-30-–-11-20-09-00）：Git-抢险、跨端交接与凌晨调教白泽"><a href="#三、-第二阶段-·-碳硅接力（11-19-17-30-–-11-20-09-00）：Git-抢险、跨端交接与凌晨调教白泽" class="headerlink" title="三、 第二阶段 · 碳硅接力（11.19 17:30 – 11.20 09:00）：Git 抢险、跨端交接与凌晨调教白泽"></a>三、 第二阶段 · 碳硅接力（11.19 17:30 – 11.20 09:00）：Git 抢险、跨端交接与凌晨调教白泽</h2><h3 id="3-1-傍晚惊魂：1-860-行前端误删抢修与两个-Windows-工程坑"><a href="#3-1-傍晚惊魂：1-860-行前端误删抢修与两个-Windows-工程坑" class="headerlink" title="3.1 傍晚惊魂：1,860 行前端误删抢修与两个 Windows 工程坑"></a>3.1 傍晚惊魂：1,860 行前端误删抢修与两个 Windows 工程坑</h3><p>开发不可能一路顺风。<code>17:28–17:30</code> 临近交接检查前，由于一次异常中断的 <code>.git/rebase-merge</code> 状态叠加提交 <code>d72928b</code>，工作区里刚写好的 <code>1,860</code> 行 <code>web/main.js</code> 等前端文件直接被删空。好在当时没有慌乱执行强清指令，而是用三步精准止损：</p>
+<ol>
+<li>先切出备份分支 <code>backup-pre-cleanup</code> 并把关键改动文件复制到系统临时目录保底；</li>
+<li>执行 <code>git rebase --quit</code> 安全退出卡死的 rebase 状态（不回退工作区）；</li>
+<li>从本地提交 <code>e0e5288</code> 把 <code>web/</code> 与 <code>scripts/package_submission.py</code> 完整检出恢复，并在 <code>tests/test_http_verify.py</code> 里立刻补上一条 <code>test_static_web_assets_served</code> 回归测试——实测 <code>GET /</code>、<code>/web/style.css</code>、<code>/web/main.js</code> 全部返回 <code>200</code> 且首页必须包含 <code>id=&quot;evidenceBox&quot;</code>，从此把“误删静态前端还能绿灯”的漏洞彻底焊死。</li>
+</ol>
+<p>顺手记下两个只有真在 Windows 工作站上打过比赛才会懂的工程坑：</p>
+<ul>
+<li><strong>假 <code>python</code> 别名坑</strong>：Windows 终端直接敲 <code>python</code> 容易触发系统商店空壳别名（直接退出 <code>9009</code>），我们在 <code>start_windows.bat</code> 和所有验收文档里全线统一改用 <code>py -3 -B</code>（既绕开假别名，又不污染工作区生成 <code>__pycache__</code>）。</li>
+<li><strong>后台端口噪声坑</strong>：多进程起停本地端口做 HTTP 验证在赛场机器上极易撞端口、留僵尸进程，后来直接改成同进程起真实 <code>app.Handler</code> 配合真实案件 JSON 做端到端 HTTP 校验，快且零环境噪声。</li>
+</ul>
+<h3 id="3-2-交接防线与合规夜间推进"><a href="#3-2-交接防线与合规夜间推进" class="headerlink" title="3.2 交接防线与合规夜间推进"></a>3.2 交接防线与合规夜间推进</h3><p>晚上 <code>21:50</code>（提交 <code>b08acf7</code>，+3,482 行），我们把 <code>server/baize_verify.py</code>（N2 双分支实机验收）、独立案件审稿官 <code>scripts/ai_case_auditor.py</code>、<code>HANDOFF.md</code> 以及给负责 UI 润色队友的 <code>TEAMMATE_UI_HANDOFF.md</code> 全部锁入分支。</p>
+<p>交接文档里直接划清了<strong>前端开发红线</strong>：只允许改 <code>web/</code> 下指定前端文件，严禁修改 <code>CONTRACT.md</code> 与服务端引擎，严禁使用 <code>innerHTML</code>（统一走 <code>textContent</code> &#x2F; <code>createTextNode</code>），严禁出现外部 CDN、npm 构建和任何密钥前缀字符，每次改动必过 <code>--verify</code> 与 <code>--dry-run</code> 打包扫描双门禁。</p>
+<p>夜间撤离场馆后，所有远程指令严格走官方合规通道——<strong>飞书 &#x2F; 企业微信 → KCoder 连接器 → 工作站</strong> 分步下发。实战里还摸出一条非常管用的“训白泽”经验：<strong>遇到跨多文件的复杂前端任务时，白泽模型偶尔会陷入超长思考空转迟迟不动手写代码；当判断它已经把上下文和方案推导充分后，及时打断当前思考并简明重申核心修改范围与验收目标，它就能迅速收敛切入编码。</strong></p>
+<h3 id="3-3-清晨-07-02-的交付惊喜"><a href="#3-3-清晨-07-02-的交付惊喜" class="headerlink" title="3.3 清晨 07:02 的交付惊喜"></a>3.3 清晨 07:02 的交付惊喜</h3><p>11 月 20 日清晨醒来拉取状态，Agent 夜间最后在 <code>07:02</code>（提交 <code>996c1cb</code>，+3,110 &#x2F; -341 行）交出了一份超预期的更新——<strong>依然保持 0 外部素材、0 第三方库</strong>：</p>
+<ul>
+<li><strong>纯原生 SVG 动态剪影舞台（<code>web/avatar_rig.js</code>，575 行）</strong>：三位嫌疑人全部用代码绘制暗黑几何剪影，随心率与心理防线（<code>composure</code>）动态呈现微震颤、冷汗与瞳孔变化；当真凶 <code>S3 顾言</code> 防线跌到临界值（<code>composure &lt;= 15</code>）触发 <code>.is-cracked</code> 状态时，镜片裂纹显现、镜框顺势倾斜 <code>-8°</code> 下沉。</li>
+<li><strong>本地 Canvas 64×64 玩家侦探头像</strong>：在浏览器本地通过像素亮度采样提取轮廓与主色调，即时生成同画风侦探剪影并写入 <code>localStorage</code>，不上传照片也不依赖多模态接口。</li>
+<li><strong>WebAudio 程序化声学合成（<code>web/audio_synth.js</code>，242 行）</strong>：零音频文件，纯振荡器实时合成随心率变化的心跳脉冲与警报音效，静音或不支持时静默降级。</li>
+<li><strong>按需网关探测与防重复护栏</strong>：把进程健康检查（<code>/api/health</code>）和真实白泽网关探活彻底拆开，并加了单飞锁避免页面刷新重复把网关打爆。</li>
+</ul>
+<hr>
+<h2 id="四、-第三阶段-·-返场验收与交付审计（11-20-09-00-–-12-00）：为什么封板前先写了一份“问题报告”？"><a href="#四、-第三阶段-·-返场验收与交付审计（11-20-09-00-–-12-00）：为什么封板前先写了一份“问题报告”？" class="headerlink" title="四、 第三阶段 · 返场验收与交付审计（11.20 09:00 – 12:00）：为什么封板前先写了一份“问题报告”？"></a>四、 第三阶段 · 返场验收与交付审计（11.20 09:00 – 12:00）：为什么封板前先写了一份“问题报告”？</h2><h3 id="4-1-三条可独立复现的验收入口"><a href="#4-1-三条可独立复现的验收入口" class="headerlink" title="4.1 三条可独立复现的验收入口"></a>4.1 三条可独立复现的验收入口</h3><p>9:00 返场后，我们做的第一件事不是急着加功能，而是把整套验收矩阵一条条跑实：</p>
+<table>
+<thead>
+<tr>
+<th align="left">验收命令</th>
+<th align="left">验证范围</th>
+<th align="center">是否联网</th>
+<th align="left">实测结论与验收标准</th>
+</tr>
+</thead>
+<tbody><tr>
+<td align="left"><code>py -3 -B app.py --verify</code></td>
+<td align="left">案件结构、行动点、节点排序窗口、HTTP 防剧透、网关回退、双槽裁决</td>
+<td align="center">否</td>
+<td align="left"><strong>120 项全量通过</strong>（基线实测 <code>13.151s</code>，提交包副本复测 <code>11.549s</code>，输出 <code>ALL CHECKS PASSED</code>）</td>
+</tr>
+<tr>
+<td align="left"><code>py -3 -B scripts/ai_case_auditor.py --selftest</code> &amp; <code>cases/case_01_manor.json --offline</code></td>
+<td align="left">坏剧本拦截自检 + 正式剧本防剧透&#x2F;引用闭合&#x2F;高心率烟雾弹硬审查</td>
+<td align="center">否（可选 <code>--live</code>）</td>
+<td align="left">自检输出 <code>SELFTEST PASSED</code>；正式剧本输出离线硬审查报告 <code>PASS</code></td>
+</tr>
+<tr>
+<td align="left"><code>py -3 -B app.py --probe-baize</code> &amp; <code>--verify-baize</code></td>
+<td align="left">网关 <code>&#123;&quot;ok&quot;:1&#125;</code> 连通探针 + 同初始态 A&#x2F;B 问法触发 <code>N2</code> 真实分流</td>
+<td align="center">是</td>
+<td align="left">要求两组策略 <code>source == &quot;live&quot;</code> 且分别输出 <code>maintain_alibi</code> 与 <code>narrow_claim</code>，回落 <code>fallback</code> 一律判负；通过输出 <code>LIVE DECISIONS VERIFIED</code></td>
+</tr>
+</tbody></table>
+<h3 id="4-2-封板前的“反吹牛”对抗式自审"><a href="#4-2-封板前的“反吹牛”对抗式自审" class="headerlink" title="4.2 封板前的“反吹牛”对抗式自审"></a>4.2 封板前的“反吹牛”对抗式自审</h3><p>离 12:00 封板只剩不到一小时，我们专门针对最终提交包跑了一轮<strong>对抗式交付审计（Delivery Audit）</strong>，先自己给自己挑出了一份详细的《不在场证明_问题报告》，再去打磨最终的《项目说明报告》：</p>
+<ul>
+<li><strong>查出真实前端细节问题</strong>：比如及时关闭了 <code>P1-01</code>（保证 N2 关键回合及快捷追问真实可用、结案卷宗在窄屏完整滚动）；也如实记录了尚存的打磨点（如复盘槽位提示文案边界、部分网关遥测与开关细节），绝不在汇报材料里粉饰太平。</li>
+<li><strong>收紧所有容易“自嗨夸大”的措辞</strong>：明确把“100%「KCoder + 白泽」”严格界定为 <strong>AI 辅助研发工具链的选用范围</strong>（游戏运行时仍可离线完成）；去掉未经单次精确压测支撑的“毫秒级回落”等营销词；在文档里如实区分 <code>offline_redteam</code> 硬审查与 <code>--live</code> 在线审稿，如实写清第一案完整可玩、其余卷宗库槽位为后续扩展预留。</li>
+</ul>
+<p>事后证明，这种“先对自己下狠手核对证据链”的习惯，比封板前仓促多塞两个半成品功能靠谱得多。</p>
+<h3 id="4-3-尘埃落定"><a href="#4-3-尘埃落定" class="headerlink" title="4.3 尘埃落定"></a>4.3 尘埃落定</h3><p><img src="/images/centralpark2026-04-award.jpg" alt="2026 世界计算大会 Central Park 专项奖：AI 开发者创想奖"></p>
+<p>12:00 顺利完成四件套打包校验与提交封板。下午开奖揭晓，我们的《不在场证明》拿下了 <strong>专项奖 · AI 开发者创想奖（¥1,000）</strong>。</p>
+<hr>
+<h2 id="五、-散场与回响（11-20-傍晚）：一年时间，从“穿着大人衣服的看客”到“系统操盘手”"><a href="#五、-散场与回响（11-20-傍晚）：一年时间，从“穿着大人衣服的看客”到“系统操盘手”" class="headerlink" title="五、 散场与回响（11.20 傍晚）：一年时间，从“穿着大人衣服的看客”到“系统操盘手”"></a>五、 散场与回响（11.20 傍晚）：一年时间，从“穿着大人衣服的看客”到“系统操盘手”</h2><p><img src="/images/centralpark2026-05-sunset-aftermath.jpg" alt="赛后傍晚走出长沙国际会议中心的晚霞广场"></p>
+<p>傍晚背着电脑走出长沙国际会议中心，广场上正好铺开一片橘粉色的晚霞，「2026 世界计算大会」的蓝旗在风里飘着。</p>
+<p>回想去年 12 月写下<a href="/2025/12/20/%E9%BB%91%E5%AE%A2%E6%9D%BE%E5%88%9D%E4%BD%93%E9%AA%8C/">《黑客松初体验》</a>时，我还是个码龄刚满两个月的大一新生，觉得参加黑客松像“穿着大人的衣服进入了一场成年人的舞会”，99% 的代码靠学长带飞，最后顺了一兜书签抽了件体恤就乐得不行。一年之后再站在赛场，依然离不开 AI 工具链和队友的并肩作战，但至少这一次，我已经能从第一份 <code>CONTRACT.md</code> 开始搭起状态机架构、划定模型能力与确定性引擎的边界、抢修被 Rebase 误删的前端分支，并盯着 120 项自动化回归用例把项目稳稳交到封板线前。</p>
+<p>这一趟 24 小时碳硅接力，留给我最实在的三条工程体悟：</p>
+<ol>
+<li><strong>用契约和确定性规则框住大模型的不确定性</strong>：LLM 擅长临场表演与语义判断，但状态流转、权限隔离和终局裁决一定要留在代码引擎里；越早写清 <code>CONTRACT.md</code>，AI 协同时的返工成本越低。</li>
+<li><strong>AI 杠杆放大的是工程素养，而不是偷懒的借口</strong>：没有 <code>test_http_verify.py</code>、没有脱敏扫描、没有 <code>--verify-baize</code> 对 <code>live/fallback</code> 的严格区分，夜间跑得越快，翻车越惨烈。</li>
+<li><strong>交付前的诚实自审比华丽的 PPT 词藻更有分量</strong>：敢把已知限制和验证边界写明白的工程交付件，才经得起任何现场追问。</li>
+</ol>
+<p>接下来我们还会继续完善《不在场证明》的后续规划——包括<strong>非对称联机玩法</strong>（让玩家分别扮演审讯官与嫌疑人在线博弈）以及<strong>自定义剧本导入</strong>。目前项目代码正在与队友一起做公开前整理与脱敏收尾，<strong>待仓库转为公开后，我也会第一时间在这里补上 GitHub 地址</strong>。</p>
+
+    </div>
+
+    
+    
+    
+
+    <footer class="post-footer">
+          <div class="post-tags">
+              <a href="/tags/CS/" rel="tag"># CS</a>
+              <a href="/tags/AI-Agent/" rel="tag"># AI Agent</a>
+              <a href="/tags/%E9%BB%91%E5%AE%A2%E6%9D%BE/" rel="tag"># 黑客松</a>
+              <a href="/tags/Neuro-Symbolic/" rel="tag"># Neuro-Symbolic</a>
+              <a href="/tags/%E8%BD%AF%E4%BB%B6%E5%B7%A5%E7%A8%8B/" rel="tag"># 软件工程</a>
+          </div>
+
+        
+
+          <div class="post-nav">
+            <div class="post-nav-item">
+                <a href="/2026/11/09/%E4%BB%8ECopilot%E5%8D%95%E6%AC%A1%E8%A1%A5%E5%85%A8%E5%88%B0%E5%A4%9C%E9%97%B4%E8%87%AA%E4%B8%BB%E9%97%AD%E7%8E%AF%EF%BC%9A%E4%BB%A3%E7%A0%81%E8%87%AA%E8%BF%AD%E4%BB%A3%E4%B8%8ETDD%E6%B5%8B%E8%AF%95%E9%97%A8%E7%A6%81%E6%99%BA%E8%83%BD%E4%BD%93%E8%AE%BE%E8%AE%A1%E5%AE%9E%E8%B7%B5/" rel="prev" title="从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与双层沙箱的代码自迭代智能体实践">
+                  <i class="fa fa-angle-left"></i> 从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与双层沙箱的代码自迭代智能体实践
+                </a>
+            </div>
+            <div class="post-nav-item">
+            </div>
+          </div>
+    </footer>
+  </article>
+</div>
+
+
+
+
+
+
+    <div class="comments" id="comments">
+  <div class="qy-comment-header">
+    <i class="fa-solid fa-comments"></i>
+    <span>文卷雅评 · 交流探讨</span>
+  </div>
+  <div id="giscus-container" class="giscus-container">
+    <script src="https://giscus.app/client.js"
+            data-repo="Archyup/Archyup.github.io"
+            data-repo-id="R_kgDOQTXfbg"
+            data-category="Announcements"
+            data-category-id="DIC_kwDOQTXfbs4DKt3K"
+            data-mapping="pathname"
+            data-strict="0"
+            data-reactions-enabled="1"
+            data-emit-metadata="0"
+            data-input-position="top"
+            data-theme="https://archyup.github.io/css/giscus-qingya.css"
+            data-lang="zh-CN"
+            data-loading="lazy"
+            crossorigin="anonymous"
+            async>
+    </script>
+  </div>
+</div>
+
+</div>
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+
+  <div class="copyright">
+    &copy; 2025 – 
+    <span itemprop="copyrightYear">2026</span>
+    <span class="with-love">
+      <i class="fa fa-leaf"></i>
+    </span>
+    <span class="author" itemprop="copyrightHolder">Archy</span>
+  </div>
+
+    </div>
+  </footer>
+
+  
+  <div class="toggle sidebar-toggle" role="button">
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+    <span class="toggle-line"></span>
+  </div>
+  <div class="sidebar-dimmer"></div>
+  <div class="back-to-top" role="button" aria-label="返回顶部">
+    <i class="fa fa-arrow-up fa-lg"></i>
+    <span>0%</span>
+  </div>
+
+<noscript>
+  <div class="noscript-warning">Theme NexT works best with JavaScript enabled</div>
+</noscript>
+<script>
+(function() {
+  if (window.__QINGYA_BOOTSTRAPPED__) return;
+  window.__QINGYA_BOOTSTRAPPED__ = true;
+
+  // 0. 基础安全与容错工具集（Storage 异常隔离、HTML 转义防 XSS、URL 净化、安全解码）
+  function safeGetLocal(key, fallback) {
+    try {
+      const val = window.localStorage.getItem(key);
+      return val !== null ? val : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function safeSetLocal(key, val) {
+    try {
+      window.localStorage.setItem(key, String(val));
+    } catch (_) {}
+  }
+
+  function safeGetSession(key, fallback) {
+    try {
+      const val = window.sessionStorage.getItem(key);
+      return val !== null ? val : fallback;
+    } catch (_) {
+      return fallback;
+    }
+  }
+
+  function safeSetSession(key, val) {
+    try {
+      window.sessionStorage.setItem(key, String(val));
+    } catch (_) {}
+  }
+
+  function safeRemoveSession(key) {
+    try {
+      window.sessionStorage.removeItem(key);
+    } catch (_) {}
+  }
+
+  function safeReplaceState(url) {
+    try {
+      window.history.replaceState(null, document.title, url);
+    } catch (_) {}
+  }
+
+  function safeDecodeURIComponent(raw) {
+    try {
+      return decodeURIComponent(raw);
+    } catch (_) {
+      return raw;
+    }
+  }
+
+  const HTML_ESCAPE_MAP = {
+    "&": "&amp;",
+    "<": "&lt;",
+    ">": "&gt;",
+    "\"": "&quot;",
+    "'": "&#39;"
+  };
+
+  function escapeHtml(str) {
+    if (str === null || str === undefined) return "";
+    return String(str).replace(/[&<>"']/g, ch => HTML_ESCAPE_MAP[ch]);
+  }
+
+  function sanitizeHref(rawUrl) {
+    const u = String(rawUrl || "").trim();
+    if (!u) return "#";
+    if (u.startsWith("/") || u.startsWith("#") || /^https?:\/\//i.test(u)) {
+      return escapeHtml(u);
+    }
+    return "#";
+  }
+
+  function sanitizeCssUrl(rawUrl) {
+    const u = String(rawUrl || "").trim();
+    if (!/^https?:\/\//i.test(u) && !u.startsWith("/")) return "";
+    return u.replace(/["\\()\r\n]/g, "");
+  }
+
+  function getEventTargetElement(e) {
+    if (!e || !e.target) return null;
+    if (e.target.nodeType === 1) return e.target;
+    return e.target.parentElement || null;
+  }
+
+  // 1. 实时壁纸抓取引擎：结合必应实时源 + 随机风景 API + 精选东方自然意境底座
+  const SEED_WALLPAPERS = [
+    "https://images.unsplash.com/photo-1509316975850-ff9c5deb0cd9?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1513836279014-a89f7a76ae86?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1464822759023-fed622ff2c3b?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1470071459604-3b5ec3a7fe05?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1493246507139-91e8fad9978e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1501785888041-af3ef285b470?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1433086966358-54859d0ed716?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1472214103451-9374bd1c798e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=2000&q=85",
+    "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=2000&q=85"
+  ];
+
+  // 生成实时动态壁纸 URL（每次调用生成全新的随机壁纸流地址）
+  const parsedSeq = parseInt(safeGetLocal("qy_wp_seq", "0"), 10);
+  let liveCounter = (Number.isFinite(parsedSeq) && parsedSeq >= 0) ? (parsedSeq % 1000000) : 0;
+
+  function generateLiveWallpaperUrl() {
+    liveCounter = (liveCounter + 1) % 1000000;
+    safeSetLocal("qy_wp_seq", liveCounter);
+    const uniqueToken = `${Date.now()}_${liveCounter}_${Math.floor(Math.random() * 100000)}`;
+    const mode = liveCounter % 3;
+    if (mode === 0) {
+      // 实时随机高清摄影流 (Fastly CDN 全球加速，无限不重样图库)
+      return `https://picsum.photos/1920/1080?random=${uniqueToken}`;
+    } else if (mode === 1) {
+      // Paugram 实时随机必应/Unsplash 壁纸源
+      const src = (liveCounter % 2 === 0) ? "bing" : "unsplash";
+      return `https://api.paugram.com/wallpaper/?source=${src}&t=${uniqueToken}`;
+    } else {
+      // 必应近 8 日实时官方画卷与精选 4K 东方山水轮替
+      return SEED_WALLPAPERS[liveCounter % SEED_WALLPAPERS.length];
+    }
+  }
+
+  // 2. 站点核心文章索引（优先读取 scripts/hexo-qingya-plugin.js 自动扫描生成的全站文章索引，发文零配置）
+  const FALLBACK_POST_INDEX = [
+    {
+      title: "从 Copilot 单次补全到夜间自主接力：基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践",
+      shortTitle: "基于 TDD 门禁与隔离沙箱的代码自迭代智能体实践",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["CS", "AI Agent", "软件工程", "TDD", "自动化测试"],
+      url: "/2026/11/09/从Copilot单次补全到夜间自主闭环：代码自迭代与TDD测试门禁智能体设计实践/",
+      summary: "面向黑客松“24h 碳硅接力 / 夜间自主研发”赛制重构 ACS-Agent：补齐 PathGuard 路径与软链拦截、临时只读副本 + 密钥脱敏 + python -I + RLIMIT 沙箱、SHA-256 门禁完整性核验、多文件 ReAct 与双协议降级。"
+    },
+    {
+      title: "深入海光 DCU 异构计算：动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优",
+      shortTitle: "动态稀疏矩阵乘 (SpMM) 的 Wave64 标量化与长尾负载均衡调优",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["CS", "高性能计算", "算子优化", "ROCm/HIP"],
+      url: "/2026/11/09/先导杯动态稀疏矩阵乘SpMM异构算子极限优化实践/",
+      summary: "先导杯第二题核心复盘：通过 __builtin_amdgcn_readfirstlane 标量提权、use_strided 4-Wave 协同拆行、块稀疏双行合并与 FP64 误差边界回退路径完成 BW 实机验证。"
+    },
+    {
+      title: "面向端侧与国产 DCU 环境的 Qwen2.5-1.5B 推理优化：32K 长上下文 KV 复用与静态图调度实践",
+      shortTitle: "32K 长上下文 KV 复用与静态图调度实践",
+      date: "2026-11-09",
+      cat: "技术实践",
+      tags: ["CS", "高性能计算", "大模型推理", "ROCm/HIP"],
+      url: "/2026/11/09/先导杯Qwen2.5-1.5B端侧32K长上下文极速推理优化实践/",
+      summary: "先导杯第一题核心复盘：围绕 Qwen2.5-1.5B 实现 1024 分块 Prefill、4 路常驻静态 HIP Graph 池、12 头 KV 预展开以及融合 GEMV 算子优化。"
+    },
+    {
+      title: "黑客松初体验",
+      shortTitle: "黑客松初体验",
+      date: "2025-12-20",
+      cat: "学习历程",
+      tags: ["随笔", "CS"],
+      url: "/2025/12/20/黑客松初体验/",
+      summary: "大一刚入学码龄两个月时的第一次黑客松之旅。记录与学长组队开发可视化预测项目的过程，以及对“将 AI 工程化、落地化”的最初思考。"
+    },
+    {
+      title: "我的CS学习之路-序章",
+      shortTitle: "我的CS学习之路-序章",
+      date: "2025-11-11",
+      cat: "学习历程",
+      tags: ["随笔", "CS"],
+      url: "/2025/11/11/我的CS学习之路-序章/",
+      summary: "高考之后在 AI 浪潮下选择计算机科学，来到湖南大学开启大学四年的 CS 探索之旅。"
+    }
+  ];
+
+  const rawIndexSource = (Array.isArray(window.__QINGYA_POST_INDEX__) && window.__QINGYA_POST_INDEX__.length > 0)
+    ? window.__QINGYA_POST_INDEX__
+    : FALLBACK_POST_INDEX;
+
+  const POST_INDEX = rawIndexSource
+    .filter(item => item && typeof item === "object")
+    .map(item => ({
+      title: String(item.title || "无题文卷"),
+      shortTitle: String(item.shortTitle || item.title || "无题文卷"),
+      date: String(item.date || ""),
+      cat: String(item.cat || "技术实践"),
+      tags: Array.isArray(item.tags) ? item.tags.map(t => String(t)).filter(Boolean) : [],
+      url: String(item.url || "#"),
+      summary: String(item.summary || "")
+    }));
+
+  const currentPathname = window.location.pathname || "/";
+  const isHomePage = currentPathname === "/" || currentPathname === "/index.html";
+  const isIndexListPage = isHomePage || Boolean(document.querySelector(".main-inner.index"));
+
+  // 3. 创建背景画布层
+  const bgContainer = document.createElement("div");
+  bgContainer.id = "qingya-wallpaper-bg";
+  bgContainer.innerHTML = `
+    <div class="qy-bg-layer qy-bg-a active"></div>
+    <div class="qy-bg-layer qy-bg-b"></div>
+    <div class="qy-bg-overlay"></div>
+  `;
+  document.body.prepend(bgContainer);
+
+  // 4. 创建首屏「清雅导航视界」
+  const portalHero = document.createElement("section");
+  portalHero.id = "qingya-portal-hero";
+  portalHero.innerHTML = `
+    <header class="qy-topbar">
+      <div class="qy-brand" id="qy-brand-home" title="返回首屏视界">
+        <span class="qy-seal">裔奇</span>
+        <span class="qy-brand-text">Archy · 格物志</span>
+      </div>
+
+      <!-- 右上角功能图标栏：默认只显示图标，鼠标悬停丝滑展开说明 -->
+      <nav class="qy-top-actions" aria-label="快捷功能导航">
+        <button type="button" class="qy-icon-pill" id="qy-btn-quick-peek">
+          <i class="fa-solid fa-layer-group"></i>
+          <span class="qy-icon-label">新篇速览</span>
+        </button>
+        <a href="/categories/" class="qy-icon-pill">
+          <i class="fa-solid fa-folder-tree"></i>
+          <span class="qy-icon-label">分类目录</span>
+        </a>
+        <a href="/tags/" class="qy-icon-pill">
+          <i class="fa-solid fa-tags"></i>
+          <span class="qy-icon-label">标签云集</span>
+        </a>
+        <a href="/archives/" class="qy-icon-pill">
+          <i class="fa-solid fa-scroll"></i>
+          <span class="qy-icon-label">岁月归档</span>
+        </a>
+        <a href="/about/" class="qy-icon-pill">
+          <i class="fa-solid fa-user-graduate"></i>
+          <span class="qy-icon-label">关于裔奇</span>
+        </a>
+        <a href="https://github.com/aarchyyy" target="_blank" rel="noopener" class="qy-icon-pill">
+          <i class="fa-brands fa-github"></i>
+          <span class="qy-icon-label">GitHub</span>
+        </a>
+      </nav>
+    </header>
+
+    <!-- 中央核心视觉区：仅保留精致半透明搜索框与轻滑展卷引导 -->
+    <div class="qy-center-stage">
+      <div class="qy-search-container">
+        <div class="qy-search-box">
+          <i class="fa-solid fa-magnifying-glass qy-search-icon"></i>
+          <input type="text" id="qy-search-input" placeholder="寻访文卷（Agent、TDD、先导杯、SpMM、Qwen）..." autocomplete="off" />
+          <kbd class="qy-search-kbd">/</kbd>
+        </div>
+        <div class="qy-search-dropdown" id="qy-search-dropdown"></div>
+      </div>
+
+      <div class="qy-scroll-hint" id="qy-scroll-hint" title="向下滑动展开文卷">
+        <span>轻滑展卷</span>
+        <i class="fa-solid fa-chevron-down"></i>
+      </div>
+
+      <!-- 二级抽屉（点击右上角「新篇速览」展开） -->
+      <div class="qy-peek-drawer" id="qy-peek-drawer">
+        <div class="qy-peek-header">
+          <span><i class="fa-solid fa-feather-pointed"></i> 近期文卷 · 点击预览摘要，二次点击深读</span>
+          <button type="button" class="qy-peek-close" id="qy-peek-close" title="收起">✕</button>
+        </div>
+        <div class="qy-peek-list" id="qy-peek-list"></div>
+      </div>
+    </div>
+  `;
+  document.body.prepend(portalHero);
+
+  // 5. 创建底部悬浮控制坞
+  const dock = document.createElement("aside");
+  dock.id = "qingya-dock";
+  dock.innerHTML = `
+    <div class="qy-dock-inner">
+      <button type="button" class="qy-dock-btn qy-dock-top-btn" id="qy-dock-top" title="回到最顶">
+        <i class="fa-solid fa-arrow-up"></i>
+        <span class="qy-top-label">归顶</span>
+      </button>
+      <div class="qy-dock-collapsible">
+        <button type="button" class="qy-dock-btn" id="qy-dock-portal" title="切换极简导航视界 / 展卷阅读模式">
+          <i class="fa-solid fa-compass"></i>
+          <span>视界</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-articles" title="展开文章卷轴">
+          <i class="fa-solid fa-book-open"></i>
+          <span>文卷</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-next-wp" title="实时抓取更换新壁纸">
+          <i class="fa-solid fa-image" id="qy-wp-icon"></i>
+          <span>换景</span>
+        </button>
+        <button type="button" class="qy-dock-btn active" id="qy-dock-auto-wp" title="开启/关闭壁纸实时轮换">
+          <i class="fa-solid fa-rotate"></i>
+          <span>时新</span>
+        </button>
+        <button type="button" class="qy-dock-btn" id="qy-dock-paper-mode" title="切换纯素宣纸阅读底色">
+          <i class="fa-solid fa-mug-hot"></i>
+          <span>素宣</span>
+        </button>
+      </div>
+    </div>
+  `;
+  document.body.appendChild(dock);
+
+  // 6. 文章页左侧「文章导读 (TOC)」与高精度滚动定位引擎（解决滑到底部仍停留在上一节的问题）
+  function setupArticleTOC() {
+    const sidebar = document.querySelector("aside.sidebar");
+    if (!sidebar) return;
+    const tocWrap = sidebar.querySelector(".post-toc-wrap");
+    const tocLinks = Array.from(sidebar.querySelectorAll(".post-toc a.nav-link"));
+    if (!tocWrap || tocLinks.length === 0) {
+      sidebar.style.display = "none";
+      return;
+    }
+
+    const headingItems = tocLinks.map(link => {
+      const href = link.getAttribute("href") || "";
+      if (!href.startsWith("#") || href.length <= 1) return null;
+      const encodedId = href.slice(1);
+      const rawId = safeDecodeURIComponent(encodedId);
+      const targetEl = document.getElementById(rawId) || document.getElementById(encodedId);
+      const navItem = link.closest(".nav-item");
+      return targetEl ? { link, navItem, targetEl } : null;
+    }).filter(Boolean);
+
+    if (headingItems.length === 0) {
+      sidebar.style.display = "none";
+      return;
+    }
+
+    document.body.classList.add("qy-has-toc");
+    if (!tocWrap.querySelector(".qy-toc-header")) {
+      const tocHeader = document.createElement("div");
+      tocHeader.className = "qy-toc-header";
+      tocHeader.innerHTML = '<i class="fa-solid fa-list-ul"></i><span>文章导读</span>';
+      tocWrap.prepend(tocHeader);
+    }
+
+    // 接管 NexT 延迟加载 (defer) 脚本中的默认目录激活与内联高度截断逻辑
+    function neutralizeNexTToc() {
+      if (window.NexT && window.NexT.utils) {
+        window.NexT.utils.updateActiveNav = function() {};
+        window.NexT.utils.activateNavByIndex = function() {};
+        window.NexT.utils.registerSidebarTOC = function() {};
+      }
+      sidebar.querySelectorAll(".nav-child").forEach(child => {
+        child.style.removeProperty("--height");
+        child.style.height = "auto";
+      });
+    }
+
+    neutralizeNexTToc();
+    document.addEventListener("DOMContentLoaded", neutralizeNexTToc);
+    document.addEventListener("page:loaded", neutralizeNexTToc);
+
+    let clickLockedIdx = -1;
+    let clickLockTimer = null;
+
+    function highlightTocIndex(activeIndex) {
+      const activeEntry = headingItems[activeIndex];
+
+      sidebar.querySelectorAll(".nav-item").forEach(el => {
+        el.classList.remove("active", "active-current", "qy-toc-current", "qy-toc-parent-active");
+      });
+
+      headingItems.forEach((item, idx) => {
+        const isCurrent = (idx === activeIndex);
+        item.link.classList.toggle("qy-toc-link-current", isCurrent);
+        if (isCurrent && item.navItem) {
+          item.navItem.classList.add("qy-toc-current", "active", "active-current");
+        }
+      });
+
+      // 沿当前条目向上回溯全部父级 .nav-item，自动展开对应大块下的子章节
+      if (activeEntry && activeEntry.navItem) {
+        let cur = activeEntry.navItem;
+        while (cur && sidebar.contains(cur)) {
+          if (cur.classList && cur.classList.contains("nav-item")) {
+            cur.classList.add("qy-toc-parent-active", "active");
+          }
+          cur = cur.parentElement;
+        }
+      }
+
+      // 确保当前高亮的目录项在左侧导读框可视区域内
+      if (activeEntry && activeEntry.link && tocWrap) {
+        const linkRect = activeEntry.link.getBoundingClientRect();
+        const wrapRect = tocWrap.getBoundingClientRect();
+        if (linkRect.top < wrapRect.top + 36 || linkRect.bottom > wrapRect.bottom - 24) {
+          tocWrap.scrollTo({
+            top: tocWrap.scrollTop + (linkRect.top - wrapRect.top) - wrapRect.height * 0.35,
+            behavior: "smooth"
+          });
+        }
+      }
+    }
+
+    // 6.1 物理级稳固吸顶锁 (Sticky + Fixed Pinning Engine)：
+    // 无论浏览器是否因 overflow-x: hidden 禁用原生 sticky，下滑时均将导读框稳固锁定在屏幕左侧
+    const colEl = sidebar.closest(".column") || sidebar.parentElement;
+    function syncSidebarStickyPin() {
+      if (window.innerWidth < 1024 || !colEl) {
+        sidebar.style.position = "";
+        sidebar.style.top = "";
+        sidebar.style.left = "";
+        sidebar.style.width = "";
+        return;
+      }
+      const colRect = colEl.getBoundingClientRect();
+      if (colRect.top <= 24) {
+        sidebar.style.setProperty("position", "fixed", "important");
+        sidebar.style.setProperty("top", "24px", "important");
+        sidebar.style.setProperty("left", colRect.left + "px", "important");
+        sidebar.style.setProperty("width", "250px", "important");
+      } else {
+        sidebar.style.setProperty("position", "relative", "important");
+        sidebar.style.setProperty("top", "0px", "important");
+        sidebar.style.setProperty("left", "0px", "important");
+        sidebar.style.setProperty("width", "250px", "important");
+      }
+    }
+
+    function updateTocOnScroll() {
+      syncSidebarStickyPin();
+      if (clickLockedIdx !== -1) {
+        highlightTocIndex(clickLockedIdx);
+        return;
+      }
+
+      const scrollY = window.scrollY || document.documentElement.scrollTop;
+      const winH = window.innerHeight;
+      const docH = document.documentElement.scrollHeight;
+
+      // 当页面滚动到最底部时，精准激活最后一个目录项
+      if (winH + scrollY >= docH - 45) {
+        highlightTocIndex(headingItems.length - 1);
+        return;
+      }
+
+      // 以屏幕上半区 (46% 处) 作为自然阅读视线基准线：新章节进入上半屏即刻展开对应大块下的小块
+      const readingLine = Math.max(180, winH * 0.46);
+      let activeIdx = 0;
+      for (let i = 0; i < headingItems.length; i++) {
+        const rect = headingItems[i].targetEl.getBoundingClientRect();
+        if (rect.top <= readingLine) {
+          activeIdx = i;
+        } else {
+          break;
+        }
+      }
+      highlightTocIndex(activeIdx);
+    }
+
+    let tocRafPending = false;
+    function scheduleTocUpdate() {
+      if (tocRafPending) return;
+      tocRafPending = true;
+      window.requestAnimationFrame(function() {
+        tocRafPending = false;
+        updateTocOnScroll();
+      });
+    }
+
+    // 使用捕获阶段拦截目录点击，覆盖 NexT 默认滚动，精准对齐标题并高亮对应子章节
+    headingItems.forEach((item, idx) => {
+      item.link.addEventListener("click", function(e) {
+        e.preventDefault();
+        e.stopImmediatePropagation();
+        clickLockedIdx = idx;
+        highlightTocIndex(idx);
+        if (clickLockTimer) clearTimeout(clickLockTimer);
+        const topPos = item.targetEl.getBoundingClientRect().top + window.scrollY - 64;
+        window.scrollTo({ top: Math.max(0, topPos), behavior: "smooth" });
+        safeReplaceState(item.link.getAttribute("href") || window.location.hash);
+        clickLockTimer = setTimeout(() => {
+          clickLockedIdx = -1;
+          updateTocOnScroll();
+        }, 750);
+      }, true);
+    });
+
+    window.addEventListener("scroll", scheduleTocUpdate, { passive: true });
+    window.addEventListener("resize", scheduleTocUpdate, { passive: true });
+    window.addEventListener("load", scheduleTocUpdate, { once: true });
+    window.addEventListener("qy:layout-shift", scheduleTocUpdate);
+
+    // 监听正文区域异步排版变化（如 Mermaid 流程图渲染、KaTeX 公式撑开、懒加载图片完成）自动校准坐标
+    const postBodyEl = document.querySelector(".post-body");
+    if (postBodyEl && typeof window.ResizeObserver === "function") {
+      try {
+        const ro = new ResizeObserver(scheduleTocUpdate);
+        ro.observe(postBodyEl);
+      } catch (_) {}
+    }
+
+    updateTocOnScroll();
+  }
+  setupArticleTOC();
+
+  // 7. 渲染「新篇速览」抽屉
+  const peekListEl = document.getElementById("qy-peek-list");
+  let activePeekIdx = -1;
+
+  function renderPeekList() {
+    if (!peekListEl) return;
+    peekListEl.innerHTML = POST_INDEX.map((post, idx) => `
+      <div class="qy-peek-item ${activePeekIdx === idx ? 'expanded' : ''}" data-idx="${idx}">
+        <div class="qy-peek-row">
+          <span class="qy-peek-cat">${escapeHtml(post.cat)}</span>
+          <span class="qy-peek-title">${escapeHtml(post.shortTitle)}</span>
+          <span class="qy-peek-date">${escapeHtml(post.date)}</span>
+          <span class="qy-peek-action">${activePeekIdx === idx ? '收起 ▴' : '摘要 ▾'}</span>
+        </div>
+        <div class="qy-peek-detail-wrap">
+          <div class="qy-peek-detail">
+            <p class="qy-peek-summary">${escapeHtml(post.summary)}</p>
+            <div class="qy-peek-footer">
+              <div class="qy-peek-tags">
+                ${post.tags.map(t => `<span class="qy-mini-tag"># ${escapeHtml(t)}</span>`).join('')}
+              </div>
+              <a href="${sanitizeHref(post.url)}" class="qy-peek-readmore">深读 →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    `).join("");
+
+    peekListEl.querySelectorAll(".qy-peek-row").forEach(row => {
+      row.addEventListener("click", function() {
+        const item = this.parentElement;
+        const idx = parseInt(item.getAttribute("data-idx"), 10);
+        if (Number.isNaN(idx)) return;
+        activePeekIdx = (activePeekIdx === idx) ? -1 : idx;
+        renderPeekList();
+      });
+    });
+  }
+  renderPeekList();
+
+  // 8. 改造文章列表卡片：简洁「摘要」与「深读」按钮（覆盖首页与后续分页列表）
+  function enhanceArticleCards() {
+    if (!isIndexListPage) return;
+    const postBlocks = document.querySelectorAll(".main-inner .post-block");
+    postBlocks.forEach((block) => {
+      const postBody = block.querySelector(".post-body");
+      const header = block.querySelector(".post-header");
+      if (!postBody || !header || block.dataset.qyEnhanced) return;
+      block.dataset.qyEnhanced = "true";
+
+      const gridWrap = document.createElement("div");
+      gridWrap.className = "qy-abstract-grid-wrap";
+      const gridInner = document.createElement("div");
+      gridInner.className = "qy-abstract-grid-inner";
+
+      postBody.parentNode.insertBefore(gridWrap, postBody);
+      gridInner.appendChild(postBody);
+      gridWrap.appendChild(gridInner);
+
+      const toggleBar = document.createElement("div");
+      toggleBar.className = "qy-card-progressive-bar";
+      const titleLink = block.querySelector(".post-title-link");
+      const postUrl = titleLink ? titleLink.getAttribute("href") : "#";
+
+      toggleBar.innerHTML = `
+        <button type="button" class="qy-btn-toggle-abstract">摘要</button>
+        <a href="${sanitizeHref(postUrl)}" class="qy-btn-enter-article">深读</a>
+      `;
+
+      header.after(toggleBar);
+
+      const toggleBtn = toggleBar.querySelector(".qy-btn-toggle-abstract");
+      toggleBtn.addEventListener("click", function() {
+        const isExpanded = gridWrap.classList.toggle("expanded");
+        this.textContent = isExpanded ? "收起" : "摘要";
+      });
+    });
+  }
+  enhanceArticleCards();
+
+  // 9. 实时壁纸抓取 + 后台预加载双缓冲引擎（带超时防挂死守卫与过期缓存自愈）
+  let activeLayerIsA = true;
+  let autoRotateTimer = null;
+  let isAutoRotate = safeGetLocal("qy_auto_wp", "false") === "true";
+  let isPaperMode = safeGetLocal("qy_paper_mode", "false") === "true";
+  let nextPreloadedUrl = null;
+  let isFetchingWp = false;
+  let isPreloadingWp = false;
+
+  const layerA = bgContainer.querySelector(".qy-bg-a");
+  const layerB = bgContainer.querySelector(".qy-bg-b");
+  const btnAutoWp = document.getElementById("qy-dock-auto-wp");
+  const btnPaperMode = document.getElementById("qy-dock-paper-mode");
+  const wpIconEl = document.getElementById("qy-wp-icon");
+
+  function loadImageWithTimeout(url, timeoutMs, onSuccess, onFailure) {
+    let settled = false;
+    const img = new Image();
+    const timer = setTimeout(function() {
+      if (settled) return;
+      settled = true;
+      img.onload = null;
+      img.onerror = null;
+      onFailure();
+    }, timeoutMs);
+
+    img.onload = function() {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      onSuccess(img.currentSrc || url);
+    };
+
+    img.onerror = function() {
+      if (settled) return;
+      settled = true;
+      clearTimeout(timer);
+      onFailure();
+    };
+
+    img.src = url;
+  }
+
+  function pickRandomSeedWallpaper() {
+    return SEED_WALLPAPERS[Math.floor(Math.random() * SEED_WALLPAPERS.length)];
+  }
+
+  function preloadNextLiveWallpaper() {
+    if (isPreloadingWp) return;
+    isPreloadingWp = true;
+    const candidateUrl = generateLiveWallpaperUrl();
+    loadImageWithTimeout(
+      candidateUrl,
+      10000,
+      function(resolvedUrl) {
+        isPreloadingWp = false;
+        nextPreloadedUrl = sanitizeCssUrl(resolvedUrl) || pickRandomSeedWallpaper();
+      },
+      function() {
+        isPreloadingWp = false;
+        nextPreloadedUrl = pickRandomSeedWallpaper();
+      }
+    );
+  }
+
+  function crossfadeToUrl(rawUrl) {
+    const cleanUrl = sanitizeCssUrl(rawUrl) || SEED_WALLPAPERS[0];
+    const targetLayer = activeLayerIsA ? layerA : layerB;
+    const otherLayer = activeLayerIsA ? layerB : layerA;
+    targetLayer.style.backgroundImage = `url("${cleanUrl}")`;
+    targetLayer.classList.add("active");
+    otherLayer.classList.remove("active");
+    activeLayerIsA = !activeLayerIsA;
+    safeSetLocal("qy_last_wp_url", cleanUrl);
+  }
+
+  // 初始壁纸首帧直出，同时静默探活缓存地址（若历史临时 CDN 链接失效则平滑自愈回退）
+  const rawSavedUrl = safeGetLocal("qy_last_wp_url", "");
+  const initialWpUrl = sanitizeCssUrl(rawSavedUrl) || SEED_WALLPAPERS[0];
+  layerA.style.backgroundImage = `url("${initialWpUrl}")`;
+  activeLayerIsA = false;
+
+  if (initialWpUrl !== SEED_WALLPAPERS[0]) {
+    loadImageWithTimeout(
+      initialWpUrl,
+      9000,
+      function() {},
+      function() {
+        if (!isPaperMode) {
+          crossfadeToUrl(SEED_WALLPAPERS[0]);
+        }
+      }
+    );
+  }
+  preloadNextLiveWallpaper();
+
+  function nextWallpaper() {
+    if (isPaperMode) togglePaperMode(false);
+    if (nextPreloadedUrl) {
+      const readyUrl = nextPreloadedUrl;
+      nextPreloadedUrl = null;
+      crossfadeToUrl(readyUrl);
+      preloadNextLiveWallpaper();
+      return;
+    }
+    if (isFetchingWp) return;
+    isFetchingWp = true;
+    if (wpIconEl) wpIconEl.classList.add("fa-spin");
+
+    const liveUrl = generateLiveWallpaperUrl();
+    loadImageWithTimeout(
+      liveUrl,
+      8000,
+      function(resolvedUrl) {
+        isFetchingWp = false;
+        if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+        crossfadeToUrl(resolvedUrl);
+        preloadNextLiveWallpaper();
+      },
+      function() {
+        isFetchingWp = false;
+        if (wpIconEl) wpIconEl.classList.remove("fa-spin");
+        crossfadeToUrl(pickRandomSeedWallpaper());
+        preloadNextLiveWallpaper();
+      }
+    );
+  }
+
+  function updateAutoRotateState() {
+    if (autoRotateTimer) {
+      clearInterval(autoRotateTimer);
+      autoRotateTimer = null;
+    }
+    if (isAutoRotate && !isPaperMode) {
+      btnAutoWp.classList.add("active");
+      autoRotateTimer = setInterval(function() {
+        if (document.hidden) return; // 标签页后台隐藏时暂停拉取，零浪费带宽与电量
+        nextWallpaper();
+      }, 35000);
+    } else {
+      btnAutoWp.classList.remove("active");
+    }
+  }
+
+  function togglePaperMode(forceState) {
+    isPaperMode = typeof forceState === "boolean" ? forceState : !isPaperMode;
+    safeSetLocal("qy_paper_mode", isPaperMode);
+    document.body.classList.toggle("qy-paper-mode", isPaperMode);
+    btnPaperMode.classList.toggle("active", isPaperMode);
+    updateAutoRotateState();
+  }
+
+  if (isPaperMode) togglePaperMode(true);
+  updateAutoRotateState();
+
+  // 10. 人体工学「下滑自动展开文卷 / 上滑到顶自动收起」状态机
+  let modeTransitionLock = false;
+
+  function setPortalMode(zenMode) {
+    if (modeTransitionLock) return;
+    modeTransitionLock = true;
+    setTimeout(() => { modeTransitionLock = false; }, 480);
+
+    if (zenMode) {
+      document.body.classList.add("qy-portal-zen");
+      document.body.classList.remove("qy-portal-scroll");
+      window.scrollTo({ top: 0, behavior: "smooth" });
+      dock.classList.remove("qy-dock-scrolled");
+    } else {
+      document.body.classList.remove("qy-portal-zen");
+      document.body.classList.add("qy-portal-scroll");
+    }
+  }
+
+  if (isHomePage) {
+    document.body.classList.add("qy-portal-zen");
+  } else {
+    document.body.classList.add("qy-inner-page", "qy-portal-scroll");
+  }
+
+  if (isHomePage) {
+    window.addEventListener("wheel", function(e) {
+      if (e.ctrlKey || e.metaKey) return; // 排除触控板双指缩放手势误触发
+      const targetEl = getEventTargetElement(e);
+      if (targetEl && (targetEl.closest(".qy-peek-drawer") || targetEl.closest(".qy-search-dropdown"))) return;
+      const isZen = document.body.classList.contains("qy-portal-zen");
+      if (isZen && e.deltaY > 12) {
+        setPortalMode(false);
+      } else if (!isZen && (window.scrollY || document.documentElement.scrollTop) <= 4 && e.deltaY < -18) {
+        setPortalMode(true);
+      }
+    }, { passive: true });
+
+    let touchStartY = 0;
+    let touchIgnoreDrawer = false;
+    let touchStartedAtTop = false;
+
+    window.addEventListener("touchstart", function(e) {
+      if (e.touches.length !== 1) return;
+      const targetEl = getEventTargetElement(e);
+      touchIgnoreDrawer = Boolean(targetEl && (targetEl.closest(".qy-peek-drawer") || targetEl.closest(".qy-search-dropdown")));
+      touchStartedAtTop = (window.scrollY || document.documentElement.scrollTop) <= 4;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    window.addEventListener("touchmove", function(e) {
+      if (e.touches.length !== 1 || touchIgnoreDrawer) return;
+      const dy = touchStartY - e.touches[0].clientY;
+      const isZen = document.body.classList.contains("qy-portal-zen");
+      if (isZen && dy > 28) {
+        setPortalMode(false);
+      } else if (!isZen && touchStartedAtTop && (window.scrollY || document.documentElement.scrollTop) <= 4 && dy < -35) {
+        setPortalMode(true);
+      }
+    }, { passive: true });
+  }
+
+  document.getElementById("qy-scroll-hint").addEventListener("click", function() {
+    setPortalMode(false);
+  });
+
+  // 11. 监听滚动：下滑阅读时，控制坞平滑移至左下角并收缩为「归顶 ↑」单按钮
+  let isScrollingToTop = false;
+  function handleScroll() {
+    const scrollY = window.scrollY || document.documentElement.scrollTop;
+    if (isScrollingToTop) {
+      if (scrollY <= 10) {
+        isScrollingToTop = false;
+        dock.classList.remove("qy-dock-scrolled");
+      }
+      return;
+    }
+    if (scrollY > 75 || (isHomePage && document.body.classList.contains("qy-portal-scroll") && scrollY > 30)) {
+      dock.classList.add("qy-dock-scrolled");
+    } else {
+      dock.classList.remove("qy-dock-scrolled");
+    }
+  }
+  window.addEventListener("scroll", handleScroll, { passive: true });
+  handleScroll();
+
+  // 12. 交互事件绑定
+  const peekDrawer = document.getElementById("qy-peek-drawer");
+  const quickPeekBtn = document.getElementById("qy-btn-quick-peek");
+
+  // 支持从内页点击「新篇速览」自动切回首屏视界并直接展开速览抽屉
+  const urlParams = new URLSearchParams(window.location.search);
+  if (isHomePage && (urlParams.get("peek") === "1" || safeGetSession("qy_open_peek", "") === "1")) {
+    safeRemoveSession("qy_open_peek");
+    if (urlParams.get("peek") === "1") {
+      urlParams.delete("peek");
+      const remainingQuery = urlParams.toString();
+      const cleanUrl = currentPathname + (remainingQuery ? `?${remainingQuery}` : "") + (window.location.hash || "");
+      safeReplaceState(cleanUrl);
+    }
+    setPortalMode(true);
+    peekDrawer.classList.add("open");
+    quickPeekBtn.classList.add("active");
+  }
+
+  quickPeekBtn.addEventListener("click", function() {
+    if (!isHomePage) {
+      safeSetSession("qy_open_peek", "1");
+      window.location.href = "/?peek=1";
+      return;
+    }
+    if (!document.body.classList.contains("qy-portal-zen")) {
+      setPortalMode(true);
+      peekDrawer.classList.add("open");
+      this.classList.add("active");
+      return;
+    }
+    peekDrawer.classList.toggle("open");
+    this.classList.toggle("active", peekDrawer.classList.contains("open"));
+  });
+
+  document.getElementById("qy-peek-close").addEventListener("click", function() {
+    peekDrawer.classList.remove("open");
+    quickPeekBtn.classList.remove("active");
+  });
+
+  document.getElementById("qy-brand-home").addEventListener("click", function() {
+    if (isHomePage) {
+      setPortalMode(true);
+    } else {
+      window.location.href = "/";
+    }
+  });
+
+  document.getElementById("qy-dock-portal").addEventListener("click", function() {
+    if (!isHomePage) {
+      window.location.href = "/";
+      return;
+    }
+    const isCurrentlyZen = document.body.classList.contains("qy-portal-zen");
+    setPortalMode(!isCurrentlyZen);
+  });
+
+  document.getElementById("qy-dock-articles").addEventListener("click", function() {
+    if (!isHomePage) {
+      window.location.href = "/archives/";
+      return;
+    }
+    setPortalMode(false);
+  });
+
+  document.getElementById("qy-dock-next-wp").addEventListener("click", nextWallpaper);
+
+  btnAutoWp.addEventListener("click", function() {
+    isAutoRotate = !isAutoRotate;
+    safeSetLocal("qy_auto_wp", isAutoRotate);
+    updateAutoRotateState();
+  });
+
+  btnPaperMode.addEventListener("click", function() {
+    togglePaperMode();
+  });
+
+  document.getElementById("qy-dock-top").addEventListener("click", function() {
+    isScrollingToTop = true;
+    dock.classList.remove("qy-dock-scrolled");
+    if (isHomePage) {
+      setPortalMode(true);
+    } else {
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+    setTimeout(() => { isScrollingToTop = false; }, 600);
+  });
+
+  // 13. 站内实时检索框逻辑（支持上下键选择与回车站内优先直达）
+  const searchInput = document.getElementById("qy-search-input");
+  const searchDropdown = document.getElementById("qy-search-dropdown");
+  let currentMatches = [];
+  let selectedIdx = -1;
+
+  function updateActiveSearchItem() {
+    const items = searchDropdown.querySelectorAll(".qy-search-item");
+    items.forEach((item, idx) => {
+      if (idx === selectedIdx) {
+        item.classList.add("active");
+        item.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      } else {
+        item.classList.remove("active");
+      }
+    });
+  }
+
+  function performSearch() {
+    const rawTrimmed = searchInput.value.trim();
+    const q = rawTrimmed.toLowerCase();
+    if (!q) {
+      currentMatches = [];
+      selectedIdx = -1;
+      searchDropdown.innerHTML = "";
+      searchDropdown.classList.remove("show");
+      return;
+    }
+
+    currentMatches = POST_INDEX.filter(p =>
+      (p.title && p.title.toLowerCase().includes(q)) ||
+      (p.shortTitle && p.shortTitle.toLowerCase().includes(q)) ||
+      (p.summary && p.summary.toLowerCase().includes(q)) ||
+      (p.tags && p.tags.some(t => t.toLowerCase().includes(q))) ||
+      (p.cat && p.cat.toLowerCase().includes(q))
+    );
+
+    selectedIdx = currentMatches.length > 0 ? 0 : -1;
+
+    if (currentMatches.length > 0) {
+      searchDropdown.innerHTML = currentMatches.map((m, idx) => `
+        <a href="${sanitizeHref(m.url)}" class="qy-search-item ${idx === 0 ? 'active' : ''}" data-idx="${idx}">
+          <div class="qy-search-item-top">
+            <span class="qy-search-item-cat">${escapeHtml(m.cat)}</span>
+            <span class="qy-search-item-title">${escapeHtml(m.shortTitle)}</span>
+            <span class="qy-search-item-date">${escapeHtml(m.date)}</span>
+          </div>
+          <div class="qy-search-item-desc">${escapeHtml(m.summary)}</div>
+        </a>
+      `).join("");
+
+      // 绑定鼠标划入高亮事件
+      searchDropdown.querySelectorAll(".qy-search-item").forEach(item => {
+        item.addEventListener("mouseenter", function() {
+          const idx = parseInt(this.getAttribute("data-idx"), 10);
+          if (!Number.isNaN(idx)) {
+            selectedIdx = idx;
+            updateActiveSearchItem();
+          }
+        });
+      });
+    } else {
+      searchDropdown.innerHTML = `
+        <div class="qy-search-empty">未在站内寻得匹配文卷</div>
+        <a href="https://cn.bing.com/search?q=${encodeURIComponent(rawTrimmed)}" target="_blank" rel="noopener noreferrer" class="qy-search-external-hint" id="qy-search-ext-link">
+          <i class="fa-solid fa-arrow-up-right-from-square"></i> 尝试全网检索「${escapeHtml(rawTrimmed)}」
+        </a>
+      `;
+    }
+    searchDropdown.classList.add("show");
+  }
+
+  searchInput.addEventListener("input", performSearch);
+  searchInput.addEventListener("compositionend", performSearch);
+
+  searchInput.addEventListener("keydown", function(e) {
+    // 拦截中文/拼音输入法组字或英文选词确认过程中的回车与方向键
+    if (e.isComposing || e.keyCode === 229) {
+      return;
+    }
+
+    if (e.key === "ArrowDown") {
+      if (currentMatches.length > 0) {
+        e.preventDefault();
+        selectedIdx = (selectedIdx + 1) % currentMatches.length;
+        updateActiveSearchItem();
+      } else {
+        const extLink = document.getElementById("qy-search-ext-link");
+        if (extLink) {
+          extLink.classList.add("active");
+        }
+      }
+    } else if (e.key === "ArrowUp") {
+      if (currentMatches.length > 0) {
+        e.preventDefault();
+        selectedIdx = (selectedIdx - 1 + currentMatches.length) % currentMatches.length;
+        updateActiveSearchItem();
+      } else {
+        const extLink = document.getElementById("qy-search-ext-link");
+        if (extLink) {
+          extLink.classList.remove("active");
+        }
+      }
+    } else if (e.key === "Enter") {
+      e.preventDefault();
+      if (currentMatches.length > 0) {
+        // 站内绝对优先：直接在当前页面打开当前选中的文章（默认第 1 篇）
+        const target = (selectedIdx >= 0 && selectedIdx < currentMatches.length)
+          ? currentMatches[selectedIdx]
+          : currentMatches[0];
+        if (target && target.url) {
+          window.location.href = target.url;
+        }
+      } else {
+        // 站内 0 命中时双次回车机制：第 1 次选中高亮，第 2 次触发全网检索
+        const extLink = document.getElementById("qy-search-ext-link");
+        if (extLink && extLink.href) {
+          if (!extLink.classList.contains("active")) {
+            extLink.classList.add("active");
+          } else {
+            window.open(extLink.href, "_blank", "noopener,noreferrer");
+          }
+        }
+      }
+    } else if (e.key === "Escape") {
+      searchDropdown.classList.remove("show");
+      this.blur();
+    }
+  });
+
+  document.addEventListener("keydown", function(e) {
+    if (e.ctrlKey || e.metaKey || e.altKey || e.isComposing) return;
+    const activeEl = document.activeElement;
+    const activeTag = activeEl && activeEl.tagName ? activeEl.tagName.toUpperCase() : "";
+    const isEditable = Boolean(activeEl && (activeEl.isContentEditable || ["INPUT", "TEXTAREA", "SELECT"].includes(activeTag)));
+    if (e.key === "/" && activeEl !== searchInput && !isEditable) {
+      e.preventDefault();
+      searchInput.focus();
+    }
+  });
+
+  document.addEventListener("click", function(e) {
+    const targetEl = getEventTargetElement(e);
+    if (!targetEl || !targetEl.closest(".qy-search-container")) {
+      searchDropdown.classList.remove("show");
+    }
+  });
+})();
+</script>
+
+</body>
+</html>
